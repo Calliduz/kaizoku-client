@@ -15,6 +15,11 @@ export default function HomePage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
+  // Filter states from URL
+  const genre = searchParams.get('genre') || '';
+  const format = searchParams.get('format') || '';
+  const sort = searchParams.get('sort') || 'popular';
+
   // Fetch initial/search data
   useEffect(() => {
     let isMounted = true;
@@ -22,7 +27,7 @@ export default function HomePage() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetchAllAnime({ search, page: 1 });
+        const res = await fetchAllAnime({ search, genre, format, sort, page: 1 });
         if (isMounted) {
           setAnimeList(res.data);
           setHasMore(res.pagination.page < res.pagination.pages);
@@ -37,7 +42,17 @@ export default function HomePage() {
 
     loadQuery();
     return () => { isMounted = false; };
-  }, [search]);
+  }, [search, genre, format, sort]);
+
+  const updateFilters = (key: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (value) {
+      newParams.set(key, value);
+    } else {
+      newParams.delete(key);
+    }
+    setSearchParams(newParams);
+  };
 
   // Load more
   const handleLoadMore = async () => {
@@ -45,7 +60,7 @@ export default function HomePage() {
     const nextPage = page + 1;
 
     try {
-      const res = await fetchAllAnime({ search, page: nextPage });
+      const res = await fetchAllAnime({ search, genre, format, sort, page: nextPage });
       setAnimeList((prev) => [...prev, ...res.data]);
       setHasMore(res.pagination.page < res.pagination.pages);
       setPage(nextPage);
@@ -73,10 +88,66 @@ export default function HomePage() {
 
       {/* Catalog Section */}
       <section className="catalog container">
-        <div className="catalog__header">
+        <div className="catalog__header" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
           <h2 className="catalog__title">
-            {search ? `Search Results: "${search}"` : 'Latest Additions'}
+            {search ? `Search Results: "${search}"` : 'Library Catalog'}
           </h2>
+
+          <div className="catalog__filters">
+            <div className="filter-group">
+              <span className="filter-label">Genre</span>
+              <select 
+                className="filter-select" 
+                value={genre} 
+                onChange={(e) => updateFilters('genre', e.target.value)}
+              >
+                <option value="">All Genres</option>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Drama">Drama</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Horror">Horror</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Psychological">Psychological</option>
+                <option value="Romance">Romance</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Slice of Life">Slice of Life</option>
+                <option value="Sports">Sports</option>
+                <option value="Supernatural">Supernatural</option>
+                <option value="Thriller">Thriller</option>
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <span className="filter-label">Format</span>
+              <select 
+                className="filter-select" 
+                value={format} 
+                onChange={(e) => updateFilters('format', e.target.value)}
+              >
+                <option value="">All Formats</option>
+                <option value="TV">TV Series</option>
+                <option value="MOVIE">Movie</option>
+                <option value="OVA">OVA</option>
+                <option value="ONA">ONA</option>
+                <option value="SPECIAL">Special</option>
+              </select>
+            </div>
+
+            <div className="filter-group">
+              <span className="filter-label">Sort By</span>
+              <select 
+                className="filter-select" 
+                value={sort} 
+                onChange={(e) => updateFilters('sort', e.target.value)}
+              >
+                <option value="popular">Popularity</option>
+                <option value="rating">Highest Rated</option>
+                <option value="newest">Recently Added</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         {error && <div className="error-message">Error: {error}</div>}
