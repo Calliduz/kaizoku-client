@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { fetchAllAnime } from "../api/animeApi";
-import AnimeCard from "../components/AnimeCard";
-import LoadingSpinner from "../components/LoadingSpinner";
-import "../styles/pages/HomePage.css";
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { fetchAllAnime } from '../api/animeApi';
+import AnimeCard from '../components/AnimeCard';
+import LoadingSpinner from '../components/LoadingSpinner';
+import '../styles/pages/HomePage.css';
 
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const search = searchParams.get("search") || "";
+  const search = searchParams.get('search') || '';
 
   const [animeList, setAnimeList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,9 +36,7 @@ export default function HomePage() {
     };
 
     loadQuery();
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, [search]);
 
   // Load more
@@ -52,7 +50,7 @@ export default function HomePage() {
       setHasMore(res.pagination.page < res.pagination.pages);
       setPage(nextPage);
     } catch (err) {
-      console.error("Failed to load more:", err);
+      console.error('Failed to load more:', err);
     }
   };
 
@@ -63,8 +61,7 @@ export default function HomePage() {
         <section className="hero">
           <div className="hero__content container">
             <h1 className="hero__title">
-              Discover the <span className="gradient-text">Pirate King</span> of
-              Anime
+              Discover the <span className="gradient-text">Pirate King</span> of Anime
             </h1>
             <p className="hero__subtitle">
               Seamless streaming. High performance. No ads.
@@ -78,7 +75,7 @@ export default function HomePage() {
       <section className="catalog container">
         <div className="catalog__header">
           <h2 className="catalog__title">
-            {search ? `Search Results: "${search}"` : "Latest Additions"}
+            {search ? `Search Results: "${search}"` : 'Latest Additions'}
           </h2>
         </div>
 
@@ -88,7 +85,7 @@ export default function HomePage() {
           <LoadingSpinner />
         ) : animeList.length === 0 ? (
           <div className="catalog__empty">
-            <span style={{ fontSize: "3rem", marginBottom: "1rem" }}>😢</span>
+            <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>😢</span>
             <h3>No anime found</h3>
             <p>Try searching for something else or trigger a scrape.</p>
           </div>
@@ -107,7 +104,7 @@ export default function HomePage() {
                   onClick={handleLoadMore}
                   disabled={loading}
                 >
-                  {loading ? "Loading..." : "Load More"}
+                  {loading ? 'Loading...' : 'Load More'}
                 </button>
               </div>
             )}
