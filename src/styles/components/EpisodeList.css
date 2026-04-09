@@ -1,0 +1,61 @@
+.episode-list {
+  margin-top: var(--space-xl);
+}
+
+.episode-list__title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+}
+
+.episode-list__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-sm);
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: var(--space-sm);
+}
+
+.episode-list__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: var(--space-md);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  transition: background var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.episode-list__item:hover {
+  background: var(--color-bg-card-hover);
+  border-color: var(--color-border-hover);
+  color: var(--color-text-primary);
+}
+
+.episode-list__item.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+.episode-list__number {
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+}
+
+.episode-list__ep-title {
+  font-size: var(--font-size-xs);
+  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
