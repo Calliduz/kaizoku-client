@@ -115,10 +115,55 @@ export default function PlayerPage() {
             </p>
 
             <div className="player-page__tags">
-              {anime.genres?.map(g => <span key={g} className="tag">{g}</span>)}
+              {anime.genres?.map(g => (
+                <span key={g} className="tag" style={{ borderLeft: `3px solid ${anime.coverColor || 'var(--color-accent)'}` }}>
+                  {g}
+                </span>
+              ))}
             </div>
 
             <p className="player-page__desc">{anime.description}</p>
+
+            <div className="player-page__metadata-grid">
+              {anime.status && (
+                <div className="metadata-item">
+                  <span className="metadata-label">Status</span>
+                  <span className="metadata-value">{anime.status.replace(/_/g, ' ')}</span>
+                </div>
+              )}
+              {anime.format && (
+                <div className="metadata-item">
+                  <span className="metadata-label">Format</span>
+                  <span className="metadata-value">{anime.format}</span>
+                </div>
+              )}
+              {anime.rating > 0 && (
+                <div className="metadata-item">
+                  <span className="metadata-label">Score</span>
+                  <span className="metadata-value" style={{ color: anime.coverColor || 'inherit' }}>
+                    ★ {(anime.rating / 10).toFixed(1)}
+                  </span>
+                </div>
+              )}
+              {anime.episodeDuration > 0 && (
+                <div className="metadata-item">
+                  <span className="metadata-label">Duration</span>
+                  <span className="metadata-value">{anime.episodeDuration} min</span>
+                </div>
+              )}
+              {anime.studios?.length > 0 && (
+                <div className="metadata-item">
+                  <span className="metadata-label">Studio</span>
+                  <span className="metadata-value">{anime.studios[0]?.name || anime.studios[0]}</span>
+                </div>
+              )}
+              {anime.startDate && (
+                <div className="metadata-item">
+                  <span className="metadata-label">Aired</span>
+                  <span className="metadata-value">{anime.startDate}</span>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="player-page__episodes-container glass">
