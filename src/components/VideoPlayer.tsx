@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
+import type { StreamingSource } from '../types';
 import '../styles/components/VideoPlayer.css';
+
+interface Quality {
+  index: number;
+  label: string;
+}
+
+interface VideoPlayerProps {
+  source: StreamingSource;
+  title?: string;
+}
 
 /**
  * VideoPlayer — HLS streaming player with auto-quality and manual quality picker.
@@ -12,11 +23,11 @@ import '../styles/components/VideoPlayer.css';
  *
  * @param {{ source: { url: string, type: string }, title: string }} props
  */
-export default function VideoPlayer({ source, title = '' }) {
-  const videoRef = useRef(null);
-  const hlsRef = useRef(null);
+export default function VideoPlayer({ source, title = '' }: VideoPlayerProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hlsRef = useRef<Hls | null>(null);
 
-  const [qualities, setQualities] = useState([]);
+  const [qualities, setQualities] = useState<Quality[]>([]);
   const [currentQuality, setCurrentQuality] = useState(-1); // -1 = auto
   const [showQualityMenu, setShowQualityMenu] = useState(false);
 
@@ -57,7 +68,7 @@ export default function VideoPlayer({ source, title = '' }) {
           video.play().catch(() => {});
         });
 
-        hls.on(Hls.Events.LEVEL_SWITCHED, (_event, data) => {
+        hls.on(Hls.Events.LEVEL_SWITCHED, () => {
           if (hlsRef.current?.autoLevelEnabled) {
             setCurrentQuality(-1);
           }
@@ -100,7 +111,7 @@ export default function VideoPlayer({ source, title = '' }) {
     };
   }, [source]);
 
-  const handleQualityChange = (levelIndex) => {
+  const handleQualityChange = (levelIndex: number) => {
     if (hlsRef.current) {
       if (levelIndex === -1) {
         hlsRef.current.currentLevel = -1; // auto

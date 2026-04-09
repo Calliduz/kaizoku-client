@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import type { Anime } from '../types';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import '../styles/components/AnimeCard.css';
 
@@ -7,7 +8,11 @@ import '../styles/components/AnimeCard.css';
  * AnimeCard — displays a single anime in the catalog grid.
  * Uses LazyLoadImage for progressive image loading.
  */
-export default function AnimeCard({ anime }) {
+interface AnimeCardProps {
+  anime: Anime;
+}
+
+export default function AnimeCard({ anime }: AnimeCardProps) {
   const {
     _id,
     title,

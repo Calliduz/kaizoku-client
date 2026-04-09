@@ -4,21 +4,21 @@ import { fetchAnimeById, fetchEpisodes, fetchEpisodeSources } from '../api/anime
 import VideoPlayer from '../components/VideoPlayer';
 import EpisodeList from '../components/EpisodeList';
 import LoadingSpinner from '../components/LoadingSpinner';
+import type { Anime, Episode, StreamingSource } from '../types';
 import '../styles/pages/PlayerPage.css';
 
 export default function PlayerPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [anime, setAnime] = useState(null);
-  const [episodes, setEpisodes] = useState([]);
-  const [currentEpisode, setCurrentEpisode] = useState(null);
-  const [sources, setSources] = useState([]);
-  const [currentSource, setCurrentSource] = useState(null);
+  const [anime, setAnime] = useState<Anime | null>(null);
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
+  const [currentSource, setCurrentSource] = useState<StreamingSource | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [sourceLoading, setSourceLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Load Anime & Episodes
   useEffect(() => {
@@ -26,6 +26,7 @@ export default function PlayerPage() {
     const loadData = async () => {
       try {
         setLoading(true);
+        if (!id) throw new Error('No anime ID provided');
         const [animeRes, itemsRes] = await Promise.all([
           fetchAnimeById(id),
           fetchEpisodes(id)
@@ -37,8 +38,8 @@ export default function PlayerPage() {
           setEpisodes(eps);
           if (eps.length > 0) setCurrentEpisode(eps[0]);
         }
-      } catch (err) {
-        if (isMounted) setError(err.message);
+      } catch (err: any) {
+        if (isMounted) setError(err.response?.data?.error?.message || err.message);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -58,7 +59,6 @@ export default function PlayerPage() {
         const res = await fetchEpisodeSources(currentEpisode._id);
         if (isMounted) {
           const fetchedSources = res.data || [];
-          setSources(fetchedSources);
           setCurrentSource(fetchedSources[0] || null);
         }
       } catch (err) {
@@ -97,7 +97,7 @@ export default function PlayerPage() {
               <LoadingSpinner />
               <p>Fetching encrypted sources (bypassing Cloudflare)...</p>
             </div>
-          ) : currentSource ? (
+          ) : currentSource && currentEpisode && anime ? (
             <VideoPlayer source={currentSource} title={`${anime.title} - ${currentEpisode.title}`} />
           ) : (
             <div className="player-page__video-error">
@@ -145,16 +145,16 @@ export default function PlayerPage() {
                   </span>
                 </div>
               )}
-              {anime.episodeDuration > 0 && (
+              {anime.episodeDuration && anime.episodeDuration > 0 && (
                 <div className="metadata-item">
                   <span className="metadata-label">Duration</span>
                   <span className="metadata-value">{anime.episodeDuration} min</span>
                 </div>
               )}
-              {anime.studios?.length > 0 && (
+              {anime.studios && anime.studios.length > 0 && (
                 <div className="metadata-item">
                   <span className="metadata-label">Studio</span>
-                  <span className="metadata-value">{anime.studios[0]?.name || anime.studios[0]}</span>
+                  <span className="metadata-value">{anime.studios[0]?.name}</span>
                 </div>
               )}
               {anime.startDate && (

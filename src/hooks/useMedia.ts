@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react';
  * Debounce hook — delays updating the value until after
  * the specified delay has elapsed since the last change.
  */
-export function useDebounce(value, delay = 400) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+export function useDebounce<T>(value: T, delay: number = 400): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedValue(value), delay);
@@ -19,10 +19,10 @@ export function useDebounce(value, delay = 400) {
  * Generic fetch hook with loading, error, and data states.
  * Re-fetches when deps change.
  */
-export function useFetch(fetchFn, deps = []) {
-  const [data, setData] = useState(null);
+export function useFetch<T>(fetchFn: () => Promise<T>, deps: any[] = []) {
+  const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function useFetch(fetchFn, deps = []) {
         if (isMounted.current) {
           setData(result);
         }
-      } catch (err) {
+      } catch (err: any) {
         if (isMounted.current) {
           setError(err.message);
         }

@@ -3,15 +3,16 @@ import { useSearchParams } from 'react-router-dom';
 import { fetchAllAnime } from '../api/animeApi';
 import AnimeCard from '../components/AnimeCard';
 import LoadingSpinner from '../components/LoadingSpinner';
+import type { Anime } from '../types';
 import '../styles/pages/HomePage.css';
 
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get('search') || '';
 
-  const [animeList, setAnimeList] = useState([]);
+  const [animeList, setAnimeList] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
@@ -33,8 +34,8 @@ export default function HomePage() {
           setHasMore(res.pagination.page < res.pagination.pages);
           setPage(1);
         }
-      } catch (err) {
-        if (isMounted) setError(err.message);
+      } catch (err: any) {
+        if (isMounted) setError(err.response?.data?.error?.message || err.message);
       } finally {
         if (isMounted) setLoading(false);
       }

@@ -6,7 +6,7 @@ export default function Navbar() {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
       navigate(`/?search=${encodeURIComponent(query.trim())}`);

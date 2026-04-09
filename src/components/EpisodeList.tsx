@@ -1,9 +1,16 @@
+import type { Episode } from '../types';
 import '../styles/components/EpisodeList.css';
+
+interface EpisodeListProps {
+  episodes: Episode[];
+  currentEpisodeId?: string;
+  onSelect: (ep: Episode) => void;
+}
 
 /**
  * EpisodeList — scrollable episode selector for the player page.
  */
-export default function EpisodeList({ episodes = [], currentEpisodeId, onSelect }) {
+export default function EpisodeList({ episodes = [], currentEpisodeId, onSelect }: EpisodeListProps) {
   return (
     <div className="episode-list" id="episode-list">
       <h3 className="episode-list__title">Episodes</h3>
