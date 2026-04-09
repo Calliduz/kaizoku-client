@@ -69,6 +69,36 @@
 
 .anime-card:hover .anime-card__play-icon {
   transform: scale(1);
+  margin-bottom: 20px;
+}
+
+.anime-card__hover-details {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 15px 15px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.9) 30%, #000);
+  transform: translateY(100%);
+  transition: transform var(--transition-base) ease-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.anime-card:hover .anime-card__hover-details {
+  transform: translateY(0);
+}
+
+.anime-card__description {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: center;
 }
 
 .anime-card__rating {

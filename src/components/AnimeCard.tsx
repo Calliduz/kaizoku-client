@@ -15,6 +15,7 @@ export default function AnimeCard({ anime }) {
     genres = [],
     rating,
     totalEpisodes,
+    description,
   } = anime;
 
   return (
@@ -29,6 +30,11 @@ export default function AnimeCard({ anime }) {
         />
         <div className="anime-card__overlay">
           <span className="anime-card__play-icon">▶</span>
+          {description && (
+            <div className="anime-card__hover-details">
+              <p className="anime-card__description">{description}</p>
+            </div>
+          )}
         </div>
 
         {rating > 0 && (

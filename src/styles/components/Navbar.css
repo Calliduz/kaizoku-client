@@ -53,15 +53,17 @@
 
 .navbar__search-input {
   width: 100%;
-  padding: 10px 16px 10px 42px;
-  background: var(--color-bg-input);
-  border: 1px solid var(--color-border);
+  padding: 12px 20px 12px 46px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-full);
   color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-family: inherit;
+  font-weight: 500;
   outline: none;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-md) cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar__search-input::placeholder {
@@ -69,8 +71,13 @@
 }
 
 .navbar__search-input:focus {
+  background: rgba(255, 255, 255, 0.1);
   border-color: var(--color-accent);
-  box-shadow: var(--shadow-glow);
+  box-shadow: 0 0 0 4px rgba(118, 56, 250, 0.15), var(--shadow-glow);
+}
+
+.navbar__search:focus-within {
+  max-width: 540px;
 }
 
 .navbar__links {
