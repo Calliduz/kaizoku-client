@@ -5,7 +5,6 @@ import AnimeCard from '../components/AnimeCard';
 import AnimeCardSkeleton from '../components/AnimeCardSkeleton';
 import EmptyState from '../components/EmptyState';
 import ErrorDisplay from '../components/ErrorDisplay';
-import LoadingSpinner from '../components/LoadingSpinner';
 import type { Anime } from '../types';
 import '../styles/pages/HomePage.css';
 
@@ -19,7 +18,6 @@ export default function HomePage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  // Filter states from URL
   const genre = searchParams.get('genre') || '';
   const format = searchParams.get('format') || '';
   const sort = searchParams.get('sort') || 'newest';
@@ -41,7 +39,11 @@ export default function HomePage() {
 
   // Fetch initial/search data
   useEffect(() => {
-    loadQuery();
+    const delayDebounceFn = setTimeout(() => {
+      loadQuery();
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
   }, [search, genre, format, sort]);
 
   const updateFilters = (key: string, value: string) => {
@@ -81,6 +83,7 @@ export default function HomePage() {
             <p className="hero__subtitle">
               Seamless streaming. High performance. No ads.
             </p>
+
           </div>
           <div className="hero__bg-gradient" />
         </section>

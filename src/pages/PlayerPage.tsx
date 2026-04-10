@@ -6,6 +6,8 @@ import EpisodeList from '../components/EpisodeList';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PlayerSkeleton from '../components/PlayerSkeleton';
 import RecommendationList from '../components/RecommendationList';
+import CharacterList from '../components/CharacterList';
+import ServerSelector from '../components/ServerSelector';
 import ErrorDisplay from '../components/ErrorDisplay';
 import EmptyState from '../components/EmptyState';
 import type { Anime, Episode, StreamingSource } from '../types';
@@ -18,6 +20,7 @@ export default function PlayerPage() {
   const [anime, setAnime] = useState<Anime | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
+  const [sources, setSources] = useState<StreamingSource[]>([]);
   const [currentSource, setCurrentSource] = useState<StreamingSource | null>(null);
 
   const [loading, setLoading] = useState(true);
@@ -61,6 +64,7 @@ export default function PlayerPage() {
         const res = await fetchEpisodeSources(currentEpisode._id);
         if (isMounted) {
           const fetchedSources = res.data || [];
+          setSources(fetchedSources);
           setCurrentSource(fetchedSources[0] || null);
         }
       } catch (err) {
@@ -96,6 +100,15 @@ export default function PlayerPage() {
         <button onClick={() => navigate(-1)} className="player-page__back">
           ← Back to Catalog
         </button>
+
+        {/* Server Selector */}
+        {!loading && !error && sources.length > 1 && (
+          <ServerSelector 
+            sources={sources} 
+            currentSource={currentSource} 
+            onSelect={setCurrentSource} 
+          />
+        )}
 
         {/* Video Player Area */}
         <div className="player-page__video-container">
@@ -175,6 +188,11 @@ export default function PlayerPage() {
                 </div>
               )}
             </div>
+
+            {/* Character List */}
+            {anime.characters && anime.characters.length > 0 && (
+              <CharacterList characters={anime.characters.slice(0, 10)} />
+            )}
           </div>
 
           <div className="player-page__episodes-container glass">

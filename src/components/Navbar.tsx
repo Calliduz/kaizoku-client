@@ -1,56 +1,28 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { fetchSuggestions } from '../api/animeApi';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles/components/Navbar.css';
 
 export default function Navbar() {
-  const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('search') || '';
   const navigate = useNavigate();
-  const searchRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      if (query.trim().length < 2) {
-        setSuggestions([]);
-        return;
-      }
-      try {
-        const res = await fetchSuggestions(query);
-        setSuggestions(res.data || []);
-      } catch (err) {
-        console.error('Failed to fetch suggestions:', err);
-      }
-    };
-
-    const timeoutId = setTimeout(fetchSuggestions, 300);
-    return () => clearTimeout(timeoutId);
-  }, [query]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) {
-      setShowSuggestions(false);
-      navigate(`/?search=${encodeURIComponent(query.trim())}`);
+  const handleSearchChange = (val: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (val.trim()) {
+      newParams.set('search', val);
+    } else {
+      newParams.delete('search');
+    }
+    setSearchParams(newParams);
+    
+    // If we're not on the home page, go there to see results
+    if (window.location.pathname !== '/') {
+      navigate(`/?${newParams.toString()}`);
     }
   };
 
-  const handleSelectSuggestion = (anime: any) => {
-    setQuery('');
-    setSuggestions([]);
-    setShowSuggestions(false);
-    navigate(`/anime/${anime._id}`);
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
   };
 
   return (
@@ -63,8 +35,8 @@ export default function Navbar() {
         </Link>
 
         {/* Search */}
-        <div className="navbar__search-container" ref={searchRef}>
-          <form className="navbar__search" onSubmit={handleSearch} id="nav-search-form">
+        <div className="navbar__search-container">
+          <form className="navbar__search" onSubmit={handleSearchSubmit} id="nav-search-form">
             <svg className="navbar__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -74,33 +46,11 @@ export default function Navbar() {
               className="navbar__search-input"
               placeholder="Search anime..."
               value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setShowSuggestions(true);
-              }}
-              onFocus={() => setShowSuggestions(true)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               id="nav-search-input"
               autoComplete="off"
             />
           </form>
-
-          {showSuggestions && suggestions.length > 0 && (
-            <div className="navbar__suggestions glass animate-fade-in">
-              {suggestions.map((item) => (
-                <div 
-                  key={item._id} 
-                  className="suggestion-item"
-                  onClick={() => handleSelectSuggestion(item)}
-                >
-                  <img src={item.coverImage} alt="" className="suggestion-image" />
-                  <div className="suggestion-info">
-                    <span className="suggestion-title">{item.title}</span>
-                    <span className="suggestion-meta">{item.format?.replace(/_/g, ' ')}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Nav Links */}

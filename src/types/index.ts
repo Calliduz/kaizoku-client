@@ -20,6 +20,22 @@ export interface Relation {
   format: string;
 }
 
+export interface VoiceActor {
+  id: number;
+  name: string;
+  nameNative: string;
+  image: string;
+}
+
+export interface Character {
+  id: number;
+  name: string;
+  nameNative: string;
+  image: string;
+  role: 'MAIN' | 'SUPPORTING' | 'BACKGROUND';
+  voiceActors: VoiceActor[];
+}
+
 export interface Anime {
   _id: string;
   title: string;
@@ -44,6 +60,7 @@ export interface Anime {
   startDate: string | null;
   endDate: string | null;
   studios: Studio[];
+  characters?: Character[];
   recommendations?: Recommendation[];
   relations?: Relation[];
   sourceId?: string;

@@ -1,4 +1,3 @@
-import React from 'react';
 import '../styles/components/AnimeCard.css';
 
 interface AnimeCardSkeletonProps {

@@ -164,3 +164,109 @@
     gap: var(--space-md);
   }
 }
+
+/* Hero Search Styles */
+.hero__search-container {
+  position: relative;
+  max-width: 600px;
+  margin: var(--space-xl) auto 0;
+  z-index: 10;
+}
+
+.hero__search {
+  display: flex;
+  gap: var(--space-sm);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  padding: 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: all var(--transition-md);
+}
+
+.hero__search:focus-within {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), var(--shadow-glow);
+}
+
+.hero__search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 0 var(--space-md);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+}
+
+.hero__search-btn {
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.hero__search-btn:hover {
+  transform: scale(1.05);
+}
+
+.hero__suggestions {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  right: 0;
+  background: rgba(26, 26, 46, 0.98);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+  text-align: left;
+}
+
+.hero-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 12px var(--space-md);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-suggestion-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.hero-suggestion-image {
+  width: 40px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-xs);
+}
+
+.hero-suggestion-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-suggestion-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.hero-suggestion-meta {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
