@@ -1,24 +1,53 @@
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles/components/Navbar.css';
 
 export default function Navbar() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('search') || '';
   const navigate = useNavigate();
+  
+  // Local state for the input to make it feel responsive
+  const urlQuery = searchParams.get('search') || '';
+  const [localQuery, setLocalQuery] = useState(urlQuery);
+  const isInitialMount = useRef(true);
+
+  // Sync local state if URL changes (e.g. browser back/forward or clear button)
+  useEffect(() => {
+    if (urlQuery !== localQuery) {
+      setLocalQuery(urlQuery);
+    }
+  }, [urlQuery]);
+
+  // Debounce the URL update
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      const newParams = new URLSearchParams(searchParams);
+      if (localQuery.trim()) {
+        newParams.set('search', localQuery);
+        newParams.set('page', '1'); // Reset to page 1 on new search
+      } else {
+        newParams.delete('search');
+        newParams.delete('page');
+      }
+      
+      setSearchParams(newParams);
+
+      // If we're not on the home page, go there to see results
+      if (window.location.pathname !== '/') {
+        navigate(`/?${newParams.toString()}`);
+      }
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(timer);
+  }, [localQuery]);
 
   const handleSearchChange = (val: string) => {
-    const newParams = new URLSearchParams(searchParams);
-    if (val.trim()) {
-      newParams.set('search', val);
-    } else {
-      newParams.delete('search');
-    }
-    setSearchParams(newParams);
-    
-    // If we're not on the home page, go there to see results
-    if (window.location.pathname !== '/') {
-      navigate(`/?${newParams.toString()}`);
-    }
+    setLocalQuery(val);
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -45,7 +74,7 @@ export default function Navbar() {
               type="text"
               className="navbar__search-input"
               placeholder="Search anime..."
-              value={query}
+              value={localQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
               id="nav-search-input"
               autoComplete="off"

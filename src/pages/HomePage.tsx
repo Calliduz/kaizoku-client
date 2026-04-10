@@ -41,7 +41,7 @@ export default function HomePage() {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       loadQuery();
-    }, 300);
+    }, 500);
 
     return () => clearTimeout(delayDebounceFn);
   }, [search, genre, format, sort]);
