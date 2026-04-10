@@ -5,6 +5,7 @@ import VideoPlayer from '../components/VideoPlayer';
 import EpisodeList from '../components/EpisodeList';
 import LoadingSpinner from '../components/LoadingSpinner';
 import PlayerSkeleton from '../components/PlayerSkeleton';
+import RecommendationList from '../components/RecommendationList';
 import ErrorDisplay from '../components/ErrorDisplay';
 import EmptyState from '../components/EmptyState';
 import type { Anime, Episode, StreamingSource } from '../types';
@@ -183,6 +184,23 @@ export default function PlayerPage() {
               onSelect={setCurrentEpisode}
             />
           </div>
+        </div>
+
+        {/* Recommendations & Relations */}
+        <div className="player-page__suggestions animate-fade-in">
+          {anime.relations && anime.relations.length > 0 && (
+            <RecommendationList 
+              title="Related Series" 
+              items={anime.relations} 
+            />
+          )}
+
+          {anime.recommendations && anime.recommendations.length > 0 && (
+            <RecommendationList 
+              title="More Like This" 
+              items={anime.recommendations} 
+            />
+          )}
         </div>
       </div>
     </div>

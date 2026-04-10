@@ -47,6 +47,16 @@ export default function PlayerSkeleton() {
             </div>
           </div>
         </div>
+
+        {/* Recommendations Skeleton */}
+        <div style={{ marginTop: 'var(--space-2xl)' }}>
+          <div className="skeleton" style={{ height: '2rem', width: '200px', marginBottom: 'var(--space-md)' }} />
+          <div style={{ display: 'flex', gap: 'var(--space-md)', overflow: 'hidden' }}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="skeleton" style={{ flex: '0 0 160px', height: '240px', borderRadius: 'var(--radius-md)' }} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

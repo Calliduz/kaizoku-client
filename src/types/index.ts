@@ -4,6 +4,22 @@ export interface Studio {
   isAnimationStudio: boolean;
 }
 
+export interface Recommendation {
+  id: number;
+  title: string;
+  coverImage: string;
+  averageScore: number;
+}
+
+export interface Relation {
+  id: number;
+  relationType: string;
+  title: string;
+  coverImage: string;
+  status: string;
+  format: string;
+}
+
 export interface Anime {
   _id: string;
   title: string;
@@ -28,6 +44,8 @@ export interface Anime {
   startDate: string | null;
   endDate: string | null;
   studios: Studio[];
+  recommendations?: Recommendation[];
+  relations?: Relation[];
   sourceId?: string;
   scrapeSource?: string;
   updatedAt: string;

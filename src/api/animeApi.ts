@@ -23,3 +23,7 @@ export async function fetchEpisodeSources(episodeId: string): Promise<any> {
 export async function triggerScrape(query: string, fetchEpisodes = false): Promise<any> {
   return client.post('/scrape', { query, fetchEpisodes });
 }
+
+export async function fetchSuggestions(query: string): Promise<any> {
+  return client.get('/anime/search/suggest', { params: { query } });
+}

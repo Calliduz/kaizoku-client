@@ -103,6 +103,12 @@
   box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
 }
 
+/* Fix for unreadable text in some browser dropdowns */
+.filter-select option {
+  background-color: #1a1a2e;
+  color: var(--color-text-primary);
+}
+
 .catalog__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

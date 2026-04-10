@@ -21,6 +21,7 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
     rating,
     totalEpisodes,
     description,
+    format,
   } = anime;
 
   return (
@@ -51,6 +52,12 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
         {totalEpisodes > 0 && (
           <span className="anime-card__episodes">
             {totalEpisodes} EP
+          </span>
+        )}
+
+        {format && (
+          <span className="anime-card__format">
+            {format.replace(/_/g, ' ')}
           </span>
         )}
       </div>
