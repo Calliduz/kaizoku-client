@@ -59,3 +59,13 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.episode-list__empty {
+  grid-column: 1 / -1;
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}

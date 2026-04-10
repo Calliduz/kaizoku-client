@@ -4,6 +4,9 @@ import { fetchAnimeById, fetchEpisodes, fetchEpisodeSources } from '../api/anime
 import VideoPlayer from '../components/VideoPlayer';
 import EpisodeList from '../components/EpisodeList';
 import LoadingSpinner from '../components/LoadingSpinner';
+import PlayerSkeleton from '../components/PlayerSkeleton';
+import ErrorDisplay from '../components/ErrorDisplay';
+import EmptyState from '../components/EmptyState';
 import type { Anime, Episode, StreamingSource } from '../types';
 import '../styles/pages/PlayerPage.css';
 
@@ -20,32 +23,30 @@ export default function PlayerPage() {
   const [sourceLoading, setSourceLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      if (!id) throw new Error('No anime ID provided');
+      const [animeRes, itemsRes] = await Promise.all([
+        fetchAnimeById(id),
+        fetchEpisodes(id)
+      ]);
+
+      setAnime(animeRes.data);
+      const eps = itemsRes.data || [];
+      setEpisodes(eps);
+      if (eps.length > 0) setCurrentEpisode(eps[0]);
+    } catch (err: any) {
+      setError(err.response?.data?.error?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Load Anime & Episodes
   useEffect(() => {
-    let isMounted = true;
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        if (!id) throw new Error('No anime ID provided');
-        const [animeRes, itemsRes] = await Promise.all([
-          fetchAnimeById(id),
-          fetchEpisodes(id)
-        ]);
-
-        if (isMounted) {
-          setAnime(animeRes.data);
-          const eps = itemsRes.data || [];
-          setEpisodes(eps);
-          if (eps.length > 0) setCurrentEpisode(eps[0]);
-        }
-      } catch (err: any) {
-        if (isMounted) setError(err.response?.data?.error?.message || err.message);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
     loadData();
-    return () => { isMounted = false; };
   }, [id]);
 
   // Load Sources when episode changes
@@ -72,8 +73,13 @@ export default function PlayerPage() {
     return () => { isMounted = false; };
   }, [currentEpisode]);
 
-  if (loading) return <LoadingSpinner />;
-  if (error || !anime) return <div className="error-message container">Error: {error || 'Not found'}</div>;
+  if (loading) return <PlayerSkeleton />;
+
+  if (error || !anime) return (
+    <div className="player-page" style={{ paddingTop: 'var(--space-2xl)' }}>
+      <ErrorDisplay message={error || 'Anime not found'} onRetry={loadData} />
+    </div>
+  );
 
   return (
     <div className="player-page" id="player-page">
@@ -101,7 +107,11 @@ export default function PlayerPage() {
             <VideoPlayer source={currentSource} title={`${anime.title} - ${currentEpisode.title}`} />
           ) : (
             <div className="player-page__video-error">
-              No sources available for this episode.
+              <EmptyState 
+                icon="📭"
+                title="No Sources Found"
+                description="We couldn't fetch any streaming links for this episode. This can happen if the external source is down or Cloudflare bypass failed."
+              />
             </div>
           )}
         </div>

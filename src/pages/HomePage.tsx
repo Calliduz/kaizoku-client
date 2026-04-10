@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { fetchAllAnime } from '../api/animeApi';
 import AnimeCard from '../components/AnimeCard';
+import AnimeCardSkeleton from '../components/AnimeCardSkeleton';
+import EmptyState from '../components/EmptyState';
+import ErrorDisplay from '../components/ErrorDisplay';
 import LoadingSpinner from '../components/LoadingSpinner';
 import type { Anime } from '../types';
 import '../styles/pages/HomePage.css';
@@ -21,28 +24,24 @@ export default function HomePage() {
   const format = searchParams.get('format') || '';
   const sort = searchParams.get('sort') || 'popular';
 
+  const loadQuery = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetchAllAnime({ search, genre, format, sort, page: 1 });
+      setAnimeList(res.data);
+      setHasMore(res.pagination.page < res.pagination.pages);
+      setPage(1);
+    } catch (err: any) {
+      setError(err.response?.data?.error?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Fetch initial/search data
   useEffect(() => {
-    let isMounted = true;
-    const loadQuery = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetchAllAnime({ search, genre, format, sort, page: 1 });
-        if (isMounted) {
-          setAnimeList(res.data);
-          setHasMore(res.pagination.page < res.pagination.pages);
-          setPage(1);
-        }
-      } catch (err: any) {
-        if (isMounted) setError(err.response?.data?.error?.message || err.message);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
     loadQuery();
-    return () => { isMounted = false; };
   }, [search, genre, format, sort]);
 
   const updateFilters = (key: string, value: string) => {
@@ -151,16 +150,19 @@ export default function HomePage() {
           </div>
         </div>
 
-        {error && <div className="error-message">Error: {error}</div>}
-
-        {loading && animeList.length === 0 ? (
-          <LoadingSpinner />
-        ) : animeList.length === 0 ? (
-          <div className="catalog__empty">
-            <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>😢</span>
-            <h3>No anime found</h3>
-            <p>Try searching for something else or trigger a scrape.</p>
+        {error ? (
+          <ErrorDisplay message={error} onRetry={loadQuery} />
+        ) : loading && animeList.length === 0 ? (
+          <div className="catalog__grid">
+            <AnimeCardSkeleton count={12} />
           </div>
+        ) : animeList.length === 0 ? (
+          <EmptyState 
+            icon="🔍"
+            title="No Results Found"
+            description={search ? `We couldn't find any anime matching "${search}".` : "The library is currently empty."}
+            action={search ? { label: 'Clear Search', onClick: () => updateFilters('search', '') } : undefined}
+          />
         ) : (
           <>
             <div className="catalog__grid" id="anime-grid">
