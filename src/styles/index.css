@@ -80,6 +80,7 @@
   /* Layout */
   --max-width: 1280px;
   --navbar-height: 64px;
+  --container-padding: 1.5rem;
 }
 
 /* ── Reset & Base ───────────────────────── */
@@ -152,7 +153,13 @@ ul, ol {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 var(--container-padding);
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
 }
 
 .glass {

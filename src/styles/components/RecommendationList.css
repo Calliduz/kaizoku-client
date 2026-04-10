@@ -39,6 +39,12 @@
   text-decoration: none;
 }
 
+@media (max-width: 480px) {
+  .rec-item {
+    flex: 0 0 130px;
+  }
+}
+
 .rec-item:hover {
   transform: translateY(-4px);
   border-color: var(--color-accent);

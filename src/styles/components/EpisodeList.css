@@ -18,6 +18,13 @@
   padding-right: var(--space-sm);
 }
 
+@media (max-width: 640px) {
+  .episode-list__grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 6px;
+  }
+}
+
 .episode-list__item {
   display: flex;
   flex-direction: column;

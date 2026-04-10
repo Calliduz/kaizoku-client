@@ -62,6 +62,24 @@
   gap: var(--space-lg);
 }
 
+@media (max-width: 768px) {
+  .player-controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .player-controls-bar__actions {
+    width: 100%;
+  }
+
+  .refresh-btn-premium {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .player-controls-bar__actions {
   display: flex;
   align-items: center;
@@ -163,6 +181,21 @@
   font-size: 0.75rem;
 }
 
+@media (max-width: 480px) {
+  .premium-loader__status {
+    font-size: var(--font-size-sm);
+  }
+
+  .premium-loader__content {
+    max-width: 260px;
+  }
+
+  .refresh-pill {
+    font-size: 0.65rem;
+    padding: 6px 14px;
+  }
+}
+
 .refresh-pill:hover {
   opacity: 1;
 }
@@ -188,6 +221,22 @@
   position: relative;
 }
 
+@media (max-width: 768px) {
+  .player-page__video-container {
+    margin-bottom: var(--space-lg);
+    border-radius: 0;
+    margin-left: -1rem !important; /* Force offset from .container 1rem padding */
+    width: calc(100% + 2rem) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .player-page__metadata-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+
 .player-page__video-loading,
 .player-page__video-error {
   position: absolute;
@@ -210,6 +259,20 @@
 .player-page__info {
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
+}
+
+@media (max-width: 768px) {
+  .player-page__info {
+    padding: var(--space-lg);
+  }
+
+  .player-page__title {
+    font-size: var(--font-size-xl);
+  }
+
+  .player-page__desc {
+    font-size: var(--font-size-sm);
+  }
 }
 
 .player-page__title {
@@ -255,6 +318,12 @@
   align-self: start;
 }
 
+@media (max-width: 768px) {
+  .player-page__episodes-container {
+    padding: var(--space-lg);
+  }
+}
+
 .player-page__metadata-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -262,6 +331,13 @@
   margin-top: var(--space-xl);
   padding-top: var(--space-lg);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 480px) {
+  .player-page__metadata-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
 }
 
 .metadata-item {

@@ -29,6 +29,12 @@
   flex-wrap: wrap;
 }
 
+@media (max-width: 480px) {
+  .server-group__list {
+    gap: 6px;
+  }
+}
+
 .server-btn {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -44,6 +50,27 @@
   align-items: flex-start;
   min-width: 100px;
   gap: 2px;
+}
+
+@media (max-width: 640px) {
+  .server-btn {
+    padding: 6px 12px;
+    min-width: 80px;
+    font-size: 0.75rem;
+    flex: 1 1 calc(33.333% - 8px);
+  }
+}
+
+@media (max-width: 480px) {
+  .server-btn {
+    flex: 1 1 calc(50% - 8px);
+  }
+}
+
+@media (max-width: 350px) {
+  .server-btn {
+    flex: 1 1 100%;
+  }
 }
 
 .server-btn:hover {
