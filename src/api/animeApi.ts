@@ -16,8 +16,8 @@ export async function fetchEpisodes(animeId: string): Promise<any> {
   return client.get(`/anime/${animeId}/episodes`);
 }
 
-export async function fetchEpisodeSources(episodeId: string): Promise<any> {
-  return client.get(`/episodes/${episodeId}/sources`);
+export async function fetchEpisodeSources(episodeId: string, refresh = false): Promise<any> {
+  return client.get(`/episodes/${episodeId}/sources`, { params: { refresh } });
 }
 
 export async function triggerScrape(query: string, fetchEpisodes = false): Promise<any> {

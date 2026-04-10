@@ -78,11 +78,19 @@ export interface Episode {
   url: string;
 }
 
+export interface Subtitle {
+  url: string;
+  lang: string;
+  default?: boolean;
+}
+
 export interface StreamingSource {
   url: string;
   quality: string;
   server: string;
   type: 'hls' | 'mp4' | 'webm' | 'iframe' | 'embed';
+  audio?: 'sub' | 'dub';
+  subtitles?: Subtitle[];
 }
 
 export interface Pagination {

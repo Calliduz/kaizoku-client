@@ -25,6 +25,7 @@ export default function PlayerPage() {
 
   const [loading, setLoading] = useState(true);
   const [sourceLoading, setSourceLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('Fetching streaming sources...');
   const [error, setError] = useState<string | null>(null);
 
   const loadData = async () => {
@@ -58,10 +59,10 @@ export default function PlayerPage() {
     let isMounted = true;
     if (!currentEpisode) return;
 
-    const loadSources = async () => {
+    const loadSources = async (isRefresh = false) => {
       try {
         setSourceLoading(true);
-        const res = await fetchEpisodeSources(currentEpisode._id);
+        const res = await fetchEpisodeSources(currentEpisode._id, isRefresh);
         if (isMounted) {
           const fetchedSources = res.data || [];
           setSources(fetchedSources);
@@ -76,7 +77,30 @@ export default function PlayerPage() {
 
     loadSources();
     return () => { isMounted = false; };
-  }, [currentEpisode]);
+  }, [currentEpisode?._id]); // Use ID as dependency to prevent object-reference loops
+
+  const handleRefreshSources = async () => {
+    if (!currentEpisode) return;
+    try {
+      setSourceLoading(true);
+      const res = await fetchEpisodeSources(currentEpisode._id, true);
+      const fetchedSources = res.data || [];
+      setSources(fetchedSources);
+      setCurrentSource(fetchedSources[0] || null);
+    } catch (err) {
+      console.error('Failed to refresh sources:', err);
+    } finally {
+      setSourceLoading(false);
+    }
+  };
+
+  // Loading Message Rotator
+  useEffect(() => {
+    if (!sourceLoading) {
+      setLoadingMessage('Fetching streaming sources...');
+      return;
+    }
+  }, [sourceLoading]);
 
   if (loading) return <PlayerSkeleton />;
 
@@ -101,21 +125,47 @@ export default function PlayerPage() {
           ← Back to Catalog
         </button>
 
-        {/* Server Selector */}
-        {!loading && !error && sources.length > 1 && (
-          <ServerSelector 
-            sources={sources} 
-            currentSource={currentSource} 
-            onSelect={setCurrentSource} 
-          />
+        {/* Premium Floating Control Bar */}
+        {!loading && !error && sources.length > 0 && (
+          <div className="player-controls-bar glass animate-fade-in">
+            <ServerSelector 
+              sources={sources} 
+              currentSource={currentSource} 
+              onSelect={setCurrentSource} 
+            />
+            <div className="player-controls-bar__actions">
+              <button 
+                onClick={handleRefreshSources} 
+                className="refresh-btn-premium"
+                title="Force re-scrape for new links"
+              >
+                <span className="refresh-btn-premium__icon">🔄</span>
+                <span className="refresh-btn-premium__text">Refresh</span>
+              </button>
+            </div>
+          </div>
         )}
 
         {/* Video Player Area */}
         <div className="player-page__video-container">
           {sourceLoading ? (
-            <div className="player-page__video-loading">
-              <LoadingSpinner />
-              <p>Fetching encrypted sources (bypassing Cloudflare)...</p>
+            <div className="player-page__video-loading premium-loader">
+              <div className="premium-loader__visual">
+                <LoadingSpinner />
+                <div className="premium-loader__pulse"></div>
+              </div>
+              <div className="premium-loader__content">
+                <p className="premium-loader__status animate-pulse">{loadingMessage}</p>
+                <div className="premium-loader__progress-bar">
+                  <div className="premium-loader__progress-fill"></div>
+                </div>
+              </div>
+              <button 
+                onClick={handleRefreshSources} 
+                className="btn btn--outline btn--sm refresh-pill"
+              >
+                Taking too long? Force Refresh
+              </button>
             </div>
           ) : currentSource && currentEpisode && anime ? (
             <VideoPlayer source={currentSource} title={`${anime.title} - ${currentEpisode.title}`} />
@@ -126,6 +176,13 @@ export default function PlayerPage() {
                 title="No Sources Found"
                 description="We couldn't fetch any streaming links for this episode. This can happen if the external source is down or Cloudflare bypass failed."
               />
+              <button 
+                onClick={handleRefreshSources} 
+                className="btn btn--primary"
+                style={{ marginTop: 'var(--space-md)', width: 'auto' }}
+              >
+                🔄 Refresh Sources
+              </button>
             </div>
           )}
         </div>

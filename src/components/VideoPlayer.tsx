@@ -147,7 +147,18 @@ export default function VideoPlayer({ source, title = '' }: VideoPlayerProps) {
         controls
         playsInline
         crossOrigin="anonymous"
-      />
+      >
+        {source.subtitles?.map((sub, index) => (
+          <track
+            key={`${sub.lang}-${index}`}
+            kind="subtitles"
+            src={sub.url}
+            srcLang={sub.lang}
+            label={sub.lang}
+            default={sub.default}
+          />
+        ))}
+      </video>
 
       {/* Quality selector */}
       {qualities.length > 0 && (
