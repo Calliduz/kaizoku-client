@@ -22,7 +22,7 @@ export default function HomePage() {
   // Filter states from URL
   const genre = searchParams.get('genre') || '';
   const format = searchParams.get('format') || '';
-  const sort = searchParams.get('sort') || 'popular';
+  const sort = searchParams.get('sort') || 'newest';
 
   const loadQuery = async () => {
     setLoading(true);
@@ -142,9 +142,9 @@ export default function HomePage() {
                 value={sort} 
                 onChange={(e) => updateFilters('sort', e.target.value)}
               >
+                <option value="newest">Recently Updated</option>
                 <option value="popular">Popularity</option>
                 <option value="rating">Highest Rated</option>
-                <option value="newest">Recently Added</option>
               </select>
             </div>
           </div>
