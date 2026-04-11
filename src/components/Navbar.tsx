@@ -1,19 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import '../styles/components/Navbar.css';
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import "../styles/components/Navbar.css";
 
 export default function Navbar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  
+
   // Local state for the input to make it feel responsive
-  const urlQuery = searchParams.get('search') || '';
+  const urlQuery = searchParams.get("search") || "";
   const [localQuery, setLocalQuery] = useState(urlQuery);
   const isInitialMount = useRef(true);
+  const hasUserTyped = useRef(false);
 
   // Sync local state if URL changes (e.g. browser back/forward or clear button)
   useEffect(() => {
     if (urlQuery !== localQuery) {
+      hasUserTyped.current = false;
       setLocalQuery(urlQuery);
     }
   }, [urlQuery]);
@@ -28,17 +30,17 @@ export default function Navbar() {
     const timer = setTimeout(() => {
       const newParams = new URLSearchParams(searchParams);
       if (localQuery.trim()) {
-        newParams.set('search', localQuery);
-        newParams.set('page', '1'); // Reset to page 1 on new search
+        newParams.set("search", localQuery);
+        newParams.set("page", "1"); // Reset to page 1 on new search
       } else {
-        newParams.delete('search');
-        newParams.delete('page');
+        newParams.delete("search");
+        newParams.delete("page");
       }
-      
+
       setSearchParams(newParams);
 
-      // If we're not on the home page, go there to see results
-      if (window.location.pathname !== '/') {
+      // Only navigate to home if the user explicitly typed in the search bar
+      if (hasUserTyped.current && window.location.pathname !== "/") {
         navigate(`/?${newParams.toString()}`);
       }
     }, 500); // 500ms debounce
@@ -47,6 +49,7 @@ export default function Navbar() {
   }, [localQuery]);
 
   const handleSearchChange = (val: string) => {
+    hasUserTyped.current = true;
     setLocalQuery(val);
   };
 
@@ -65,8 +68,18 @@ export default function Navbar() {
 
         {/* Search */}
         <div className="navbar__search-container">
-          <form className="navbar__search" onSubmit={handleSearchSubmit} id="nav-search-form">
-            <svg className="navbar__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <form
+            className="navbar__search"
+            onSubmit={handleSearchSubmit}
+            id="nav-search-form"
+          >
+            <svg
+              className="navbar__search-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
@@ -84,8 +97,12 @@ export default function Navbar() {
 
         {/* Nav Links */}
         <div className="navbar__links">
-          <Link to="/" className="navbar__link" id="nav-home">Home</Link>
-          <Link to="/catalog" className="navbar__link" id="nav-catalog">Catalog</Link>
+          <Link to="/" className="navbar__link" id="nav-home">
+            Home
+          </Link>
+          <Link to="/catalog" className="navbar__link" id="nav-catalog">
+            Catalog
+          </Link>
         </div>
       </div>
     </nav>
