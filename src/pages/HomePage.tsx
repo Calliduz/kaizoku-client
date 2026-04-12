@@ -161,7 +161,7 @@ export default function HomePage() {
                 </p>
                 <div className="spotlight-actions">
                   <button
-                    onClick={() => navigate(`/anime/${spotlight[0]._id}`)}        
+                    onClick={() => navigate(`/anime/${spotlight[0]._id}`)}
                     className="btn-watch"
                   >
                     Watch Now

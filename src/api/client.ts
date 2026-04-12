@@ -1,14 +1,14 @@
-import axios from 'axios';
+import axios from "axios";
 
 /**
  * Axios instance pre-configured with the API base URL.
  * All API calls go through this client for consistent config.
  */
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
   timeout: 30000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -23,14 +23,14 @@ client.interceptors.response.use(
     const message =
       error.response?.data?.error?.message ||
       error.message ||
-      'An unexpected error occurred';
+      "An unexpected error occurred";
 
     if (!isLogo404) {
-      console.error('[API Error]', message);
+      console.error("[API Error]", message);
     }
-    
+
     return Promise.reject(new Error(message));
-  }
+  },
 );
 
 export default client;

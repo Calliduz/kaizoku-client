@@ -53,7 +53,7 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
         )}
 
         {displayEpisodes > 0 && (
-          <span className="anime-card__episodes">{displayEpisodes} EP</span>      
+          <span className="anime-card__episodes">{displayEpisodes} EP</span>
         )}
 
         {format && (
