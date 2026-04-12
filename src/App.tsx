@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const PlayerPage = lazy(() => import("./pages/PlayerPage"));
+const AnimeDetailsPage = lazy(() => import("./pages/AnimeDetailsPage"));
 
 export default function App() {
   return (
@@ -14,7 +15,11 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/catalog" element={<HomePage />} />
-            <Route path="/anime/:id" element={<PlayerPage />} />
+            <Route path="/anime/:id" element={<AnimeDetailsPage />} />
+            <Route
+              path="/anime/:id/watch/:episodeId"
+              element={<PlayerPage />}
+            />
             <Route
               path="*"
               element={

@@ -198,3 +198,14 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+/* Mobile Nav */
+.navbar__burger { display: none; background: none; border: none; font-size: 1.5rem; color: var(--color-text); cursor: pointer; }
+.navbar__content { display: flex; align-items: center; width: 100%; justify-content: space-between; }
+@media (max-width: 768px) {
+  .navbar__burger { display: block; }
+  .navbar__content { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--color-bg-card); padding: 20px; gap: 20px; border-bottom: 1px solid var(--color-border); }
+  .navbar__content--open { display: flex; }
+  .navbar__search-container { width: 100%; max-width: none; }
+  .navbar__links { width: 100%; justify-content: center; }
+}

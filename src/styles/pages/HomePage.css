@@ -20,3 +20,16 @@
 .row-title { margin-left: 0; margin-bottom: 0; }
 .see-all-btn { background: none; border: none; color: #00a3ff; cursor: pointer; font-size: 0.9rem; font-weight: 600; padding: 5px 10px; }
 .see-all-btn:hover { background: rgba(0, 163, 255, 0.1); border-radius: 4px; }
+.discovery-view { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+.catalog { max-width: 1400px; margin: 40px auto 0; padding: 0 20px; }
+
+/* Spotlight Carousel */
+.spotlight-carousel { position: relative; width: 100vw; height: 60vh; min-height: 400px; margin-left: calc(-50vw + 50%); overflow: hidden; margin-bottom: 60px; }
+.spotlight-hero { position: absolute; inset: 0; background-size: cover; background-position: right top; display: flex; align-items: center; opacity: 0; transition: opacity 0.8s ease-in-out; }
+.spotlight-hero.active { opacity: 1; z-index: 1; }
+.spotlight-content { margin: 0; width: 100%; max-width: 1400px; padding: 0 40px; transform: translateY(20px); opacity: 0; transition: all 0.6s ease 0.3s; }
+.spotlight-hero.active .spotlight-content { transform: translateY(0); opacity: 1; }
+.spotlight-logo.drop-shadow { filter: drop-shadow(0 0 20px rgba(0,0,0,0.8)); max-width: 400px; max-height: 180px; object-fit: contain; }
+.carousel-indicators { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 2; }
+.carousel-dot { width: 12px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.3); border: none; cursor: pointer; transition: all 0.3s ease; }
+.carousel-dot.active { background: #fff; width: 24px; }

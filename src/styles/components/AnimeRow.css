@@ -1,0 +1,144 @@
+.anime-row-container {
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.row-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary, #ffffff);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.title-icon {
+  display: inline-block;
+  width: 4px;
+  height: 24px;
+  background: var(--primary-color, #00e0ff);
+  border-radius: 4px;
+}
+
+.see-all-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #b3b3b3);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.see-all-btn:hover {
+  color: var(--primary-color, #00e0ff);
+  transform: translateX(2px);
+}
+
+.row-scroll-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.anime-row {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0.5rem 0.5rem 1.5rem 0.5rem; /* Padded sides for shadow visibility */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.anime-row::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.anime-row-item {
+  flex: 0 0 calc(50% - 1.25rem); /* 2 items visible on very small screens */
+  min-width: 150px;
+}
+
+@media (min-width: 576px) {
+  .anime-row-item {
+    flex: 0 0 calc(33.333% - 1.25rem); /* 3 items */
+  }
+}
+
+@media (min-width: 768px) {
+  .anime-row-item {
+    flex: 0 0 calc(25% - 1.25rem); /* 4 items */
+  }
+}
+
+@media (min-width: 992px) {
+  .anime-row-item {
+    flex: 0 0 calc(20% - 1.25rem); /* 5 items */
+  }
+}
+
+@media (min-width: 1200px) {
+  .anime-row-item {
+    flex: 0 0 calc(16.666% - 1.25rem); /* 6 items visible */
+  }
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 45%; /* Slightly above middle for better balance against cards */
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(15, 15, 20, 0.85); /* Darker backdrop to pop more */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  opacity: 0.9;
+}
+
+.row-scroll-wrapper:hover .nav-arrow {
+  opacity: 1;
+}
+
+.nav-arrow:hover {
+  background: rgba(30, 30, 40, 0.95);
+  transform: translateY(-50%) scale(1.15);
+  color: var(--primary-color, #00e0ff);
+  border-color: var(--primary-color, #00e0ff);
+}
+
+.nav-arrow.prev-arrow {
+  left: 5px; /* Safely inside container, no clipping */
+}
+
+.nav-arrow.next-arrow {
+  right: 5px; /* Safely inside container, no clipping */
+}
+
+@media (max-width: 768px) {
+  .nav-arrow {
+    display: none; /* Hide arrows on touch devices */
+  }
+}

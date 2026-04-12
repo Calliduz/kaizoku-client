@@ -3,6 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { fetchAllAnime } from "../api/animeApi";
 import AnimeCard from "../components/AnimeCard";
 import AnimeCardSkeleton from "../components/AnimeCardSkeleton";
+import AnimeRow from "../components/AnimeRow";
+import AnimeLogoImage from "../components/AnimeLogoImage";
 import EmptyState from "../components/EmptyState";
 import ErrorDisplay from "../components/ErrorDisplay";
 import type { Anime } from "../types";
@@ -30,19 +32,22 @@ export default function HomePage() {
   const [spotlight, setSpotlight] = useState<Anime[]>([]);
   const [latest, setLatest] = useState<Anime[]>([]);
   const [topRated, setTopRated] = useState<Anime[]>([]);
+  const [trending, setTrending] = useState<Anime[]>([]);
   const [discoveryLoading, setDiscoveryLoading] = useState(true);
 
   const loadDiscovery = async () => {
     setDiscoveryLoading(true);
     try {
-      const [spotlightRes, latestRes, topRes] = await Promise.all([
+      const [spotlightRes, latestRes, topRes, trendingRes] = await Promise.all([
         fetchAllAnime({ sort: "popular", limit: 10, page: 1 }),
         fetchAllAnime({ sort: "newest", limit: 15, page: 1 }),
         fetchAllAnime({ sort: "rating", limit: 15, page: 1 }),
+        fetchAllAnime({ sort: "popularity", limit: 15, page: 1 }),
       ]);
       setSpotlight(spotlightRes.data);
       setLatest(latestRes.data);
       setTopRated(topRes.data);
+      setTrending(trendingRes.data);
     } catch (e) {
       console.error(e);
       setError("Failed to load discovery data");
@@ -144,7 +149,11 @@ export default function HomePage() {
                   className="spotlight-logo"
                 />
               ) : (
-                <h1 className="spotlight-title">{spotlight[0].title}</h1>
+                <AnimeLogoImage
+                  animeId={spotlight[0]._id}
+                  title={spotlight[0].title}
+                  className="spotlight-logo"
+                />
               )}
               <p className="spotlight-description">
                 {spotlight[0].description?.substring(0, 150)}...
@@ -162,62 +171,21 @@ export default function HomePage() {
         )}
 
         {/* Horizontal Scrolling Rows */}
-        <div className="discovery-row-container">
-          <div className="row-title-container">
-            <h2 className="row-title">LATEST RELEASES</h2>
-            <button
-              className="see-all-btn"
-              onClick={() => updateFilters("sort", "newest")}
-            >
-              See All &gt;
-            </button>
-          </div>
-          <div className="anime-row">
-            {latest.map((anime) => (
-              <div className="anime-row-item" key={anime._id}>
-                <AnimeCard anime={anime} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="discovery-row-container">
-          <div className="row-title-container">
-            <h2 className="row-title">TRENDING THIS SEASON</h2>
-            <button
-              className="see-all-btn"
-              onClick={() => updateFilters("sort", "popular")}
-            >
-              See All &gt;
-            </button>
-          </div>
-          <div className="anime-row">
-            {spotlight.slice(1).map((anime) => (
-              <div className="anime-row-item" key={anime._id}>
-                <AnimeCard anime={anime} />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="discovery-row-container">
-          <div className="row-title-container">
-            <h2 className="row-title">ALL-TIME POPULAR</h2>
-            <button
-              className="see-all-btn"
-              onClick={() => updateFilters("sort", "rating")}
-            >
-              See All &gt;
-            </button>
-          </div>
-          <div className="anime-row">
-            {topRated.map((anime) => (
-              <div className="anime-row-item" key={anime._id}>
-                <AnimeCard anime={anime} />
-              </div>
-            ))}
-          </div>
-        </div>
+        <AnimeRow
+          title="Latest Releases"
+          animes={latest}
+          onSeeAll={() => updateFilters("sort", "newest")}
+        />
+        <AnimeRow
+          title="Trending This Season"
+          animes={trending}
+          onSeeAll={() => updateFilters("sort", "popularity")}
+        />
+        <AnimeRow
+          title="All-Time Popular"
+          animes={topRated}
+          onSeeAll={() => updateFilters("sort", "rating")}
+        />
       </div>
     );
   };
