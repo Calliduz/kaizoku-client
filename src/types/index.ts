@@ -58,6 +58,7 @@ export interface Anime {
     | "UNKNOWN";
   format: string | null;
   totalEpisodes: number;
+  latestEpisode?: number;
   episodeDuration: number | null;
   rating: number;
   meanScore: number;

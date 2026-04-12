@@ -135,36 +135,38 @@ export default function HomePage() {
       <div className="discovery-view">
         {/* Spotlight Carousel Hero (Placeholder for top item) */}
         {spotlight.length > 0 && (
-          <div
-            className="spotlight-hero"
-            style={{
-              backgroundImage: `linear-gradient(to right, rgba(10,10,10,0.9) 20%, rgba(10,10,10,0.4) 60%, rgba(10,10,10,0)), url(${spotlight[0].bannerImage || spotlight[0].coverImage})`,
-            }}
-          >
-            <div className="spotlight-content">
-              {spotlight[0].logo ? (
-                <img
-                  src={spotlight[0].logo}
-                  alt={spotlight[0].title}
-                  className="spotlight-logo"
-                />
-              ) : (
-                <AnimeLogoImage
-                  animeId={spotlight[0]._id}
-                  title={spotlight[0].title}
-                  className="spotlight-logo"
-                />
-              )}
-              <p className="spotlight-description">
-                {spotlight[0].description?.substring(0, 150)}...
-              </p>
-              <div className="spotlight-actions">
-                <button
-                  onClick={() => navigate(`/anime/${spotlight[0]._id}`)}
-                  className="btn-watch"
-                >
-                  Watch Now
-                </button>
+          <div className="spotlight-carousel">
+            <div
+              className="spotlight-hero active"
+              style={{
+                backgroundImage: `linear-gradient(to right, rgba(10,10,10,0.9) 20%, rgba(10,10,10,0.4) 60%, rgba(10,10,10,0)), url(${spotlight[0].bannerImage || spotlight[0].coverImage})`,
+              }}
+            >
+              <div className="spotlight-content">
+                {spotlight[0].logo ? (
+                  <img
+                    src={spotlight[0].logo}
+                    alt={spotlight[0].title}
+                    className="spotlight-logo"
+                  />
+                ) : (
+                  <AnimeLogoImage
+                    animeId={spotlight[0]._id}
+                    title={spotlight[0].title}
+                    className="spotlight-logo"
+                  />
+                )}
+                <p className="spotlight-description">
+                  {spotlight[0].description?.substring(0, 150)}...
+                </p>
+                <div className="spotlight-actions">
+                  <button
+                    onClick={() => navigate(`/anime/${spotlight[0]._id}`)}        
+                    className="btn-watch"
+                  >
+                    Watch Now
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -182,7 +184,7 @@ export default function HomePage() {
           onSeeAll={() => updateFilters("sort", "popularity")}
         />
         <AnimeRow
-          title="All-Time Popular"
+          title="Top Rated"
           animes={topRated}
           onSeeAll={() => updateFilters("sort", "rating")}
         />

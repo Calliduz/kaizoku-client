@@ -51,14 +51,12 @@ export default function AnimeLogoImage({
     return <h1 className="details-title-text">{title}</h1>;
   }
 
-  return (
-    logo ? (
-      <img
-        src={logo}
-        alt={title}
-        className={`${className} ${loading ? "logo-loading" : "logo-loaded"}`}
-        style={{ opacity: loading ? 0 : 1, transition: "opacity 0.6s ease" }}
-      />
-    ) : null
-  );
+  return logo ? (
+    <img
+      src={logo}
+      alt={title}
+      className={`${className} ${loading ? "logo-loading" : "logo-loaded"}`}
+      style={{ opacity: loading ? 0 : 1, transition: "opacity 0.6s ease" }}
+    />
+  ) : null;
 }

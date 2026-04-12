@@ -20,9 +20,12 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
     genres = [],
     rating,
     totalEpisodes,
+    latestEpisode,
     description,
     format,
   } = anime;
+
+  const displayEpisodes = latestEpisode ?? totalEpisodes;
 
   return (
     <Link to={`/anime/${_id}`} className="anime-card" id={`anime-card-${_id}`}>
@@ -49,8 +52,8 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
           </span>
         )}
 
-        {totalEpisodes > 0 && (
-          <span className="anime-card__episodes">{totalEpisodes} EP</span>
+        {displayEpisodes > 0 && (
+          <span className="anime-card__episodes">{displayEpisodes} EP</span>      
         )}
 
         {format && (
