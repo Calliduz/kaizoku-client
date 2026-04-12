@@ -4,7 +4,7 @@ import { fetchAnimeById, fetchEpisodes } from "../api/animeApi";
 import EpisodeList from "../components/EpisodeList";
 import CharacterList from "../components/CharacterList";
 import RecommendationList from "../components/RecommendationList";
-import LoadingSpinner from "../components/LoadingSpinner";
+import AnimeDetailsSkeleton from "../components/AnimeDetailsSkeleton";
 import ErrorDisplay from "../components/ErrorDisplay";
 import AnimeLogoImage from "../components/AnimeLogoImage";
 import type { Anime, Episode } from "../types";
@@ -41,7 +41,7 @@ export default function AnimeDetailsPage() {
     loadData();
   }, [id]);
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <AnimeDetailsSkeleton />;
   if (error)
     return (
       <ErrorDisplay message={error} onRetry={() => window.location.reload()} />

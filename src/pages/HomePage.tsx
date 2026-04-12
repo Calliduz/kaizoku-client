@@ -34,6 +34,7 @@ export default function HomePage() {
   const [topRated, setTopRated] = useState<Anime[]>([]);
   const [trending, setTrending] = useState<Anime[]>([]);
   const [discoveryLoading, setDiscoveryLoading] = useState(true);
+  const [currentSpotlightIdx, setCurrentSpotlightIdx] = useState(0);
 
   const loadDiscovery = async () => {
     setDiscoveryLoading(true);
@@ -82,6 +83,14 @@ export default function HomePage() {
     }
   }, [search, genre, format, sort, isBrowsing]);
 
+  useEffect(() => {
+    if (spotlight.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentSpotlightIdx((prev) => (prev + 1) % spotlight.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [spotlight]);
+
   const updateFilters = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (value) {
@@ -117,15 +126,65 @@ export default function HomePage() {
   const renderDiscoveryView = () => {
     if (discoveryLoading) {
       return (
-        <div className="discovery-view">
-          <div className="carousel-skeleton" />
-          <h2 className="row-title">Latest Updates</h2>
-          <div className="anime-row">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div className="anime-row-item" key={i}>
-                <AnimeCardSkeleton />
-              </div>
-            ))}
+        <div className="discovery-view animate-fade-in" id="discovery-skeleton">
+          <div
+            className="carousel-skeleton skeleton"
+            style={{
+              width: "100vw",
+              height: "60vh",
+              minHeight: "400px",
+              marginLeft: "calc(-50vw + 50%)",
+              marginBottom: "60px",
+            }}
+          />
+
+          <h2
+            className="row-title"
+            style={{ width: "200px", height: "28px", marginBottom: "20px" }}
+          >
+            <div
+              className="skeleton"
+              style={{ width: "100%", height: "100%", borderRadius: "4px" }}
+            />
+          </h2>
+          <div className="anime-row" style={{ overflow: "hidden" }}>
+            <AnimeCardSkeleton count={6} />
+          </div>
+
+          <h2
+            className="row-title"
+            style={{
+              width: "250px",
+              height: "28px",
+              marginTop: "40px",
+              marginBottom: "20px",
+            }}
+          >
+            <div
+              className="skeleton"
+              style={{ width: "100%", height: "100%", borderRadius: "4px" }}
+            />
+          </h2>
+          <div className="anime-row" style={{ overflow: "hidden" }}>
+            <AnimeCardSkeleton count={6} />
+          </div>
+
+          <h2
+            className="row-title"
+            style={{
+              width: "150px",
+              height: "28px",
+              marginTop: "40px",
+              marginBottom: "20px",
+            }}
+          >
+            <div
+              className="skeleton"
+              style={{ width: "100%", height: "100%", borderRadius: "4px" }}
+            />
+          </h2>
+          <div className="anime-row" style={{ overflow: "hidden" }}>
+            <AnimeCardSkeleton count={6} />
           </div>
         </div>
       );
@@ -133,41 +192,61 @@ export default function HomePage() {
 
     return (
       <div className="discovery-view">
-        {/* Spotlight Carousel Hero (Placeholder for top item) */}
+        {/* Spotlight Carousel */}
         {spotlight.length > 0 && (
           <div className="spotlight-carousel">
-            <div
-              className="spotlight-hero active"
-              style={{
-                backgroundImage: `linear-gradient(to right, rgba(10,10,10,0.9) 20%, rgba(10,10,10,0.4) 60%, rgba(10,10,10,0)), url(${spotlight[0].bannerImage || spotlight[0].coverImage})`,
-              }}
-            >
-              <div className="spotlight-content">
-                {spotlight[0].logo ? (
-                  <img
-                    src={spotlight[0].logo}
-                    alt={spotlight[0].title}
-                    className="spotlight-logo"
-                  />
-                ) : (
-                  <AnimeLogoImage
-                    animeId={spotlight[0]._id}
-                    title={spotlight[0].title}
-                    className="spotlight-logo"
-                  />
-                )}
-                <p className="spotlight-description">
-                  {spotlight[0].description?.substring(0, 150)}...
-                </p>
-                <div className="spotlight-actions">
-                  <button
-                    onClick={() => navigate(`/anime/${spotlight[0]._id}`)}
-                    className="btn-watch"
-                  >
-                    Watch Now
-                  </button>
+            {spotlight.map((anime, index) => (
+              <div
+                key={anime._id}
+                className={`spotlight-hero ${index === currentSpotlightIdx ? "active" : ""}`}
+                style={{
+                  backgroundImage: `linear-gradient(to right, rgba(10,10,10,0.9) 20%, rgba(10,10,10,0.4) 60%, rgba(10,10,10,0)), url(${anime.bannerImage || anime.coverImage})`,
+                }}
+              >
+                <div
+                  className="spotlight-content"
+                  style={
+                    index !== currentSpotlightIdx ? { display: "none" } : {}
+                  }
+                >
+                  {anime.logo ? (
+                    <img
+                      src={anime.logo}
+                      alt={anime.title}
+                      className="spotlight-logo drop-shadow"
+                    />
+                  ) : (
+                    <AnimeLogoImage
+                      animeId={anime._id}
+                      title={anime.title}
+                      className="spotlight-logo"
+                    />
+                  )}
+                  <h2 className="spotlight-title">{anime.title}</h2>
+                  <p className="spotlight-description">
+                    {anime.description?.substring(0, 150)}...
+                  </p>
+                  <div className="spotlight-actions">
+                    <button
+                      onClick={() => navigate(`/anime/${anime._id}`)}
+                      className="btn-watch"
+                    >
+                      Watch Now
+                    </button>
+                  </div>
                 </div>
               </div>
+            ))}
+
+            <div className="carousel-indicators">
+              {spotlight.map((_, index) => (
+                <button
+                  key={index}
+                  className={`carousel-dot ${index === currentSpotlightIdx ? "active" : ""}`}
+                  onClick={() => setCurrentSpotlightIdx(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
         )}
@@ -236,6 +315,9 @@ export default function HomePage() {
               {animeList.map((anime) => (
                 <AnimeCard key={anime._id} anime={anime} />
               ))}
+              {loading && animeList.length > 0 && (
+                <AnimeCardSkeleton count={5} />
+              )}
             </div>
             {hasMore && (
               <div className="catalog__actions">
@@ -244,7 +326,7 @@ export default function HomePage() {
                   onClick={handleLoadMore}
                   disabled={loading}
                 >
-                  {loading ? "Loading..." : "Load More"}
+                  {loading && animeList.length > 0 ? "" : "Load More Anime"}
                 </button>
               </div>
             )}
