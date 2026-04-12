@@ -145,3 +145,123 @@
   font-size: 0.95rem;
   max-width: 900px;
 }
+
+/* Individual Anime Page Responsiveness */
+@media (max-width: 1024px) {
+  .details-hero {
+    height: 40vh;
+  }
+  .details-title-text {
+    font-size: 2.2rem;
+  }
+  .details-logo {
+    max-width: 300px;
+    max-height: 100px;
+  }
+  .details-content-container {
+    padding: 0 20px;
+    margin-top: -80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .details-hero {
+    height: 35vh;
+  }
+  .details-top-grid {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+  .details-poster {
+    width: 200px;
+    margin-top: -60px; /* Push poster higher up over the hero */
+  }
+  .details-info {
+    padding-top: 10px;
+    align-items: center;
+  }
+  .details-title-text {
+    font-size: 1.8rem;
+  }
+  .details-metadata {
+    justify-content: center;
+  }
+  .details-actions {
+    justify-content: center;
+    width: 100%;
+  }
+  .btn-watch-now, .btn-add-list {
+    flex: 1;
+    justify-content: center;
+  }
+  .details-logo {
+    max-width: 250px;
+    max-height: 80px;
+  }
+  .details-summary {
+    text-align: left;
+    font-size: 0.9rem;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .details-hero {
+    height: 30vh;
+  }
+  .details-poster {
+    width: 160px;
+    margin-top: -40px;
+  }
+  .details-title-text {
+    font-size: 1.5rem;
+  }
+  .details-metadata {
+    gap: 6px;
+  }
+  .meta-chip {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+  .details-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-watch-now, .btn-add-list {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+  .details-content-container {
+    padding: 0 15px;
+  }
+}
+
+/* Fix for details-main-grid overlap */
+.details-main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 30px;
+  max-width: 1400px;
+  margin: 40px auto 0;
+  padding: 0 20px;
+}
+
+@media (max-width: 992px) {
+  .details-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .details-content-container {
+    margin-top: 0;
+  }
+  .details-poster {
+    margin-top: -80px;
+  }
+  .details-main-grid {
+    padding: 0 15px;
+  }
+}

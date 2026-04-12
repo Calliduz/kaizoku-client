@@ -215,25 +215,14 @@ export default function PlayerPage() {
           className="player-page__layout"
           style={{
             marginTop: "20px",
-            gridTemplateColumns: "minmax(0, 1fr) 350px",
           }}
         >
-          <div
-            className="player-page__info glass"
-            style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}
-          >
-            <div
-              className="player-page__cover-wrapper"
-              style={{ flexShrink: 0 }}
-            >
+          <div className="player-page__info glass player-info-box">
+            <div className="player-page__cover-wrapper">
               <img
                 src={anime.coverImage}
                 alt={anime.title}
-                style={{
-                  width: "120px",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-                }}
+                className="player-page__cover-img"
               />
             </div>
             <div className="player-page__details">

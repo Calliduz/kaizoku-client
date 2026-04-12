@@ -147,99 +147,88 @@ export default function AnimeDetailsPage() {
         </div>
       </div>
 
-      <div
-        className="container"
-        style={{ maxWidth: "1400px", margin: "40px auto 0", padding: "20px" }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0, 1fr) 300px",
-            gap: "30px",
-          }}
-        >
-          <div className="main-content-column">
-            <div className="episodes-section" style={{ marginBottom: "40px" }}>
-              <h2 style={{ marginBottom: "20px" }}>
-                Episodes ({episodes.length})
-              </h2>
-              {episodes.length > 0 ? (
-                <EpisodeList
-                  episodes={episodes}
-                  currentEpisodeId={undefined}
-                  onSelect={(ep) => navigate(`/anime/${id}/watch/${ep._id}`)}
-                />
-              ) : (
-                <div>No episodes available yet.</div>
-              )}
-            </div>
-            {anime.characters && anime.characters.length > 0 && (
-              <CharacterList characters={anime.characters.slice(0, 10)} />
+      <div className="container details-main-grid">
+        <div className="main-content-column">
+          <div className="episodes-section" style={{ marginBottom: "40px" }}>
+            <h2 style={{ marginBottom: "20px" }}>
+              Episodes ({episodes.length})
+            </h2>
+            {episodes.length > 0 ? (
+              <EpisodeList
+                episodes={episodes}
+                currentEpisodeId={undefined}
+                onSelect={(ep) => navigate(`/anime/${id}/watch/${ep._id}`)}
+              />
+            ) : (
+              <div>No episodes available yet.</div>
             )}
           </div>
+          {anime.characters && anime.characters.length > 0 && (
+            <CharacterList characters={anime.characters.slice(0, 10)} />
+          )}
+        </div>
 
-          <aside
-            className="sidebar-column"
-            style={{ display: "flex", flexDirection: "column", gap: "30px" }}
+        <aside
+          className="sidebar-column"
+          style={{ display: "flex", flexDirection: "column", gap: "30px" }}
+        >
+          <div
+            className="production-info card-panel"
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              padding: "20px",
+              borderRadius: "12px",
+            }}
           >
-            <div
-              className="production-info card-panel"
+            <h3
               style={{
-                background: "rgba(255,255,255,0.02)",
-                padding: "20px",
-                borderRadius: "12px",
+                borderBottom: "1px solid rgba(255,255,255,0.1)",
+                paddingBottom: "10px",
+                marginBottom: "15px",
               }}
             >
-              <h3
-                style={{
-                  borderBottom: "1px solid rgba(255,255,255,0.1)",
-                  paddingBottom: "10px",
-                  marginBottom: "15px",
-                }}
-              >
-                Production
-              </h3>
-              <p
-                style={{
-                  margin: "8px 0",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span style={{ color: "var(--text-secondary)" }}>Studio</span>
-                <span>{anime.studios?.[0]?.name || "Unknown"}</span>
-              </p>
-              <p
-                style={{
-                  margin: "8px 0",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span style={{ color: "var(--text-secondary)" }}>Episodes</span>
-                <span>{anime.totalEpisodes || "Ongoing"}</span>
-              </p>
-              <p
-                style={{
-                  margin: "8px 0",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span style={{ color: "var(--text-secondary)" }}>Season</span>
-                <span>
-                  {anime.season} {anime.seasonYear}
-                </span>
-              </p>
-            </div>
-            {anime.recommendations && anime.recommendations.length > 0 && (
-              <RecommendationList
-                title="More Like This"
-                items={anime.recommendations}
-              />
-            )}
-          </aside>
-        </div>
+              Production
+            </h3>
+            <p
+              style={{
+                margin: "8px 0",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <span style={{ color: "var(--text-secondary)" }}>Studio</span>
+              <span>{anime.studios?.[0]?.name || "Unknown"}</span>
+            </p>
+            <p
+              style={{
+                margin: "8px 0",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <span style={{ color: "var(--text-secondary)" }}>Episodes</span>
+              <span>{anime.totalEpisodes || "Ongoing"}</span>
+            </p>
+            <p
+              style={{
+                margin: "8px 0",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <span style={{ color: "var(--text-secondary)" }}>Season</span>
+              <span>
+                {anime.season} {anime.seasonYear}
+              </span>
+            </p>
+          </div>
+          {anime.recommendations && anime.recommendations.length > 0 && (
+            <RecommendationList
+              title="More Like This"
+              items={anime.recommendations}
+            />
+          )}
+        </aside>
       </div>
     </div>
   );
