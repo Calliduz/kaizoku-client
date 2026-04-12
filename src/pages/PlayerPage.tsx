@@ -116,7 +116,18 @@ export default function PlayerPage() {
     }
   }, [sourceLoading]);
 
-  if (loading) return <PlayerSkeleton />;
+  if (loading) {
+    return (
+      <>
+        <div className="mobile-only-spinner">
+          <LoadingSpinner />
+        </div>
+        <div className="desktop-only-skeleton">
+          <PlayerSkeleton />
+        </div>
+      </>
+    );
+  }
 
   if (error || !anime)
     return (

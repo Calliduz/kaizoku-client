@@ -7,6 +7,7 @@ import RecommendationList from "../components/RecommendationList";
 import AnimeDetailsSkeleton from "../components/AnimeDetailsSkeleton";
 import ErrorDisplay from "../components/ErrorDisplay";
 import AnimeLogoImage from "../components/AnimeLogoImage";
+import LoadingSpinner from "../components/LoadingSpinner";
 import type { Anime, Episode } from "../types";
 import "../styles/pages/AnimeDetailsPage.css";
 
@@ -41,7 +42,18 @@ export default function AnimeDetailsPage() {
     loadData();
   }, [id]);
 
-  if (loading) return <AnimeDetailsSkeleton />;
+  if (loading) {
+    return (
+      <>
+        <div className="mobile-only-spinner">
+          <LoadingSpinner />
+        </div>
+        <div className="desktop-only-skeleton">
+          <AnimeDetailsSkeleton />
+        </div>
+      </>
+    );
+  }
   if (error)
     return (
       <ErrorDisplay message={error} onRetry={() => window.location.reload()} />

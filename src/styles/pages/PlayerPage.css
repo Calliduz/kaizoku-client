@@ -26,6 +26,20 @@
   padding-bottom: var(--space-3xl);
 }
 
+.player-back-btn {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  margin-bottom: var(--space-md);
+}
+
+@media (max-width: 768px) {
+  .player-back-btn {
+    margin-bottom: 10px;
+  }
+}
+
 .player-page__back {
   display: inline-block;
   background: transparent;

@@ -46,11 +46,16 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
 .spotlight-description {
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 1.05rem;
+  line-height: 1.6;
   margin-bottom: 20px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  color: #ddd;
+  color: #f4f4f4;
+  font-weight: 500;
+  text-shadow: 
+    0px 1px 3px rgba(0, 0, 0, 0.9),
+    0px 2px 6px rgba(0, 0, 0, 0.8),
+    0px 0px 14px rgba(0, 0, 0, 0.7);
+  max-width: 90%;
 }
 .btn-watch {
   background-color: #00a3ff;
@@ -281,6 +286,7 @@
   }
   .spotlight-hero {
     padding: 20px;
+    padding-top: calc(var(--navbar-height) + 20px);
     background-image: var(--bg-mobile);
     background-position: center;
     background-size: cover;
@@ -288,28 +294,36 @@
     padding-bottom: 50px;
   }
   .spotlight-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
     padding: 0 20px;
   }
   .spotlight-logo.drop-shadow {
     max-width: 250px;
     max-height: 100px;
+    margin-bottom: 10px;
   }
   .spotlight-title {
     font-size: 1.8rem;
     margin-bottom: 10px;
   }
   .spotlight-description {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-bottom: 15px;
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9), 0px 0px 8px rgba(0, 0, 0, 0.8);
+    font-weight: 500;
   }
   .catalog__header {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
+    padding-top: calc(var(--navbar-height) + 15px);
   }
   .catalog__filters {
     width: 100%;
@@ -377,6 +391,11 @@
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 15px;
   }
+  .spotlight-hero {
+    align-items: flex-end;
+    padding-bottom: 50px;
+    padding-top: calc(var(--navbar-height) + 20px);
+  }
   .spotlight-logo.drop-shadow {
     max-width: 200px;
     margin-bottom: 10px;
@@ -404,13 +423,22 @@
   .spotlight-hero {
     align-items: flex-end;
     padding-bottom: 60px;
+    padding-top: calc(var(--navbar-height) + 20px);
     background-size: cover;
+  }
+  .spotlight-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
   }
   .spotlight-description {
     -webkit-line-clamp: 3;
     font-size: 0.95rem;
     overflow: hidden;
     margin-bottom: 20px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9), 0px 0px 8px rgba(0, 0, 0, 0.8);
+    font-weight: 500;
   }
   .spotlight-title {
     font-size: 2rem;
@@ -493,17 +521,20 @@
     margin-left: calc(-50vw + 50%);
     margin-top: calc(-1 * var(--navbar-height));
     border-radius: 0;
-    height: 58vh;
-    min-height: 340px;
+    height: 65vh;
+    min-height: 420px;
+    margin-bottom: 10px;
   }
 
   .home-page .spotlight-hero {
     background-size: cover;
     background-position: center top;
+    padding-top: calc(var(--navbar-height));
   }
 
   .home-page .spotlight-content {
     padding-bottom: 20px;
+    justify-content: flex-end;
   }
 
   .home-page .spotlight-title {
@@ -514,10 +545,68 @@
   .home-page .spotlight-description {
     font-size: 0.95rem;
     margin-bottom: 8px;
+    font-weight: 600;
+    color: #f8f8f8;
+    text-shadow: 
+      0px 1px 3px rgba(0, 0, 0, 0.9),
+      0px 2px 6px rgba(0, 0, 0, 0.8),
+      0px 0px 12px rgba(0, 0, 0, 0.7);
   }
 
   .catalog-back-btn {
     margin-right: 0;
     margin-bottom: 10px;
+  }
+}
+
+/* Final mobile-first carousel layering fix (kept last to override older blocks) */
+.home-page .spotlight-hero {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+}
+
+.home-page .spotlight-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(8, 10, 16, 0.45) 0%, rgba(8, 10, 16, 0.15) 28%, rgba(8, 10, 16, 0.72) 100%),
+    linear-gradient(90deg, rgba(6, 8, 14, 0.58) 0%, rgba(6, 8, 14, 0.18) 45%, rgba(6, 8, 14, 0) 100%);
+  pointer-events: none;
+}
+
+.home-page .spotlight-content,
+.home-page .carousel-indicators {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .home-page .spotlight-carousel {
+    margin-top: calc(-1 * var(--navbar-height));
+    height: 56vh;
+    min-height: 330px;
+    margin-bottom: 6px;
+  }
+
+  .home-page .spotlight-hero {
+    padding-top: calc(var(--navbar-height) + 10px);
+  }
+
+  .home-page .spotlight-content {
+    padding: 0 16px 16px;
+  }
+
+  .home-page .carousel-indicators {
+    bottom: 12px;
+  }
+
+  .home-page .spotlight-description {
+    color: #ffffff;
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.9),
+      0 4px 16px rgba(0, 0, 0, 0.85);
   }
 }

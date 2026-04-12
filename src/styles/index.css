@@ -314,10 +314,10 @@ ol {
 
 /* Enhanced Back Button */
 .back-btn {
-  position: fixed;
-  top: calc(var(--navbar-height) + 12px);
-  left: 14px;
-  z-index: 1200;
+  position: absolute;
+  top: calc(var(--navbar-height) + 14px);
+  left: max(14px, calc((100% - 1200px) / 2 + 14px));
+  z-index: 100;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -351,13 +351,19 @@ ol {
 
 .details-back-btn,
 .player-back-btn {
-  top: calc(var(--navbar-height) + 10px);
+  top: calc(var(--navbar-height) + 14px);
+}
+
+@media (max-width: 1240px) {
+  .back-btn {
+    left: 20px;
+  }
 }
 
 @media (max-width: 768px) {
   .back-btn {
-    top: calc(var(--navbar-height) + 8px);
-    left: 10px;
+    top: calc(var(--navbar-height) + 10px);
+    left: 12px;
     padding: 7px 12px;
     font-size: 0.75rem;
   }
