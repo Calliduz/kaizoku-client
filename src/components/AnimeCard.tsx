@@ -65,15 +65,6 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
 
       <div className="anime-card__info">
         <h3 className="anime-card__title">{title}</h3>
-        {genres.length > 0 && (
-          <div className="anime-card__genres">
-            {genres.slice(0, 3).map((genre) => (
-              <span key={genre} className="anime-card__genre">
-                {genre}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
     </Link>
   );

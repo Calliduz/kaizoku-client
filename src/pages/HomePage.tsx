@@ -7,6 +7,7 @@ import AnimeRow from "../components/AnimeRow";
 import AnimeLogoImage from "../components/AnimeLogoImage";
 import EmptyState from "../components/EmptyState";
 import ErrorDisplay from "../components/ErrorDisplay";
+import LoadingSpinner from "../components/LoadingSpinner";
 import type { Anime } from "../types";
 import "../styles/pages/HomePage.css";
 
@@ -19,7 +20,7 @@ export default function HomePage() {
   const format = searchParams.get("format") || "";
   const sort = searchParams.get("sort") || "newest";
 
-  const isBrowsing = search || genre || format;
+  const isBrowsing = search || genre || format || searchParams.has("sort");
 
   // Browsing State
   const [animeList, setAnimeList] = useState<Anime[]>([]);
@@ -127,64 +128,69 @@ export default function HomePage() {
     if (discoveryLoading) {
       return (
         <div className="discovery-view animate-fade-in" id="discovery-skeleton">
-          <div
-            className="carousel-skeleton skeleton"
-            style={{
-              width: "100vw",
-              height: "60vh",
-              minHeight: "400px",
-              marginLeft: "calc(-50vw + 50%)",
-              marginBottom: "60px",
-            }}
-          />
-
-          <h2
-            className="row-title"
-            style={{ width: "200px", height: "28px", marginBottom: "20px" }}
-          >
-            <div
-              className="skeleton"
-              style={{ width: "100%", height: "100%", borderRadius: "4px" }}
-            />
-          </h2>
-          <div className="anime-row" style={{ overflow: "hidden" }}>
-            <AnimeCardSkeleton count={6} />
+          <div className="mobile-only-spinner">
+            <LoadingSpinner />
           </div>
-
-          <h2
-            className="row-title"
-            style={{
-              width: "250px",
-              height: "28px",
-              marginTop: "40px",
-              marginBottom: "20px",
-            }}
-          >
+          <div className="desktop-only-skeleton">
             <div
-              className="skeleton"
-              style={{ width: "100%", height: "100%", borderRadius: "4px" }}
+              className="carousel-skeleton skeleton"
+              style={{
+                width: "100vw",
+                height: "60vh",
+                minHeight: "400px",
+                marginLeft: "calc(-50vw + 50%)",
+                marginBottom: "60px",
+              }}
             />
-          </h2>
-          <div className="anime-row" style={{ overflow: "hidden" }}>
-            <AnimeCardSkeleton count={6} />
-          </div>
 
-          <h2
-            className="row-title"
-            style={{
-              width: "150px",
-              height: "28px",
-              marginTop: "40px",
-              marginBottom: "20px",
-            }}
-          >
-            <div
-              className="skeleton"
-              style={{ width: "100%", height: "100%", borderRadius: "4px" }}
-            />
-          </h2>
-          <div className="anime-row" style={{ overflow: "hidden" }}>
-            <AnimeCardSkeleton count={6} />
+            <h2
+              className="row-title"
+              style={{ width: "200px", height: "28px", marginBottom: "20px" }}
+            >
+              <div
+                className="skeleton"
+                style={{ width: "100%", height: "100%", borderRadius: "4px" }}
+              />
+            </h2>
+            <div className="anime-row" style={{ overflow: "hidden" }}>
+              <AnimeCardSkeleton count={6} />
+            </div>
+
+            <h2
+              className="row-title"
+              style={{
+                width: "250px",
+                height: "28px",
+                marginTop: "40px",
+                marginBottom: "20px",
+              }}
+            >
+              <div
+                className="skeleton"
+                style={{ width: "100%", height: "100%", borderRadius: "4px" }}
+              />
+            </h2>
+            <div className="anime-row" style={{ overflow: "hidden" }}>
+              <AnimeCardSkeleton count={6} />
+            </div>
+
+            <h2
+              className="row-title"
+              style={{
+                width: "150px",
+                height: "28px",
+                marginTop: "40px",
+                marginBottom: "20px",
+              }}
+            >
+              <div
+                className="skeleton"
+                style={{ width: "100%", height: "100%", borderRadius: "4px" }}
+              />
+            </h2>
+            <div className="anime-row" style={{ overflow: "hidden" }}>
+              <AnimeCardSkeleton count={6} />
+            </div>
           </div>
         </div>
       );
@@ -199,9 +205,12 @@ export default function HomePage() {
               <div
                 key={anime._id}
                 className={`spotlight-hero ${index === currentSpotlightIdx ? "active" : ""}`}
-                style={{
-                  backgroundImage: `linear-gradient(to right, rgba(10,10,10,0.9) 20%, rgba(10,10,10,0.4) 60%, rgba(10,10,10,0)), url(${anime.bannerImage || anime.coverImage})`,
-                }}
+                style={
+                  {
+                    "--bg-desktop": `linear-gradient(to right, rgba(10,10,10,0.9) 20%, rgba(10,10,10,0.4) 60%, rgba(10,10,10,0)), url(${anime.bannerImage || anime.coverImage})`,
+                    "--bg-mobile": `linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.5) 40%, rgba(10,10,10,0) 80%), url(${anime.coverImage || anime.bannerImage})`,
+                  } as React.CSSProperties
+                }
               >
                 <div
                   className="spotlight-content"
@@ -300,9 +309,14 @@ export default function HomePage() {
         {error ? (
           <ErrorDisplay message={error} onRetry={loadQuery} />
         ) : loading && animeList.length === 0 ? (
-          <div className="catalog__grid">
-            <AnimeCardSkeleton count={10} />
-          </div>
+          <>
+            <div className="mobile-only-spinner">
+              <LoadingSpinner />
+            </div>
+            <div className="catalog__grid desktop-only-skeleton">
+              <AnimeCardSkeleton count={10} />
+            </div>
+          </>
         ) : animeList.length === 0 ? (
           <EmptyState
             icon="🔎"
