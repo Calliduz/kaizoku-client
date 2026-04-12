@@ -32,7 +32,7 @@ export interface Character {
   name: string;
   nameNative: string;
   image: string;
-  role: 'MAIN' | 'SUPPORTING' | 'BACKGROUND';
+  role: "MAIN" | "SUPPORTING" | "BACKGROUND";
   voiceActors: VoiceActor[];
 }
 
@@ -45,10 +45,17 @@ export interface Anime {
   coverImage: string;
   coverColor: string | null;
   bannerImage: string;
+  logo?: string;
   description: string;
   genres: string[];
   tags: string[];
-  status: 'RELEASING' | 'FINISHED' | 'NOT_YET_RELEASED' | 'CANCELLED' | 'HIATUS' | 'UNKNOWN';
+  status:
+    | "RELEASING"
+    | "FINISHED"
+    | "NOT_YET_RELEASED"
+    | "CANCELLED"
+    | "HIATUS"
+    | "UNKNOWN";
   format: string | null;
   totalEpisodes: number;
   episodeDuration: number | null;
@@ -88,8 +95,8 @@ export interface StreamingSource {
   url: string;
   quality: string;
   server: string;
-  type: 'hls' | 'mp4' | 'webm' | 'iframe' | 'embed';
-  audio?: 'sub' | 'dub';
+  type: "hls" | "mp4" | "webm" | "iframe" | "embed";
+  audio?: "sub" | "dub";
   subtitles?: Subtitle[];
 }
 

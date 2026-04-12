@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import type { Anime } from '../types';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-import '../styles/components/AnimeCard.css';
+import { Link } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import type { Anime } from "../types";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import "../styles/components/AnimeCard.css";
 
 /**
  * AnimeCard — displays a single anime in the catalog grid.
@@ -28,7 +28,7 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
     <Link to={`/anime/${_id}`} className="anime-card" id={`anime-card-${_id}`}>
       <div className="anime-card__image-wrapper">
         <LazyLoadImage
-          src={coverImage || '/placeholder.svg'}
+          src={coverImage || "/placeholder.svg"}
           alt={title}
           effect="blur"
           className="anime-card__image"
@@ -50,14 +50,12 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
         )}
 
         {totalEpisodes > 0 && (
-          <span className="anime-card__episodes">
-            {totalEpisodes} EP
-          </span>
+          <span className="anime-card__episodes">{totalEpisodes} EP</span>
         )}
 
         {format && (
           <span className="anime-card__format">
-            {format.replace(/_/g, ' ')}
+            {format.replace(/_/g, " ")}
           </span>
         )}
       </div>
@@ -67,7 +65,9 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
         {genres.length > 0 && (
           <div className="anime-card__genres">
             {genres.slice(0, 3).map((genre) => (
-              <span key={genre} className="anime-card__genre">{genre}</span>
+              <span key={genre} className="anime-card__genre">
+                {genre}
+              </span>
             ))}
           </div>
         )}
