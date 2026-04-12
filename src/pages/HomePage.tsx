@@ -36,6 +36,9 @@ export default function HomePage() {
   const [trending, setTrending] = useState<Anime[]>([]);
   const [discoveryLoading, setDiscoveryLoading] = useState(true);
   const [currentSpotlightIdx, setCurrentSpotlightIdx] = useState(0);
+  const [fanartBackgrounds, setFanartBackgrounds] = useState<Record<string, string>>({});
+  const spotlightWithBanner = spotlight.filter((anime) => !!anime.bannerImage);
+  const carouselItems = spotlightWithBanner.length >= 3 ? spotlightWithBanner : spotlight;
 
   const loadDiscovery = async () => {
     setDiscoveryLoading(true);
@@ -85,12 +88,18 @@ export default function HomePage() {
   }, [search, genre, format, sort, isBrowsing]);
 
   useEffect(() => {
-    if (spotlight.length === 0) return;
+    if (carouselItems.length === 0) return;
     const interval = setInterval(() => {
-      setCurrentSpotlightIdx((prev) => (prev + 1) % spotlight.length);
+      setCurrentSpotlightIdx((prev) => (prev + 1) % carouselItems.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [spotlight]);
+  }, [carouselItems]);
+
+  useEffect(() => {
+    if (currentSpotlightIdx >= carouselItems.length) {
+      setCurrentSpotlightIdx(0);
+    }
+  }, [carouselItems.length, currentSpotlightIdx]);
 
   const updateFilters = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -199,16 +208,16 @@ export default function HomePage() {
     return (
       <div className="discovery-view">
         {/* Spotlight Carousel */}
-        {spotlight.length > 0 && (
+        {carouselItems.length > 0 && (
           <div className="spotlight-carousel">
-            {spotlight.map((anime, index) => (
+            {carouselItems.map((anime, index) => (
               <div
                 key={anime._id}
                 className={`spotlight-hero ${index === currentSpotlightIdx ? "active" : ""}`}
                 style={
                   {
-                    "--bg-desktop": `linear-gradient(to right, rgba(10,10,10,0.9) 20%, rgba(10,10,10,0.4) 60%, rgba(10,10,10,0)), url(${anime.bannerImage || anime.coverImage})`,
-                    "--bg-mobile": `linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.5) 40%, rgba(10,10,10,0) 80%), url(${anime.coverImage || anime.bannerImage})`,
+                    "--bg-desktop": `url(${fanartBackgrounds[anime._id] || anime.fanartBackground || anime.bannerImage || anime.coverImage})`,
+                    "--bg-mobile": `linear-gradient(to top, rgba(10,10,10,0.64) 0%, rgba(10,10,10,0.24) 38%, rgba(10,10,10,0) 72%), url(${anime.coverImage || anime.bannerImage})`,
                   } as React.CSSProperties
                 }
               >
@@ -218,20 +227,17 @@ export default function HomePage() {
                     index !== currentSpotlightIdx ? { display: "none" } : {}
                   }
                 >
-                  {anime.logo ? (
-                    <img
-                      src={anime.logo}
-                      alt={anime.title}
-                      className="spotlight-logo drop-shadow"
-                    />
-                  ) : (
-                    <AnimeLogoImage
-                      animeId={anime._id}
-                      title={anime.title}
-                      className="spotlight-logo"
-                    />
-                  )}
-                  <h2 className="spotlight-title">{anime.title}</h2>
+                  <AnimeLogoImage
+                    animeId={anime._id}
+                    title={anime.title}
+                    className="spotlight-logo drop-shadow"
+                    onBackgroundFetched={(bgUrl) => {
+                      setFanartBackgrounds((prev) => {
+                        if (prev[anime._id] === bgUrl) return prev;
+                        return { ...prev, [anime._id]: bgUrl };
+                      });
+                    }}
+                  />
                   <p className="spotlight-description">
                     {anime.description?.substring(0, 150)}...
                   </p>
@@ -248,7 +254,7 @@ export default function HomePage() {
             ))}
 
             <div className="carousel-indicators">
-              {spotlight.map((_, index) => (
+              {carouselItems.map((_, index) => (
                 <button
                   key={index}
                   className={`carousel-dot ${index === currentSpotlightIdx ? "active" : ""}`}
@@ -281,11 +287,43 @@ export default function HomePage() {
   };
 
   const renderCatalogView = () => {
+    const getCatalogTitle = () => {
+      if (search) return `Search: "${search}"`;
+      if (genre) return `Genre: ${genre}`;
+      if (format) return `Format: ${format}`;
+      switch (sort) {
+        case "newest":
+          return "Latest Releases";
+        case "popularity":
+          return "Trending Anime";
+        case "rating":
+          return "Top Rated";
+        default:
+          return "Catalog View";
+      }
+    };
+
     return (
       <section className="catalog container">
         <div className="catalog__header">
-          <h2 className="catalog__title">
-            {search ? `Search: "${search}"` : "Catalog View"}
+          <button
+            className="catalog-back-btn"
+            onClick={() => {
+              setSearchParams(new URLSearchParams());
+              navigate("/");
+            }}
+          >
+            ← Back
+          </button>
+          <h2
+            className="catalog__title"
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: "900",
+              marginBottom: "20px",
+            }}
+          >
+            {getCatalogTitle()}
           </h2>
           <div className="catalog__filters">
             <div className="filter-group">

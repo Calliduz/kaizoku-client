@@ -58,11 +58,27 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar glass" id="main-navbar">
+    <nav className="navbar" id="main-navbar">
       <div className="navbar__inner container">
         {/* Logo */}
         <Link to="/" className="navbar__logo" id="nav-logo">
-          <span className="navbar__logo-icon">⛵</span>
+          <div className="logo-badge">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="logo-svg"
+            >
+              <polygon points="12 2 2 12 12 22 22 12 12 2"></polygon>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </div>
           <span className="navbar__logo-text gradient-text">KAIZOKU</span>
         </Link>
 

@@ -5,7 +5,7 @@
  */
 
 /* ── Google Font ────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
 /* ── CSS Variables (Dark Theme) ─────────── */
 :root {
@@ -35,11 +35,20 @@
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #6c5ce7 0%, #a855f7 100%);
-  --gradient-hero: linear-gradient(180deg, transparent 0%, var(--color-bg-primary) 100%);
-  --gradient-card: linear-gradient(145deg, rgba(108, 92, 231, 0.08) 0%, transparent 100%);
+  --gradient-hero: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--color-bg-primary) 100%
+  );
+  --gradient-card: linear-gradient(
+    145deg,
+    rgba(108, 92, 231, 0.08) 0%,
+    transparent 100%
+  );
 
   /* Typography */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
@@ -125,7 +134,8 @@ button {
   outline: none;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -215,28 +225,53 @@ ul, ol {
 
 /* ── Animations ─────────────────────────── */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-fade-in {
@@ -277,3 +312,53 @@ ul, ol {
   box-shadow: var(--shadow-glow);
 }
 
+/* Enhanced Back Button */
+.back-btn {
+  position: fixed;
+  top: calc(var(--navbar-height) + 12px);
+  left: 14px;
+  z-index: 1200;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(9, 10, 15, 0.64);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.back-btn svg {
+  stroke: currentColor;
+}
+
+.back-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(108, 92, 231, 0.35);
+  border-color: rgba(108, 92, 231, 0.5);
+}
+
+.details-back-btn,
+.player-back-btn {
+  top: calc(var(--navbar-height) + 10px);
+}
+
+@media (max-width: 768px) {
+  .back-btn {
+    top: calc(var(--navbar-height) + 8px);
+    left: 10px;
+    padding: 7px 12px;
+    font-size: 0.75rem;
+  }
+}

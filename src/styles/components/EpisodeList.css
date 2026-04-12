@@ -11,33 +11,16 @@
 
 .episode-list__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: var(--space-sm);
-  max-height: 360px;
+  grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+  gap: 10px;
+  max-height: 250px;
   overflow-y: auto;
   padding-right: var(--space-sm);
 }
 
-@media (max-width: 768px) {
-  .episode-list__grid {
-    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
-    gap: 10px;
-    max-height: 250px;
-  }
-  .episode-list__item {
-    aspect-ratio: 1;
-    padding: 0;
-  }
-  .episode-list__number {
-    font-size: 1.2rem;
-    font-weight: 700;
-  }
-  .episode-list__ep-title {
-    display: none;
-  }
-}
-
 .episode-list__item {
+  aspect-ratio: 1;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,16 +52,7 @@
 
 .episode-list__number {
   font-weight: 700;
-  font-size: var(--font-size-lg);
-}
-
-.episode-list__ep-title {
-  font-size: var(--font-size-xs);
-  text-align: center;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 1.2rem;
 }
 
 .episode-list__empty {

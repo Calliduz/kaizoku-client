@@ -45,6 +45,7 @@ export interface Anime {
   coverImage: string;
   coverColor: string | null;
   bannerImage: string;
+  fanartBackground?: string;
   logo?: string;
   description: string;
   genres: string[];

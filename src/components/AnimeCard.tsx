@@ -17,7 +17,6 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
     _id,
     title,
     coverImage,
-    genres = [],
     rating,
     totalEpisodes,
     latestEpisode,

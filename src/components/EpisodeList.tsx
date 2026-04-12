@@ -25,14 +25,14 @@ export default function EpisodeList({
               key={ep._id}
               className={`episode-list__item ${ep._id === currentEpisodeId ? "active" : ""}`}
               onClick={() => onSelect(ep)}
+              title={
+                ep.title && ep.title !== `Episode ${ep.number}`
+                  ? ep.title
+                  : undefined
+              }
               id={`episode-${ep.number}`}
             >
               <span className="episode-list__number">{ep.number}</span>
-              <span className="episode-list__ep-title">
-                {ep.title && ep.title !== `Episode ${ep.number}`
-                  ? ep.title
-                  : `Episode ${ep.number}`}
-              </span>
             </button>
           ))
         ) : (

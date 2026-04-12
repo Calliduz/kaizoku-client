@@ -6,6 +6,7 @@ interface Props {
   initialLogo?: string;
   title: string;
   className?: string;
+  onBackgroundFetched?: (bgUrl: string) => void;
 }
 
 export default function AnimeLogoImage({
@@ -13,6 +14,7 @@ export default function AnimeLogoImage({
   initialLogo,
   title,
   className = "details-logo",
+  onBackgroundFetched,
 }: Props) {
   const [logo, setLogo] = useState<string | null>(initialLogo || null);
   const [loading, setLoading] = useState(!initialLogo);
@@ -33,8 +35,11 @@ export default function AnimeLogoImage({
     // Load dynamically from backend
     fetchAnimeLogo(animeId)
       .then((res) => {
-        if (res.success && res.data) {
-          setLogo(res.data);
+        if (res.success) {
+          if (res.data) setLogo(res.data);
+          if (res.background && onBackgroundFetched) {
+            onBackgroundFetched(res.background);
+          }
         } else {
           setFailed(true);
         }

@@ -12,8 +12,10 @@
 }
 
 .row-title {
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 1.85rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
   color: var(--text-primary, #ffffff);
   margin: 0;
   display: flex;
@@ -138,6 +140,10 @@
 }
 
 @media (max-width: 768px) {
+  .row-title {
+    font-size: 1.45rem;
+  }
+
   .nav-arrow {
     display: none; /* Hide arrows on touch devices */
   }
