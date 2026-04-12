@@ -1,5 +1,5 @@
-import type { Episode } from '../types';
-import '../styles/components/EpisodeList.css';
+import type { Episode } from "../types";
+import "../styles/components/EpisodeList.css";
 
 interface EpisodeListProps {
   episodes: Episode[];
@@ -10,7 +10,11 @@ interface EpisodeListProps {
 /**
  * EpisodeList — scrollable episode selector for the player page.
  */
-export default function EpisodeList({ episodes = [], currentEpisodeId, onSelect }: EpisodeListProps) {
+export default function EpisodeList({
+  episodes = [],
+  currentEpisodeId,
+  onSelect,
+}: EpisodeListProps) {
   return (
     <div className="episode-list" id="episode-list">
       <h3 className="episode-list__title">Episodes</h3>
@@ -19,13 +23,15 @@ export default function EpisodeList({ episodes = [], currentEpisodeId, onSelect 
           episodes.map((ep) => (
             <button
               key={ep._id}
-              className={`episode-list__item ${ep._id === currentEpisodeId ? 'active' : ''}`}
+              className={`episode-list__item ${ep._id === currentEpisodeId ? "active" : ""}`}
               onClick={() => onSelect(ep)}
               id={`episode-${ep.number}`}
             >
               <span className="episode-list__number">{ep.number}</span>
               <span className="episode-list__ep-title">
-                {ep.title || `Episode ${ep.number}`}
+                {ep.title && ep.title !== `Episode ${ep.number}`
+                  ? ep.title
+                  : `Episode ${ep.number}`}
               </span>
             </button>
           ))
