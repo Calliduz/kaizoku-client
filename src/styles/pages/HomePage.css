@@ -585,7 +585,7 @@
 
   .home-page .spotlight-content {
     padding-bottom: 20px;
-    justify-content: flex-end;
+    justify-content: center; /* Changed to center to avoid pushing everything to the very bottom */
   }
 
   .home-page .spotlight-title {
@@ -652,13 +652,13 @@
 @media (max-width: 768px) {
   .home-page .spotlight-carousel {
     margin-top: calc(-1 * var(--navbar-height));
-    height: 65vh;
-    min-height: 420px;
+    height: 55vh; /* Reduced from 65vh to eliminate the huge gap */
+    min-height: 380px;
     margin-bottom: 20px;
   }
 
   .home-page .spotlight-hero {
-    padding-top: calc(var(--navbar-height) + 80px); /* Further increased for safety */
+    padding-top: calc(var(--navbar-height) + 40px); /* Re-tuned for better centered appearance */
   }
 
   .home-page .spotlight-content {
