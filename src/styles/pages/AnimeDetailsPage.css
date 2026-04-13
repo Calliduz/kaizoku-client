@@ -5,14 +5,14 @@
 }
 .details-hero {
   position: relative;
-  height: 48vh;
+  height: 55vh; /* Increased from 48vh */
   width: 100%;
 }
 .details-hero__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 20%; /* Prioritize the upper part of the image */
+  object-position: center 30%; /* Fine-tuned for better character centering */
   opacity: 0.5;
   filter: blur(4px);
 }
@@ -171,7 +171,7 @@
 
 @media (max-width: 768px) {
   .details-hero {
-    height: 35vh;
+    height: 45vh; /* Increased from 35vh */
   }
   .details-top-grid {
     flex-direction: column;

@@ -7,7 +7,6 @@ import RecommendationList from "../components/RecommendationList";
 import AnimeDetailsSkeleton from "../components/AnimeDetailsSkeleton";
 import ErrorDisplay from "../components/ErrorDisplay";
 import AnimeLogoImage from "../components/AnimeLogoImage";
-import LoadingSpinner from "../components/LoadingSpinner";
 import type { Anime, Episode } from "../types";
 import "../styles/pages/AnimeDetailsPage.css";
 
@@ -52,14 +51,9 @@ export default function AnimeDetailsPage() {
 
   if (loading) {
     return (
-      <>
-        <div className="mobile-only-spinner">
-          <LoadingSpinner />
-        </div>
-        <div className="desktop-only-skeleton">
-          <AnimeDetailsSkeleton />
-        </div>
-      </>
+      <div className="discovery-view animate-fade-in">
+        <AnimeDetailsSkeleton />
+      </div>
     );
   }
   if (error)
@@ -68,9 +62,10 @@ export default function AnimeDetailsPage() {
     );
   if (!anime) return <div className="container">Anime not found</div>;
 
-  const bgImage = (!isMobile && anime.fanartBackground) 
-    ? anime.fanartBackground 
-    : (anime.bannerImage || anime.coverImage);
+  const bgImage =
+    !isMobile && anime.fanartBackground
+      ? anime.fanartBackground
+      : anime.bannerImage || anime.coverImage;
 
   return (
     <div

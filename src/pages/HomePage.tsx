@@ -159,9 +159,9 @@ export default function HomePage() {
           
           {/* Row Skeletons */}
           {[1, 2, 3].map((i) => (
-            <div key={i} className="row-skeleton-container" style={{ margin: '40px 0' }}>
-              <div className="skeleton" style={{ width: '200px', height: '24px', marginBottom: '20px', marginLeft: '20px', borderRadius: '4px' }} />
-              <div className="anime-row" style={{ overflow: 'hidden' }}>
+            <div key={i} className="discovery-row-container skeleton-row" style={{ marginTop: '30px' }}>
+              <div className="skeleton" style={{ width: '200px', height: '24px', marginBottom: '15px', borderRadius: '4px' }} />
+              <div className="anime-row" style={{ overflow: 'hidden', padding: '10px 0' }}>
                 <AnimeCardSkeleton count={6} />
               </div>
             </div>
