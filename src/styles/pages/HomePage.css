@@ -634,16 +634,31 @@
   z-index: 1;
 }
 
+/* Skeleton Polish */
+.skeleton-carousel {
+  pointer-events: none;
+  background: #0a0a0a;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-top: calc(-1 * var(--navbar-height));
+  height: 60vh;
+  min-height: 380px;
+}
+
+.skeleton-carousel .spotlight-hero::before {
+  display: none; /* Hide the gradient overlay for the skeleton */
+}
+
 @media (max-width: 768px) {
   .home-page .spotlight-carousel {
     margin-top: calc(-1 * var(--navbar-height));
-    height: 56vh;
-    min-height: 330px;
-    margin-bottom: 6px;
+    height: 65vh;
+    min-height: 420px;
+    margin-bottom: 20px;
   }
 
   .home-page .spotlight-hero {
-    padding-top: calc(var(--navbar-height) + 50px);
+    padding-top: calc(var(--navbar-height) + 80px); /* Further increased for safety */
   }
 
   .home-page .spotlight-content {

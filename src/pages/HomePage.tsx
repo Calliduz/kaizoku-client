@@ -145,21 +145,27 @@ export default function HomePage() {
     if (discoveryLoading) {
       return (
         <div className="discovery-view animate-fade-in" id="discovery-skeleton">
-          <div className="discovery-view-skeleton">
-            {/* Carousel Skeleton */}
-            <div className="spotlight-carousel skeleton" 
-                 style={{ borderRadius: '18px', marginBottom: '40px' }} />
-            
-            {/* Row Skeletons */}
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="row-skeleton" style={{ marginBottom: '40px' }}>
-                <div className="skeleton" style={{ width: '200px', height: '28px', marginBottom: '20px', borderRadius: '4px' }} />
-                <div className="anime-row" style={{ overflow: 'hidden', padding: '0' }}>
-                  <AnimeCardSkeleton count={6} />
-                </div>
+          {/* Main Carousel Skeleton */}
+          <div className="spotlight-carousel skeleton-carousel">
+            <div className="spotlight-hero active" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+              <div className="spotlight-content">
+                <div className="skeleton" style={{ width: '300px', height: '120px', marginBottom: '20px' }} />
+                <div className="skeleton" style={{ width: '80%', height: '1.2rem', marginBottom: '10px' }} />
+                <div className="skeleton" style={{ width: '60%', height: '1.2rem', marginBottom: '25px' }} />
+                <div className="skeleton" style={{ width: '140px', height: '45px', borderRadius: '8px' }} />
               </div>
-            ))}
+            </div>
           </div>
+          
+          {/* Row Skeletons */}
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="row-skeleton-container" style={{ margin: '40px 0' }}>
+              <div className="skeleton" style={{ width: '200px', height: '24px', marginBottom: '20px', marginLeft: '20px', borderRadius: '4px' }} />
+              <div className="anime-row" style={{ overflow: 'hidden' }}>
+                <AnimeCardSkeleton count={6} />
+              </div>
+            </div>
+          ))}
         </div>
       );
     }

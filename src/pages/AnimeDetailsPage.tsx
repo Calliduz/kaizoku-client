@@ -15,6 +15,14 @@ export default function AnimeDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const [anime, setAnime] = useState<Anime | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,7 +68,9 @@ export default function AnimeDetailsPage() {
     );
   if (!anime) return <div className="container">Anime not found</div>;
 
-  const bgImage = anime.bannerImage || anime.coverImage;
+  const bgImage = (!isMobile && anime.fanartBackground) 
+    ? anime.fanartBackground 
+    : (anime.bannerImage || anime.coverImage);
 
   return (
     <div
