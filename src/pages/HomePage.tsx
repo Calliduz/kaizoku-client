@@ -101,6 +101,14 @@ export default function HomePage() {
     }
   }, [carouselItems.length, currentSpotlightIdx]);
 
+  const handleNextSpotlight = () => {
+    setCurrentSpotlightIdx((prev) => (prev + 1) % carouselItems.length);
+  };
+
+  const handlePrevSpotlight = () => {
+    setCurrentSpotlightIdx((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
+  };
+
   const updateFilters = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (value) {
@@ -137,69 +145,20 @@ export default function HomePage() {
     if (discoveryLoading) {
       return (
         <div className="discovery-view animate-fade-in" id="discovery-skeleton">
-          <div className="mobile-only-spinner">
-            <LoadingSpinner />
-          </div>
-          <div className="desktop-only-skeleton">
-            <div
-              className="carousel-skeleton skeleton"
-              style={{
-                width: "100vw",
-                height: "60vh",
-                minHeight: "400px",
-                marginLeft: "calc(-50vw + 50%)",
-                marginBottom: "60px",
-              }}
-            />
-
-            <h2
-              className="row-title"
-              style={{ width: "200px", height: "28px", marginBottom: "20px" }}
-            >
-              <div
-                className="skeleton"
-                style={{ width: "100%", height: "100%", borderRadius: "4px" }}
-              />
-            </h2>
-            <div className="anime-row" style={{ overflow: "hidden" }}>
-              <AnimeCardSkeleton count={6} />
-            </div>
-
-            <h2
-              className="row-title"
-              style={{
-                width: "250px",
-                height: "28px",
-                marginTop: "40px",
-                marginBottom: "20px",
-              }}
-            >
-              <div
-                className="skeleton"
-                style={{ width: "100%", height: "100%", borderRadius: "4px" }}
-              />
-            </h2>
-            <div className="anime-row" style={{ overflow: "hidden" }}>
-              <AnimeCardSkeleton count={6} />
-            </div>
-
-            <h2
-              className="row-title"
-              style={{
-                width: "150px",
-                height: "28px",
-                marginTop: "40px",
-                marginBottom: "20px",
-              }}
-            >
-              <div
-                className="skeleton"
-                style={{ width: "100%", height: "100%", borderRadius: "4px" }}
-              />
-            </h2>
-            <div className="anime-row" style={{ overflow: "hidden" }}>
-              <AnimeCardSkeleton count={6} />
-            </div>
+          <div className="discovery-view-skeleton">
+            {/* Carousel Skeleton */}
+            <div className="spotlight-carousel skeleton" 
+                 style={{ borderRadius: '18px', marginBottom: '40px' }} />
+            
+            {/* Row Skeletons */}
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="row-skeleton" style={{ marginBottom: '40px' }}>
+                <div className="skeleton" style={{ width: '200px', height: '28px', marginBottom: '20px', borderRadius: '4px' }} />
+                <div className="anime-row" style={{ overflow: 'hidden', padding: '0' }}>
+                  <AnimeCardSkeleton count={6} />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       );
@@ -252,6 +211,13 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+
+            <button className="carousel-control prev" onClick={handlePrevSpotlight}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button className="carousel-control next" onClick={handleNextSpotlight}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
 
             <div className="carousel-indicators">
               {carouselItems.map((_, index) => (
@@ -333,12 +299,20 @@ export default function HomePage() {
                 value={genre}
                 onChange={(e) => updateFilters("genre", e.target.value)}
               >
-                <option value="">All</option>
+                <option value="">All Genres</option>
                 <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
                 <option value="Comedy">Comedy</option>
                 <option value="Drama">Drama</option>
                 <option value="Fantasy">Fantasy</option>
+                <option value="Horror">Horror</option>
+                <option value="Mystery">Mystery</option>
                 <option value="Romance">Romance</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Slice of Life">Slice of Life</option>
+                <option value="Sports">Sports</option>
+                <option value="Supernatural">Supernatural</option>
+                <option value="Thriller">Thriller</option>
               </select>
             </div>
           </div>
