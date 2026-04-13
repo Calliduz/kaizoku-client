@@ -598,6 +598,10 @@
     margin-bottom: 8px;
     font-weight: 600;
     color: #f8f8f8;
+    display: -webkit-box;
+    -webkit-line-clamp: 10; /* Increased to avoid cutting off descriptions */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     text-shadow: 
       0px 1px 3px rgba(0, 0, 0, 0.9),
       0px 2px 6px rgba(0, 0, 0, 0.8),
@@ -651,14 +655,14 @@
 
 @media (max-width: 768px) {
   .home-page .spotlight-carousel {
-    margin-top: calc(-1 * var(--navbar-height));
-    height: 55vh; /* Reduced from 65vh to eliminate the huge gap */
+    margin-top: 0; /* No longer ignoring navbar space on mobile */
+    height: 55vh; 
     min-height: 380px;
     margin-bottom: 20px;
   }
 
   .home-page .spotlight-hero {
-    padding-top: calc(var(--navbar-height) + 40px); /* Re-tuned for better centered appearance */
+    padding-top: 20px; /* Reduced since navbar no longer overlaps */
   }
 
   .home-page .spotlight-content {

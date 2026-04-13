@@ -131,6 +131,11 @@
 }
 
 @media (max-width: 640px) {
+  .navbar {
+    position: relative; /* No longer fixed over content on mobile */
+    background: rgba(8, 10, 18, 0.95); /* More solid to hide content behind */
+  }
+
   .navbar__inner {
     grid-template-columns: auto 1fr;
     gap: 10px;
