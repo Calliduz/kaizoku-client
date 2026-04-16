@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { fetchAllAnime } from "../api/animeApi";
 import AnimeCard from "../components/AnimeCard";
@@ -130,6 +130,19 @@ export default function HomePage() {
     setCurrentSpotlightIdx((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
   };
 
+  // Touch swipe support
+  const touchStartX = useRef<number>(0);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 50) {
+      if (delta > 0) handleNextSpotlight();
+      else handlePrevSpotlight();
+    }
+  };
+
   const updateFilters = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (value) {
@@ -195,7 +208,11 @@ export default function HomePage() {
       <div className="discovery-view">
         {/* Spotlight Carousel */}
         {carouselItems.length > 0 && (
-          <div className="spotlight-carousel">
+          <div
+            className="spotlight-carousel"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             {carouselItems.map((anime, index) => (
               <div
                 key={anime._id}

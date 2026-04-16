@@ -145,24 +145,39 @@
 .spotlight-carousel {
   position: relative;
   width: 100vw;
-  height: 75vh;
-  min-height: 500px;
+  height: 78vh;
+  min-height: 520px;
   margin-top: calc(-1 * var(--navbar-height));
   margin-left: calc(-50vw + 50%);
   overflow: hidden;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
+
 .spotlight-hero {
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: right top;
+  background-position: center top;
   background-image: var(--bg-desktop);
   display: flex;
   align-items: center;
   opacity: 0;
-  transition: opacity 0.8s ease-in-out;
+  transition: opacity 0.9s ease-in-out;
 }
+
+/* Cinematic multi-directional gradient overlay */
+.spotlight-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(5, 7, 10, 0.92) 0%, rgba(5, 7, 10, 0.5) 45%, transparent 75%),
+    linear-gradient(to top, rgba(5, 7, 10, 0.98) 0%, rgba(5, 7, 10, 0.5) 30%, transparent 60%),
+    linear-gradient(to bottom, rgba(5, 7, 10, 0.4) 0%, transparent 20%);
+  z-index: 0;
+  pointer-events: none;
+}
+
 .anime-card__info {
   padding: 12px;
   background: var(--color-bg-card);
@@ -172,50 +187,79 @@
 .anime-card-wrapper.is-hovered .anime-card__info {
   background: var(--color-bg-card-light);
 }
+
 .spotlight-hero.active {
   opacity: 1;
   z-index: 1;
 }
+
 .spotlight-content {
   margin: 0;
   width: 100%;
   max-width: 1400px;
-  padding: 0 40px;
-  transform: translateY(20px);
+  padding: 0 5%;
+  transform: translateX(-20px);
   opacity: 0;
-  transition: all 0.6s ease 0.3s;
-}
-.spotlight-hero.active .spotlight-content {
-  transform: translateY(0);
-  opacity: 1;
-}
-.spotlight-logo.drop-shadow {
-  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
-  max-width: 400px;
-  max-height: 180px;
-  object-fit: contain;
-}
-.carousel-indicators {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
+  transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.25s;
+  position: relative;
   z-index: 2;
 }
+
+.spotlight-hero.active .spotlight-content {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.spotlight-logo.drop-shadow {
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.9));
+  max-width: 420px;
+  max-height: 180px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+/* Carousel progress indicator dots */
+.carousel-indicators {
+  position: absolute;
+  bottom: 24px;
+  left: 5%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 4;
+}
+
 .carousel-dot {
-  width: 12px;
-  height: 4px;
+  width: 28px;
+  height: 3px;
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.3);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
 }
+
 .carousel-dot.active {
+  background: rgba(255, 255, 255, 0.4);
+  width: 28px;
+}
+
+/* Animated fill for active dot */
+.carousel-dot.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: #fff;
-  width: 24px;
+  border-radius: 2px;
+  animation: dot-fill 8s linear forwards;
+}
+
+@keyframes dot-fill {
+  from { width: 0%; }
+  to { width: 100%; }
 }
 
 /* Carousel Side Navigation */
@@ -223,21 +267,22 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 56px;
+  height: 56px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 5;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   opacity: 0;
   outline: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 .spotlight-carousel:hover .carousel-control {
@@ -245,20 +290,29 @@
 }
 
 .carousel-control:hover, .carousel-control:focus {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: #fff;
-  transform: translateY(-50%) scale(1.1);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-50%) scale(1.12);
   outline: none !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15) !important;
+}
+
+.carousel-control.prev {
+  left: 24px;
+}
+
+.carousel-control.next {
+  right: 24px;
 }
 
 .carousel-control svg {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
 }
 
 @media (max-width: 768px) {
   .carousel-control {
-    display: none; /* Hide on mobile to avoid clutter */
+    display: none;
   }
 }
 
@@ -491,41 +545,64 @@
 }
 @media (max-width: 768px) {
   .spotlight-carousel {
-    height: 70vh;
-    min-height: 480px;
-    width: calc(100% + 20px);
-    margin-left: -10px;
+    height: 72vh;
+    min-height: 500px;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
     margin-top: calc(-1 * var(--navbar-height));
     border-radius: 0;
+    margin-bottom: 30px;
   }
+
   .spotlight-hero {
     align-items: flex-end;
-    padding-bottom: 60px;
-    padding-top: calc(var(--navbar-height) + 40px); /* Increased for overlap fix */
-    background-size: cover;
+    background-image: var(--bg-mobile);
+    background-position: center top;
   }
+
+  /* Additional mobile gradient for bottom readability */
+  .spotlight-hero::before {
+    background:
+      linear-gradient(to top, rgba(5, 7, 10, 0.98) 0%, rgba(5, 7, 10, 0.7) 25%, rgba(5, 7, 10, 0.2) 55%, transparent 80%),
+      linear-gradient(to bottom, rgba(5, 7, 10, 0.5) 0%, transparent 15%);
+  }
+
   .spotlight-content {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     height: 100%;
+    padding: 0 5% 80px;
   }
+
+  .spotlight-logo.drop-shadow {
+    max-width: 240px;
+    max-height: 100px;
+    margin-bottom: 8px;
+  }
+
   .spotlight-description {
     -webkit-line-clamp: 3;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     overflow: hidden;
-    margin-bottom: 20px;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9), 0px 0px 8px rgba(0, 0, 0, 0.8);
+    margin-bottom: 16px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
     font-weight: 500;
   }
-  .spotlight-title {
-    font-size: 2rem;
-    margin-bottom: 10px;
+
+  /* Swipe hint dots on mobile carousel */
+  .carousel-indicators {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
   }
-  .btn-watch {
-    margin-bottom: 10px;
+
+  .btn-watch-hero, .btn-info-hero {
+    padding: 10px 20px;
+    font-size: 0.95rem;
   }
 }
+
 
 .mobile-only-spinner {
   display: none;
@@ -568,30 +645,46 @@
   width: 100%;
   margin-left: 0;
   margin-top: 0;
-  border-radius: 18px;
-  height: clamp(360px, 54vh, 520px);
-  min-height: 360px;
+  border-radius: 16px;
+  height: clamp(400px, 62vh, 560px);
+  min-height: 400px;
 }
 
 .home-page .spotlight-hero {
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center top;
 }
 
 .home-page .spotlight-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center; /* Changed from flex-end for better PC centering */
+  justify-content: flex-end;
   min-height: 100%;
-  max-width: 800px;
-  padding-bottom: 40px;
-  padding-top: 40px;
+  max-width: 700px;
+  padding-bottom: 60px;
 }
 
 .home-page .spotlight-actions {
   margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .home-page .spotlight-carousel {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-top: calc(-1 * var(--navbar-height));
+    border-radius: 0;
+    height: 72vh;
+    min-height: 480px;
+    margin-bottom: 16px;
+  }
+
+  .home-page .spotlight-content {
+    padding-bottom: 80px;
+    max-width: 100%;
+  }
 }
 
 /* ───── Trailer Container Overhaul ───── */
