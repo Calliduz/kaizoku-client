@@ -14,10 +14,10 @@ export default function AnimeDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -40,6 +40,9 @@ export default function AnimeDetailsPage() {
 
         setAnime(animeRes.data);
         setEpisodes(itemsRes.data || []);
+        
+        // Scroll to top on load
+        window.scrollTo(0, 0);
       } catch (err: any) {
         setError(err.response?.data?.error?.message || err.message);
       } finally {
@@ -50,225 +53,111 @@ export default function AnimeDetailsPage() {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="discovery-view animate-fade-in">
-        <AnimeDetailsSkeleton />
-      </div>
-    );
+    return <AnimeDetailsSkeleton />;
   }
-  if (error)
-    return (
-      <ErrorDisplay message={error} onRetry={() => window.location.reload()} />
-    );
+  
+  if (error) {
+    return <ErrorDisplay message={error} onRetry={() => window.location.reload()} />;
+  }
+  
   if (!anime) return <div className="container">Anime not found</div>;
 
-  const bgImage =
-    !isMobile && anime.fanartBackground
-      ? anime.fanartBackground
-      : anime.bannerImage || anime.coverImage;
+  const bgImage = anime.fanartBackground || anime.bannerImage || anime.coverImage;
 
   return (
-    <div
-      className="anime-details-page animate-fade-in"
-      style={{ position: "relative" }}
-    >
-      <button
-        className="back-btn details-back-btn"
-        onClick={() => navigate(-1)}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Back
-      </button>
+    <div className="anime-details-page animate-fade-in">
+      {/* Cinematic Hero Section */}
       <div className="details-hero">
-        <img
-          src={bgImage}
-          alt="Banner"
-          className={`details-hero__img ${anime.bannerImage ? "has-banner" : ""}`}
-        />
+        <img src={bgImage} alt="Banner" className="details-hero__img" />
         <div className="details-hero__gradient" />
+        
+        <button className="back-btn details-back-btn" onClick={() => navigate(-1)}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Back
+        </button>
       </div>
 
       <div className="details-content-container">
         <div className="details-top-grid">
+          {/* Left: Poster */}
           <div className="details-poster">
             <img src={anime.coverImage} alt={anime.title} />
           </div>
 
+          {/* Right: Primary Info */}
           <div className="details-info">
-            {anime.logo ? (
-              <img
-                src={anime.logo}
-                alt={anime.title}
-                className="details-logo"
-              />
-            ) : (
-              <AnimeLogoImage animeId={anime._id} title={anime.title} />
-            )}
+            <AnimeLogoImage animeId={anime._id} initialLogo={anime.logo} title={anime.title} className="details-logo" />
 
             <div className="details-metadata">
               {anime.rating > 0 && (
-                <span className="meta-chip score">
-                  ★ {(anime.rating / 10).toFixed(1)}
-                </span>
+                <span className="meta-chip score">★ {(anime.rating / 10).toFixed(1)}</span>
               )}
-              {episodes.length > 0 && (
-                <span className="meta-chip episodes">
-                  {episodes.length} eps
-                </span>
-              )}
-              {anime.format && (
-                <span className="meta-chip">{anime.format}</span>
-              )}
-              {anime.status && (
-                <span className="meta-chip">{anime.status}</span>
-              )}
+              <span className="meta-chip">{anime.format?.replace(/_/g, " ")}</span>
+              <span className="meta-chip episodes">{episodes.length} Episodes</span>
+              <span className="meta-chip">{anime.status}</span>
+              <span className="meta-chip">{anime.season} {anime.year}</span>
             </div>
 
             <div className="details-actions">
               <button
                 className="btn-watch-now"
-                onClick={() => {
-                  if (episodes.length > 0) {
-                    navigate(`/anime/${anime._id}/watch/${episodes[0]._id}`);
-                  }
-                }}
+                onClick={() => episodes.length > 0 && navigate(`/anime/${anime._id}/watch/${episodes[0]._id}`)}
               >
-                ▶ Watch Now
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Watch Now
               </button>
-              <button className="btn-add-list">+ Add to List</button>
-              <button
-                className="btn-add-list"
-                style={{
-                  padding: "12px",
-                  width: "48px",
-                  justifyContent: "center",
-                }}
-              >
-                ♡
+              <button className="btn-add-list">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add to List
               </button>
-            </div>
-
-            <div
-              style={{
-                borderBottom: "1px solid rgba(255,255,255,0.1)",
-                paddingBottom: "10px",
-                marginTop: "20px",
-                display: "flex",
-                gap: "20px",
-              }}
-            >
-              <span
-                style={{
-                  fontWeight: "bold",
-                  borderBottom: "2px solid var(--primary-color)",
-                  paddingBottom: "10px",
-                }}
-              >
-                Summary
-              </span>
-              <span style={{ color: "var(--text-secondary)" }}>Relations</span>
             </div>
 
             <p className="details-summary">{anime.description}</p>
           </div>
         </div>
-      </div>
 
-      <div className="container details-main-grid">
-        <div className="main-content-column">
-          <div className="episodes-section" style={{ marginBottom: "40px" }}>
-            <h2 style={{ marginBottom: "20px" }}>
-              Episodes ({episodes.length})
-            </h2>
-            {episodes.length > 0 ? (
-              <EpisodeList
-                episodes={episodes}
-                currentEpisodeId={undefined}
-                onSelect={(ep) => navigate(`/anime/${id}/watch/${ep._id}`)}
-              />
-            ) : (
-              <div>No episodes available yet.</div>
+        {/* Bottom Grid: Episodes & Sidebar */}
+        <div className="details-main-grid">
+          <div className="main-content-column">
+            <div className="episodes-section">
+              <h2 className="section-title">
+                Episodes <span style={{ color: "var(--color-accent)", opacity: 0.8 }}>({episodes.length})</span>
+              </h2>
+              {episodes.length > 0 ? (
+                <EpisodeList
+                  episodes={episodes}
+                  onSelect={(ep) => navigate(`/anime/${id}/watch/${ep._id}`)}
+                />
+              ) : (
+                <div className="empty-state">No episodes available yet.</div>
+              )}
+            </div>
+
+            {anime.characters && anime.characters.length > 0 && (
+              <div className="characters-section" style={{ marginTop: "3rem" }}>
+                <h2 className="section-title">Characters</h2>
+                <CharacterList characters={anime.characters.slice(0, 10)} />
+              </div>
             )}
           </div>
-          {anime.characters && anime.characters.length > 0 && (
-            <CharacterList characters={anime.characters.slice(0, 10)} />
-          )}
-        </div>
 
-        <aside
-          className="sidebar-column"
-          style={{ display: "flex", flexDirection: "column", gap: "30px" }}
-        >
-          <div
-            className="production-info card-panel"
-            style={{
-              background: "rgba(255,255,255,0.02)",
-              padding: "20px",
-              borderRadius: "12px",
-            }}
-          >
-            <h3
-              style={{
-                borderBottom: "1px solid rgba(255,255,255,0.1)",
-                paddingBottom: "10px",
-                marginBottom: "15px",
-              }}
-            >
-              Production
-            </h3>
-            <p
-              style={{
-                margin: "8px 0",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <span style={{ color: "var(--text-secondary)" }}>Studio</span>
-              <span>{anime.studios?.[0]?.name || "Unknown"}</span>
-            </p>
-            <p
-              style={{
-                margin: "8px 0",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <span style={{ color: "var(--text-secondary)" }}>Episodes</span>
-              <span>{anime.totalEpisodes || "Ongoing"}</span>
-            </p>
-            <p
-              style={{
-                margin: "8px 0",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <span style={{ color: "var(--text-secondary)" }}>Season</span>
-              <span>
-                {anime.season} {anime.seasonYear}
-              </span>
-            </p>
-          </div>
-          {anime.recommendations && anime.recommendations.length > 0 && (
-            <RecommendationList
-              title="More Like This"
-              items={anime.recommendations}
-            />
-          )}
-        </aside>
+          <aside className="sidebar-column">
+            <div className="production-info card-panel" style={{ background: "rgba(255,255,255,0.03)", padding: "24px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.05)" }}>
+              <h3 className="section-title" style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>Information</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ opacity: 0.6 }}>Studio</span> <span>{anime.studios?.[0]?.name || "Unknown"}</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ opacity: 0.6 }}>Source</span> <span>{anime.source}</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ opacity: 0.6 }}>Genres</span> <span style={{ textAlign: "right", fontSize: "0.9rem" }}>{anime.genres?.slice(0, 3).join(", ")}</span></div>
+              </div>
+            </div>
+
+            {anime.recommendations && anime.recommendations.length > 0 && (
+              <div style={{ marginTop: "2rem" }}>
+                <RecommendationList title="Recommend" items={anime.recommendations} />
+              </div>
+            )}
+          </aside>
+        </div>
       </div>
     </div>
   );

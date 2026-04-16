@@ -5,6 +5,16 @@ import "../styles/components/Navbar.css";
 export default function Navbar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Scroll listener for sticky navbar effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Local state for the input to make it feel responsive
   const urlQuery = searchParams.get("search") || "";
@@ -58,27 +68,17 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar" id="main-navbar">
+    <nav className={`navbar ${isScrolled ? "scrolled" : ""}`} id="main-navbar">
+      {/* Navbar Particles */}
+      <div className="navbar__particles">
+        {[...Array(30)].map((_, i) => (
+          <div key={i} className="particle" />
+        ))}
+      </div>
       <div className="navbar__inner container">
         {/* Logo */}
         <Link to="/" className="navbar__logo" id="nav-logo">
-          <div className="logo-badge">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="logo-svg"
-            >
-              <polygon points="12 2 2 12 12 22 22 12 12 2"></polygon>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-          </div>
+          <img src="/logo.png" alt="Kaizoku Logo" className="navbar__logo-img" />
           <span className="navbar__logo-text gradient-text">KAIZOKU</span>
         </Link>
 

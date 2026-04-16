@@ -58,16 +58,41 @@
   max-width: 90%;
 }
 .btn-watch {
-  background-color: #00a3ff;
-  color: #fff;
-  padding: 12px 24px;
+  background-color: var(--color-accent);
+  color: #000;
+  padding: 12px 28px;
   border-radius: 8px;
-  font-weight: 700;
+  font-weight: 800;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
 }
 .btn-watch:hover {
+  transform: scale(1.05) translateY(-2px);
+  background-color: var(--color-accent-hover);
+  box-shadow: 0 8px 25px var(--color-accent-glow);
+}
+.btn-info {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+}
+.btn-info:hover {
+  background-color: rgba(255, 255, 255, 0.3);
   transform: scale(1.05);
 }
 .search-bar-standalone {
@@ -138,6 +163,15 @@
   opacity: 0;
   transition: opacity 0.8s ease-in-out;
 }
+.anime-card__info {
+  padding: 12px;
+  background: var(--color-bg-card);
+  transition: all 0.3s ease;
+}
+
+.anime-card-wrapper.is-hovered .anime-card__info {
+  background: var(--color-bg-card-light);
+}
 .spotlight-hero.active {
   opacity: 1;
   z-index: 1;
@@ -189,10 +223,9 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.4);
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
@@ -203,24 +236,19 @@
   z-index: 5;
   transition: all 0.3s ease;
   opacity: 0;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .spotlight-carousel:hover .carousel-control {
   opacity: 1;
 }
 
-.carousel-control:hover {
-  background: rgba(0, 163, 255, 0.6);
-  border-color: rgba(255, 255, 255, 0.3);
+.carousel-control:hover, .carousel-control:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #fff;
   transform: translateY(-50%) scale(1.1);
-}
-
-.carousel-control.prev {
-  left: 20px;
-}
-
-.carousel-control.next {
-  right: 20px;
+  outline: none !important;
 }
 
 .carousel-control svg {
@@ -566,6 +594,169 @@
   margin-top: 8px;
 }
 
+/* ───── Trailer Container Overhaul ───── */
+.spotlight-trailer-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.spotlight-hero.active .spotlight-trailer-container {
+  opacity: 1;
+}
+
+.spotlight-trailer-iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw;
+  min-height: 100vh;
+  min-width: 177.77vh;
+  transform: translate(-50%, -50%);
+  border: none !important;
+  outline: none !important;
+  pointer-events: none;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+/* ───── Hero Actions Refinement (Netflix Style) ───── */
+.spotlight-actions-hero {
+  display: flex;
+  gap: 16px;
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.btn-watch-hero {
+  background: #fff;
+  color: #000;
+  padding: 12px 30px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-watch-hero:hover {
+  background: rgba(255, 255, 255, 0.75);
+  transform: scale(1.05);
+}
+
+.btn-info-hero {
+  background: rgba(109, 109, 110, 0.7);
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.btn-info-hero:hover {
+  background: rgba(109, 109, 110, 0.4);
+  transform: scale(1.05);
+}
+
+/* ───── Mute Toggle Style ───── */
+.hero-mute-toggle {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  pointer-events: all;
+}
+
+.hero-mute-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.spotlight-metadata {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 10;
+}
+
+.meta-badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-badge.rating {
+  background: var(--color-accent);
+  color: #000;
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+
+.meta-badge.format {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.meta-badge.episodes {
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-glow);
+  font-weight: 700;
+}
+
+.meta-genres {
+  display: flex;
+  gap: 8px;
+}
+
+.genre-tag {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.genre-tag:not(:last-child)::after {
+  content: "•";
+  margin-left: 8px;
+  color: var(--color-accent);
+  opacity: 0.5;
+}
+
 @media (max-width: 768px) {
   .home-page .spotlight-carousel {
     width: 100vw;
@@ -581,6 +772,35 @@
     background-size: cover;
     background-position: center top;
     padding-top: calc(var(--navbar-height));
+    animation: ken-burns 20s ease infinite alternate;
+  }
+
+  @keyframes ken-burns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+  }
+
+  .meta-badge.episodes {
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent-glow);
+  }
+
+  .meta-genres {
+    display: flex;
+    gap: 8px;
+  }
+
+  .genre-tag {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .genre-tag:not(:last-child)::after {
+    content: "•";
+    margin-left: 8px;
+    color: var(--color-accent);
+    opacity: 0.5;
   }
 
   .home-page .spotlight-content {
@@ -625,10 +845,11 @@
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   background:
-    linear-gradient(180deg, rgba(8, 10, 16, 0.45) 0%, rgba(8, 10, 16, 0.15) 28%, rgba(8, 10, 16, 0.72) 100%),
-    linear-gradient(90deg, rgba(6, 8, 14, 0.58) 0%, rgba(6, 8, 14, 0.18) 45%, rgba(6, 8, 14, 0) 100%);
+    linear-gradient(180deg, rgba(5, 7, 10, 0.4) 0%, rgba(5, 7, 10, 0) 25%, rgba(5, 7, 10, 0.4) 60%, var(--color-bg-primary) 100%),
+    linear-gradient(90deg, rgba(5, 7, 10, 0.8) 0%, rgba(5, 7, 10, 0.4) 30%, transparent 60%),
+    linear-gradient(-90deg, rgba(5, 7, 10, 0.6) 0%, transparent 40%);
   pointer-events: none;
 }
 

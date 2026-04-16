@@ -5,10 +5,20 @@
   right: 0;
   height: var(--navbar-height);
   z-index: 1000;
-  background: rgba(8, 10, 18, 0.28);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden; /* Contain particles */
+}
+
+.navbar.scrolled {
+  background: rgba(5, 7, 10, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 202, 40, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
 .navbar__inner {
@@ -22,27 +32,28 @@
 .navbar__logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-weight: 900;
   letter-spacing: -0.3px;
 }
 
-.logo-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  color: #fff;
-  background: linear-gradient(145deg, #6c5ce7 0%, #913ef8 100%);
-  box-shadow: 0 8px 20px rgba(108, 92, 231, 0.35);
+.navbar__logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(255, 202, 40, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.navbar__logo:hover .navbar__logo-img {
+  transform: rotate(15deg) scale(1.1);
 }
 
 .navbar__logo-text {
   font-size: 1.75rem;
-  font-weight: 900;
+  font-weight: 950;
   line-height: 1;
+  letter-spacing: 1px;
 }
 
 .navbar__search-container {
@@ -113,6 +124,90 @@
 .navbar__link:hover {
   color: #fff;
   background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Golden Ember Particles ──────────────── */
+.navbar__particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  background: radial-gradient(circle, var(--color-accent) 0%, var(--color-accent-hover) 70%, transparent 100%);
+  border-radius: 50%;
+  filter: blur(1.5px);
+  box-shadow: 0 0 10px var(--color-accent-glow), 0 0 20px var(--color-accent);
+  top: -20px;
+  animation: ember-drift var(--duration) linear infinite;
+  opacity: 0;
+}
+
+/* More varied particles for 30 count */
+.particle:nth-child(3n) { --size: 8px; --duration: 18s; }
+.particle:nth-child(3n+1) { --size: 4px; --duration: 25s; filter: blur(1px); }
+.particle:nth-child(3n+2) { --size: 6px; --duration: 21s; filter: blur(2px); }
+
+/* Distribute across the whole width with varied delays */
+.particle:nth-child(1) { left: 2%; --delay: 0s; }
+.particle:nth-child(2) { left: 8%; --delay: 4s; }
+.particle:nth-child(3) { left: 15%; --delay: 2s; }
+.particle:nth-child(4) { left: 22%; --delay: 7s; }
+.particle:nth-child(5) { left: 30%; --delay: 1s; }
+.particle:nth-child(6) { left: 38%; --delay: 5s; }
+.particle:nth-child(7) { left: 45%; --delay: 3s; }
+.particle:nth-child(8) { left: 52%; --delay: 8s; }
+.particle:nth-child(9) { left: 60%; --delay: 2s; }
+.particle:nth-child(10) { left: 68%; --delay: 6s; }
+.particle:nth-child(11) { left: 75%; --delay: 1s; }
+.particle:nth-child(12) { left: 82%; --delay: 4s; }
+.particle:nth-child(13) { left: 90%; --delay: 7s; }
+.particle:nth-child(14) { left: 95%; --delay: 3s; }
+.particle:nth-child(15) { left: 5%; --delay: 9s; }
+.particle:nth-child(16) { left: 12%; --delay: 5s; }
+.particle:nth-child(17) { left: 20%; --delay: 2s; }
+.particle:nth-child(18) { left: 28%; --delay: 6s; }
+.particle:nth-child(19) { left: 35%; --delay: 1s; }
+.particle:nth-child(20) { left: 42%; --delay: 8s; }
+.particle:nth-child(21) { left: 50%; --delay: 4s; }
+.particle:nth-child(22) { left: 58%; --delay: 7s; }
+.particle:nth-child(23) { left: 65%; --delay: 3s; }
+.particle:nth-child(24) { left: 72%; --delay: 9s; }
+.particle:nth-child(25) { left: 80%; --delay: 5s; }
+.particle:nth-child(26) { left: 88%; --delay: 2s; }
+.particle:nth-child(27) { left: 98%; --delay: 6s; }
+.particle:nth-child(28) { left: 18%; --delay: 10s; }
+.particle:nth-child(29) { left: 48%; --delay: 11s; }
+.particle:nth-child(30) { left: 78%; --delay: 12s; }
+
+.particle {
+  width: var(--size);
+  height: var(--size);
+  animation-delay: var(--delay);
+}
+
+@keyframes ember-drift {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(60px) translateX(25px) rotate(180deg);
+    opacity: 0.7;
+  }
+  85% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(120px) translateX(-15px) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 @media (max-width: 900px) {

@@ -9,6 +9,7 @@ interface Props {
   animes: Anime[];
   loading?: boolean;
   onSeeAll?: () => void;
+  showRankings?: boolean;
 }
 
 export default function AnimeRow({
@@ -16,6 +17,7 @@ export default function AnimeRow({
   animes,
   loading = false,
   onSeeAll,
+  showRankings = false,
 }: Props) {
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -57,22 +59,11 @@ export default function AnimeRow({
 
       <div className="row-scroll-wrapper">
         <button
-          className="nav-arrow prev-arrow"
+          className="row-nav row-nav--prev"
           onClick={() => handleScroll("left")}
           aria-label="Scroll left"
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </button>
 
         <div className="anime-row" ref={rowRef}>
@@ -82,30 +73,22 @@ export default function AnimeRow({
                   <AnimeCardSkeleton />
                 </div>
               ))
-            : animes.map((anime) => (
+            : animes.map((anime, index) => (
                 <div className="anime-row-item" key={anime._id}>
+                  {showRankings && index < 10 && (
+                    <div className="ranking-number">{index + 1}</div>
+                  )}
                   <AnimeCard anime={anime} />
                 </div>
               ))}
         </div>
 
         <button
-          className="nav-arrow next-arrow"
+          className="row-nav row-nav--next"
           onClick={() => handleScroll("right")}
           aria-label="Scroll right"
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
       </div>
     </div>

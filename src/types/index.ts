@@ -47,6 +47,12 @@ export interface Anime {
   bannerImage: string;
   fanartBackground?: string;
   logo?: string;
+  trailer?: {
+    id: string;
+    site: string;
+    thumbnail: string;
+    url: string;
+  } | null;
   description: string;
   genres: string[];
   tags: string[];

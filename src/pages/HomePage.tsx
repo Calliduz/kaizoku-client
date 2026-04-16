@@ -36,6 +36,8 @@ export default function HomePage() {
   const [trending, setTrending] = useState<Anime[]>([]);
   const [discoveryLoading, setDiscoveryLoading] = useState(true);
   const [currentSpotlightIdx, setCurrentSpotlightIdx] = useState(0);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [fanartBackgrounds, setFanartBackgrounds] = useState<Record<string, string>>({});
   const spotlightWithBanner = spotlight.filter((anime) => !!anime.bannerImage);
   const carouselItems = spotlightWithBanner.length >= 3 ? spotlightWithBanner : spotlight;
@@ -89,11 +91,26 @@ export default function HomePage() {
 
   useEffect(() => {
     if (carouselItems.length === 0) return;
+    
+    // Reset trailer when slide changes
+    setShowTrailer(false);
+    
     const interval = setInterval(() => {
       setCurrentSpotlightIdx((prev) => (prev + 1) % carouselItems.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [carouselItems]);
+    }, 8000); // Slower carousel for better impact
+
+    // Show trailer after 2 seconds of being on a slide
+    const trailerTimer = setTimeout(() => {
+      if (carouselItems[currentSpotlightIdx]?.trailer?.id) {
+        setShowTrailer(true);
+      }
+    }, 2000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(trailerTimer);
+    };
+  }, [carouselItems, currentSpotlightIdx]);
 
   useEffect(() => {
     if (currentSpotlightIdx >= carouselItems.length) {
@@ -203,18 +220,61 @@ export default function HomePage() {
                       });
                     }}
                   />
+                  <div className="spotlight-metadata">
+                    <span className="meta-badge rating">★ {(anime.rating / 10).toFixed(1)}</span>
+                    <span className="meta-badge format">{anime.format?.replace(/_/g, " ")}</span>
+                    <span className="meta-badge episodes">{anime.totalEpisodes} Episodes</span>
+                    <div className="meta-genres">
+                      {anime.genres?.slice(0, 3).map(g => <span key={g} className="genre-tag">{g}</span>)}
+                    </div>
+                  </div>
                   <p className="spotlight-description">
-                    {anime.description?.substring(0, 150)}...
+                    {anime.description?.substring(0, 220)}...
                   </p>
-                  <div className="spotlight-actions">
+                  <div className="spotlight-actions-hero">
                     <button
                       onClick={() => navigate(`/anime/${anime._id}`)}
-                      className="btn-watch"
+                      className="btn-watch-hero"
                     >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                       Watch Now
+                    </button>
+                    <button
+                      onClick={() => navigate(`/anime/${anime._id}`)}
+                      className="btn-info-hero"
+                    >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                      More Info
                     </button>
                   </div>
                 </div>
+
+                {/* Trailer Overlay */}
+                {index === currentSpotlightIdx && showTrailer && anime.trailer?.id && (
+                  <div className="spotlight-trailer-container animate-fade-in">
+                    <iframe
+                      className="spotlight-trailer-iframe"
+                      src={`https://www.youtube.com/embed/${anime.trailer.id}?autoplay=1&mute=${isMuted ? 1 : 0}&controls=0&loop=1&playlist=${anime.trailer.id}&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&modestbranding=1`}
+                      allow="autoplay; encrypted-media"
+                      title="Anime Trailer"
+                    />
+                  </div>
+                )}
+
+                {/* Always-accessible Mute Toggle if trailer exists */}
+                {index === currentSpotlightIdx && anime.trailer?.id && (
+                  <button 
+                    className="hero-mute-toggle"
+                    onClick={() => setIsMuted(!isMuted)}
+                    title={isMuted ? "Unmute Trailer" : "Mute Trailer"}
+                  >
+                    {isMuted ? (
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/></svg>
+                    ) : (
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                    )}
+                  </button>
+                )}
               </div>
             ))}
 
@@ -245,12 +305,13 @@ export default function HomePage() {
           onSeeAll={() => updateFilters("sort", "newest")}
         />
         <AnimeRow
-          title="Trending This Season"
+          title="Trending Now"
           animes={trending}
+          showRankings={true}
           onSeeAll={() => updateFilters("sort", "popularity")}
         />
         <AnimeRow
-          title="Top Rated"
+          title="Top Rated Classics"
           animes={topRated}
           onSeeAll={() => updateFilters("sort", "rating")}
         />
