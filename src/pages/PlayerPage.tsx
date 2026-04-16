@@ -298,6 +298,8 @@ export default function PlayerPage() {
               episodes={episodes}
               currentEpisodeId={currentEpisode?._id}
               onSelect={(ep) => navigate(`/anime/${id}/watch/${ep._id}`)}
+              fallbackImage={anime.fanartBackground || anime.bannerImage || anime.coverImage}
+              variant="compact"
             />
           </div>
         </div>

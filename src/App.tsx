@@ -7,6 +7,7 @@ import SEO from "./components/SEO";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const PlayerPage = lazy(() => import("./pages/PlayerPage"));
 const AnimeDetailsPage = lazy(() => import("./pages/AnimeDetailsPage"));
+const LegalPage = lazy(() => import("./pages/LegalPage"));
 
 export default function App() {
   return (
@@ -23,9 +24,9 @@ export default function App() {
               path="/anime/:id/watch/:episodeId"
               element={<PlayerPage />}
             />
-            <Route path="/terms" element={<div className="container" style={{padding: '120px 20px'}}><h2>Terms of Service</h2><p>Coming soon...</p></div>} />
-            <Route path="/privacy" element={<div className="container" style={{padding: '120px 20px'}}><h2>Privacy Policy</h2><p>Coming soon...</p></div>} />
-            <Route path="/dmca" element={<div className="container" style={{padding: '120px 20px'}}><h2>DMCA</h2><p>Coming soon...</p></div>} />
+            <Route path="/terms" element={<LegalPage type="terms" />} />
+            <Route path="/privacy" element={<LegalPage type="privacy" />} />
+            <Route path="/dmca" element={<LegalPage type="dmca" />} />
             <Route
               path="*"
               element={

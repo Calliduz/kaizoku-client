@@ -5,19 +5,20 @@
   right: 0;
   height: var(--navbar-height);
   z-index: 1000;
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
+  background: rgba(0, 163, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden; /* Contain particles */
 }
 
 .navbar.scrolled {
-  background: rgba(5, 7, 10, 0.85);
+  background: rgba(5, 7, 10, 0.9);
+  background-image: linear-gradient(rgba(0, 163, 255, 0.08), transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(255, 202, 40, 0.15);
+  border-bottom: 1px solid rgba(0, 163, 255, 0.3);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 

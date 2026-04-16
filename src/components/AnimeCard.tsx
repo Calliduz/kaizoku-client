@@ -22,7 +22,6 @@ export default function AnimeCard({ anime, disableTrailer = false }: AnimeCardPr
     rating,
     totalEpisodes,
     latestEpisode,
-    description,
     format,
   } = anime;
   const [isHovered, setIsHovered] = useState(false);
@@ -95,7 +94,7 @@ export default function AnimeCard({ anime, disableTrailer = false }: AnimeCardPr
             <div className="card-meta-line">
               <span className="badge-match">{(90 + Math.floor(Math.random() * 9))}% Match</span>
               <span className="meta-quality">HD</span>
-              <span className="meta-year">{anime.year}</span>
+              <span className="meta-year">{anime.seasonYear}</span>
               <span className="meta-format">{format?.replace(/_/g, " ")}</span>
             </div>
             <div className="card-genres-line">

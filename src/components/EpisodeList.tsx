@@ -6,6 +6,7 @@ interface EpisodeListProps {
   currentEpisodeId?: string;
   onSelect: (ep: Episode) => void;
   fallbackImage?: string;
+  variant?: "default" | "compact";
 }
 
 /**
@@ -16,12 +17,13 @@ export default function EpisodeList({
   currentEpisodeId,
   onSelect,
   fallbackImage,
+  variant = "default",
 }: EpisodeListProps) {
   return (
-    <div className="episode-list-cinematic" id="episode-list">
+    <div className={`episode-list-cinematic ${variant === "compact" ? "compact-view" : ""}`} id="episode-list">
       <div className="episode-list__container">
         {episodes.length > 0 ? (
-          episodes.map((ep, index) => {
+          episodes.map((ep) => {
             const isActive = ep._id === currentEpisodeId;
             return (
               <button

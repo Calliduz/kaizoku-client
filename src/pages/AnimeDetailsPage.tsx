@@ -146,13 +146,18 @@ export default function AnimeDetailsPage() {
               <span className="meta-chip">{anime.format?.replace(/_/g, " ")}</span>
               <span className="meta-chip episodes">{episodes.length} Episodes</span>
               <span className="meta-chip status-tag">{anime.status}</span>
-              <span className="meta-chip season-tag">{anime.season} {anime.year}</span>
+              <span className="meta-chip season-tag">{anime.season} {anime.seasonYear}</span>
             </div>
 
             <div className="details-actions">
               <button
                 className="btn-watch-now"
-                onClick={() => episodes.length > 0 && navigate(`/anime/${anime._id}/watch/${episodes[0]._id}`)}
+                onClick={() => {
+                  if (episodes.length > 0) {
+                    const firstEp = [...episodes].sort((a, b) => a.number - b.number)[0];
+                    navigate(`/anime/${anime._id}/watch/${firstEp._id}`);
+                  }
+                }}
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                 Watch Now
@@ -198,7 +203,7 @@ export default function AnimeDetailsPage() {
               <h3 className="section-title" style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>Information</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ opacity: 0.6 }}>Studio</span> <span>{anime.studios?.[0]?.name || "Unknown"}</span></div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ opacity: 0.6 }}>Source</span> <span>{anime.source}</span></div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ opacity: 0.6 }}>Source</span> <span>{anime.scrapeSource || "Unknown"}</span></div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ opacity: 0.6 }}>Genres</span> <span style={{ textAlign: "right", fontSize: "0.9rem" }}>{anime.genres?.slice(0, 3).join(", ")}</span></div>
               </div>
             </div>
@@ -217,7 +222,10 @@ export default function AnimeDetailsPage() {
         <div className={`sticky-watch-fab ${showStickyWatch ? "visible" : ""}`}>
           <button
             className="btn-watch-now"
-            onClick={() => navigate(`/anime/${anime._id}/watch/${episodes[0]._id}`)}
+            onClick={() => {
+              const firstEp = [...episodes].sort((a, b) => a.number - b.number)[0];
+              navigate(`/anime/${anime._id}/watch/${firstEp._id}`);
+            }}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             Watch Now
