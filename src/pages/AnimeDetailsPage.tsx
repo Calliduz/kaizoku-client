@@ -192,7 +192,6 @@ export default function AnimeDetailsPage() {
 
             {anime.characters && anime.characters.length > 0 && (
               <div className="characters-section" style={{ marginTop: "3rem" }}>
-                <h2 className="section-title">Characters</h2>
                 <CharacterList characters={anime.characters.slice(0, 10)} />
               </div>
             )}

@@ -141,28 +141,29 @@
   padding: 0 20px;
 }
 
-/* Spotlight Carousel */
 .spotlight-carousel {
-  position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 85vh; /* Changed from 100vh to avoid excessive scrolling */
   min-height: 520px;
   margin-top: calc(-1 * var(--navbar-height));
   margin-left: calc(-50vw + 50%);
+  position: relative;
   overflow: hidden;
-  margin-bottom: 0px;
+  margin-bottom: -20px; /* Pull the content below slightly up */
 }
 
 .spotlight-hero {
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center top;
+  background-position: center 20%; /* Focus slightly higher on faces */
   background-image: var(--bg-desktop);
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   opacity: 0;
   transition: opacity 0.9s ease-in-out;
+  z-index: 1;
 }
 
 /* Cinematic multi-directional gradient overlay */
@@ -170,11 +171,13 @@
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to right, rgba(5, 7, 10, 0.6) 0%, rgba(5, 7, 10, 0.2) 40%, transparent 60%),
-    linear-gradient(to top, rgba(5, 7, 10, 0.7) 0%, rgba(5, 7, 10, 0.1) 20%, transparent 40%),
-    linear-gradient(to bottom, rgba(5, 7, 10, 0.2) 0%, transparent 15%);
-  z-index: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 7, 10, 0) 50%,     
+    rgba(5, 7, 10, 0.8) 85%,   
+    var(--color-bg-primary) 100% 
+  );
   pointer-events: none;
 }
 
@@ -544,14 +547,15 @@
   }
 }
 @media (max-width: 768px) {
-  .spotlight-carousel {
-    height: 72vh;
-    min-height: 500px;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    margin-top: calc(-1 * var(--navbar-height));
-    border-radius: 0;
-    margin-bottom: 30px;
+  .home-page .spotlight-carousel {
+    height: 60vh; /* Shorter for mobile */
+    margin-top: 0; 
+    margin-bottom: 0; /* Remove extra space */
+  }
+  
+  .discovery-view {
+    margin-top: 0; /* Ensure rows start immediately after hero */
+    padding-top: 20px;
   }
 
   .spotlight-hero {
@@ -643,13 +647,15 @@
 
 .home-page .spotlight-carousel {
   width: 100vw;
-  height: 100vh;
+  height: 85vh; /* Changed from 100vh to avoid excessive scrolling */
   min-height: 520px;
   margin-top: calc(-1 * var(--navbar-height));
   margin-left: calc(-50vw + 50%);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -20px; /* Pull the content below slightly up */
   border-radius: 0;
   box-shadow: none;
-  margin-bottom: 0px;
 }
 
 .home-page .spotlight-hero {
