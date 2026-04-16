@@ -126,7 +126,7 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* ── Golden Ember Particles ──────────────── */
+/* ── Golden Firefly Particles ──────────────── */
 .navbar__particles {
   position: absolute;
   inset: 0;
@@ -137,51 +137,51 @@
 
 .particle {
   position: absolute;
-  background: radial-gradient(circle, var(--color-accent) 0%, var(--color-accent-hover) 70%, transparent 100%);
+  background: radial-gradient(circle, #fff5d6 0%, var(--color-accent) 50%, transparent 100%);
   border-radius: 50%;
-  filter: blur(1.5px);
-  box-shadow: 0 0 10px var(--color-accent-glow), 0 0 20px var(--color-accent);
-  top: -20px;
-  animation: ember-drift var(--duration) linear infinite;
+  filter: blur(1px);
+  box-shadow: 0 0 8px var(--color-accent), 0 0 16px var(--color-accent-glow);
+  bottom: -10px;
   opacity: 0;
+  animation: firefly-rise var(--duration) ease-in-out infinite;
 }
 
-/* More varied particles for 30 count */
-.particle:nth-child(3n) { --size: 8px; --duration: 18s; }
-.particle:nth-child(3n+1) { --size: 4px; --duration: 25s; filter: blur(1px); }
-.particle:nth-child(3n+2) { --size: 6px; --duration: 21s; filter: blur(2px); }
+/* Varied sizes and speeds for 30 particles */
+.particle:nth-child(3n)   { --size: 7px;  --duration: 7s;  }
+.particle:nth-child(3n+1) { --size: 4px;  --duration: 11s; filter: blur(0.5px); }
+.particle:nth-child(3n+2) { --size: 5px;  --duration: 9s;  filter: blur(1.5px); }
 
-/* Distribute across the whole width with varied delays */
-.particle:nth-child(1) { left: 2%; --delay: 0s; }
-.particle:nth-child(2) { left: 8%; --delay: 4s; }
-.particle:nth-child(3) { left: 15%; --delay: 2s; }
-.particle:nth-child(4) { left: 22%; --delay: 7s; }
-.particle:nth-child(5) { left: 30%; --delay: 1s; }
-.particle:nth-child(6) { left: 38%; --delay: 5s; }
-.particle:nth-child(7) { left: 45%; --delay: 3s; }
-.particle:nth-child(8) { left: 52%; --delay: 8s; }
-.particle:nth-child(9) { left: 60%; --delay: 2s; }
-.particle:nth-child(10) { left: 68%; --delay: 6s; }
-.particle:nth-child(11) { left: 75%; --delay: 1s; }
-.particle:nth-child(12) { left: 82%; --delay: 4s; }
-.particle:nth-child(13) { left: 90%; --delay: 7s; }
-.particle:nth-child(14) { left: 95%; --delay: 3s; }
-.particle:nth-child(15) { left: 5%; --delay: 9s; }
-.particle:nth-child(16) { left: 12%; --delay: 5s; }
-.particle:nth-child(17) { left: 20%; --delay: 2s; }
-.particle:nth-child(18) { left: 28%; --delay: 6s; }
-.particle:nth-child(19) { left: 35%; --delay: 1s; }
-.particle:nth-child(20) { left: 42%; --delay: 8s; }
-.particle:nth-child(21) { left: 50%; --delay: 4s; }
-.particle:nth-child(22) { left: 58%; --delay: 7s; }
-.particle:nth-child(23) { left: 65%; --delay: 3s; }
-.particle:nth-child(24) { left: 72%; --delay: 9s; }
-.particle:nth-child(25) { left: 80%; --delay: 5s; }
-.particle:nth-child(26) { left: 88%; --delay: 2s; }
-.particle:nth-child(27) { left: 98%; --delay: 6s; }
-.particle:nth-child(28) { left: 18%; --delay: 10s; }
-.particle:nth-child(29) { left: 48%; --delay: 11s; }
-.particle:nth-child(30) { left: 78%; --delay: 12s; }
+/* Distribute across the whole navbar width */
+.particle:nth-child(1)  { left: 2%;  --delay: 0s;    }
+.particle:nth-child(2)  { left: 8%;  --delay: 1.5s;  }
+.particle:nth-child(3)  { left: 15%; --delay: 0.5s;  }
+.particle:nth-child(4)  { left: 22%; --delay: 3s;    }
+.particle:nth-child(5)  { left: 30%; --delay: 0.8s;  }
+.particle:nth-child(6)  { left: 38%; --delay: 2s;    }
+.particle:nth-child(7)  { left: 45%; --delay: 1.2s;  }
+.particle:nth-child(8)  { left: 52%; --delay: 4s;    }
+.particle:nth-child(9)  { left: 60%; --delay: 0.3s;  }
+.particle:nth-child(10) { left: 68%; --delay: 2.5s;  }
+.particle:nth-child(11) { left: 75%; --delay: 1s;    }
+.particle:nth-child(12) { left: 82%; --delay: 3.5s;  }
+.particle:nth-child(13) { left: 90%; --delay: 0.7s;  }
+.particle:nth-child(14) { left: 95%; --delay: 1.8s;  }
+.particle:nth-child(15) { left: 5%;  --delay: 4.5s;  }
+.particle:nth-child(16) { left: 12%; --delay: 2.2s;  }
+.particle:nth-child(17) { left: 20%; --delay: 0.4s;  }
+.particle:nth-child(18) { left: 28%; --delay: 3.2s;  }
+.particle:nth-child(19) { left: 35%; --delay: 1.6s;  }
+.particle:nth-child(20) { left: 42%; --delay: 5s;    }
+.particle:nth-child(21) { left: 50%; --delay: 2.8s;  }
+.particle:nth-child(22) { left: 58%; --delay: 0.9s;  }
+.particle:nth-child(23) { left: 65%; --delay: 4.2s;  }
+.particle:nth-child(24) { left: 72%; --delay: 1.4s;  }
+.particle:nth-child(25) { left: 80%; --delay: 3.8s;  }
+.particle:nth-child(26) { left: 88%; --delay: 0.2s;  }
+.particle:nth-child(27) { left: 98%; --delay: 2.6s;  }
+.particle:nth-child(28) { left: 18%; --delay: 5.5s;  }
+.particle:nth-child(29) { left: 48%; --delay: 6s;    }
+.particle:nth-child(30) { left: 78%; --delay: 4.8s;  }
 
 .particle {
   width: var(--size);
@@ -189,26 +189,27 @@
   animation-delay: var(--delay);
 }
 
-@keyframes ember-drift {
+@keyframes firefly-rise {
   0% {
-    transform: translateY(0) translateX(0) rotate(0deg);
+    transform: translateY(0) translateX(0) scale(0.5);
     opacity: 0;
   }
-  15% {
-    opacity: 0.9;
+  20% {
+    opacity: 1;
   }
   50% {
-    transform: translateY(60px) translateX(25px) rotate(180deg);
-    opacity: 0.7;
+    transform: translateY(-40px) translateX(12px) scale(1);
+    opacity: 0.9;
   }
-  85% {
-    opacity: 0.4;
+  80% {
+    opacity: 0.5;
   }
   100% {
-    transform: translateY(120px) translateX(-15px) rotate(360deg);
+    transform: translateY(-80px) translateX(-8px) scale(0.3);
     opacity: 0;
   }
 }
+
 
 @media (max-width: 900px) {
   .navbar__inner {

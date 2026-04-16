@@ -606,7 +606,7 @@
   transition: opacity 1.5s ease-in-out;
 }
 
-.spotlight-hero.active .spotlight-trailer-container {
+.spotlight-trailer-container.trailer-visible {
   opacity: 1;
 }
 
@@ -624,6 +624,23 @@
   pointer-events: none;
   box-shadow: none !important;
   background-color: transparent !important;
+}
+
+/* Cover overlay that hides YouTube player UI during initialization */
+.trailer-poster-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  transition: opacity 0.8s ease-out;
+  pointer-events: none;
+}
+
+.trailer-poster-cover.cover-hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ───── Hero Actions Refinement (Netflix Style) ───── */

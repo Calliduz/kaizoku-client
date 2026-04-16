@@ -115,6 +115,12 @@
   user-select: none;
 }
 
+@media (max-width: 768px) {
+  .ranking-number {
+    display: none; /* Prevents overflow-x scroll issues on mobile */
+  }
+}
+
 .row-nav {
   position: absolute;
   top: 0;

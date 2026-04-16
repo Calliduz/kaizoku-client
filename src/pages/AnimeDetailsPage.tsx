@@ -15,6 +15,8 @@ export default function AnimeDetailsPage() {
   const navigate = useNavigate();
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+  const [detailTrailerMuted, setDetailTrailerMuted] = useState(true);
+  const [detailTrailerReady, setDetailTrailerReady] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 1024);
@@ -32,6 +34,7 @@ export default function AnimeDetailsPage() {
       try {
         setLoading(true);
         setError(null);
+        setDetailTrailerReady(false);
         if (!id) throw new Error("No anime ID provided");
         const [animeRes, itemsRes] = await Promise.all([
           fetchAnimeById(id),
@@ -43,6 +46,11 @@ export default function AnimeDetailsPage() {
         
         // Scroll to top on load
         window.scrollTo(0, 0);
+
+        // Delay revealing trailer
+        if (animeRes.data?.trailer?.id) {
+          setTimeout(() => setDetailTrailerReady(true), 2000);
+        }
       } catch (err: any) {
         setError(err.response?.data?.error?.message || err.message);
       } finally {
@@ -63,18 +71,47 @@ export default function AnimeDetailsPage() {
   if (!anime) return <div className="container">Anime not found</div>;
 
   const bgImage = anime.fanartBackground || anime.bannerImage || anime.coverImage;
+  const hasTrailer = !!anime.trailer?.id;
 
   return (
     <div className="anime-details-page animate-fade-in">
       {/* Cinematic Hero Section */}
       <div className="details-hero">
-        <img src={bgImage} alt="Banner" className="details-hero__img" />
+        {/* Poster cover — always shown, fades when trailer is ready */}
+        <img src={bgImage} alt="Banner" className={`details-hero__img ${hasTrailer && detailTrailerReady ? "details-hero__img--hidden" : ""}`} />
+        
+        {/* Trailer background */}
+        {hasTrailer && (
+          <div className="details-hero__trailer">
+            <iframe
+              src={`https://www.youtube.com/embed/${anime.trailer!.id}?autoplay=1&mute=${detailTrailerMuted ? 1 : 0}&controls=0&loop=1&playlist=${anime.trailer!.id}&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&modestbranding=1`}
+              allow="autoplay; encrypted-media"
+              title="Anime Trailer Background"
+              className="details-hero__trailer-iframe"
+            />
+          </div>
+        )}
+
         <div className="details-hero__gradient" />
         
         <button className="back-btn details-back-btn" onClick={() => navigate(-1)}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
           Back
         </button>
+
+        {hasTrailer && (
+          <button
+            className="hero-mute-toggle"
+            onClick={() => setDetailTrailerMuted(!detailTrailerMuted)}
+            title={detailTrailerMuted ? "Unmute Trailer" : "Mute Trailer"}
+          >
+            {detailTrailerMuted ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6"/></svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            )}
+          </button>
+        )}
       </div>
 
       <div className="details-content-container">

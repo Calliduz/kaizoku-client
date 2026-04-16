@@ -37,6 +37,7 @@ export default function HomePage() {
   const [discoveryLoading, setDiscoveryLoading] = useState(true);
   const [currentSpotlightIdx, setCurrentSpotlightIdx] = useState(0);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [trailerReady, setTrailerReady] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [fanartBackgrounds, setFanartBackgrounds] = useState<Record<string, string>>({});
   const spotlightWithBanner = spotlight.filter((anime) => !!anime.bannerImage);
@@ -94,6 +95,7 @@ export default function HomePage() {
     
     // Reset trailer when slide changes
     setShowTrailer(false);
+    setTrailerReady(false);
     
     const interval = setInterval(() => {
       setCurrentSpotlightIdx((prev) => (prev + 1) % carouselItems.length);
@@ -103,6 +105,8 @@ export default function HomePage() {
     const trailerTimer = setTimeout(() => {
       if (carouselItems[currentSpotlightIdx]?.trailer?.id) {
         setShowTrailer(true);
+        // Delay revealing trailer by 1.5s to let YouTube suppress its UI
+        setTimeout(() => setTrailerReady(true), 1500);
       }
     }, 2000);
 
@@ -251,7 +255,12 @@ export default function HomePage() {
 
                 {/* Trailer Overlay */}
                 {index === currentSpotlightIdx && showTrailer && anime.trailer?.id && (
-                  <div className="spotlight-trailer-container animate-fade-in">
+                  <div className={`spotlight-trailer-container ${trailerReady ? "trailer-visible" : ""}`}>
+                    {/* Poster cover to hide YouTube player UI during initialization */}
+                    <div
+                      className={`trailer-poster-cover ${trailerReady ? "cover-hidden" : ""}`}
+                      style={{ backgroundImage: `url(${fanartBackgrounds[anime._id] || anime.bannerImage || anime.coverImage})` }}
+                    />
                     <iframe
                       className="spotlight-trailer-iframe"
                       src={`https://www.youtube.com/embed/${anime.trailer.id}?autoplay=1&mute=${isMuted ? 1 : 0}&controls=0&loop=1&playlist=${anime.trailer.id}&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&modestbranding=1`}
