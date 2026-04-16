@@ -108,6 +108,11 @@ body {
   color: var(--color-text-primary);
   background-color: var(--color-bg-primary);
   min-height: 100vh;
+  /* Premium selection color */
+  & ::selection {
+    background-color: var(--color-accent);
+    color: #000;
+  }
 }
 
 a {
@@ -133,23 +138,31 @@ ol {
   list-style: none;
 }
 
-/* ── Scrollbar ──────────────────────────── */
+/* ── Premium Scrollbar ────────────────────────── */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 5px; /* Ultra thin for elegance */
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-secondary);
+  background: var(--color-bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-bg-card);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-full);
+  transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) var(--color-bg-primary);
 }
 
 /* ── Utility Classes ────────────────────── */
@@ -221,10 +234,12 @@ ol {
 @keyframes fadeIn {
   from {
     opacity: 0;
+    filter: blur(4px);
     transform: translateY(10px);
   }
   to {
     opacity: 1;
+    filter: blur(0);
     transform: translateY(0);
   }
 }

@@ -17,6 +17,7 @@ export default function AnimeDetailsPage() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
   const [detailTrailerMuted, setDetailTrailerMuted] = useState(true);
   const [detailTrailerReady, setDetailTrailerReady] = useState(false);
+  const [showStickyWatch, setShowStickyWatch] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 1024);
@@ -58,6 +59,18 @@ export default function AnimeDetailsPage() {
       }
     };
     loadData();
+
+    const handleScroll = () => {
+      // Show sticky button after scrolling past the hero actions (approx 500px)
+      if (window.scrollY > 500) {
+        setShowStickyWatch(true);
+      } else {
+        setShowStickyWatch(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [id]);
 
   if (loading) {
@@ -129,10 +142,11 @@ export default function AnimeDetailsPage() {
               {anime.rating > 0 && (
                 <span className="meta-chip score">★ {(anime.rating / 10).toFixed(1)}</span>
               )}
+              <span className="meta-chip match-percent">{(90 + Math.floor(Math.random() * 9))}% Match</span>
               <span className="meta-chip">{anime.format?.replace(/_/g, " ")}</span>
               <span className="meta-chip episodes">{episodes.length} Episodes</span>
-              <span className="meta-chip">{anime.status}</span>
-              <span className="meta-chip">{anime.season} {anime.year}</span>
+              <span className="meta-chip status-tag">{anime.status}</span>
+              <span className="meta-chip season-tag">{anime.season} {anime.year}</span>
             </div>
 
             <div className="details-actions">
@@ -164,6 +178,7 @@ export default function AnimeDetailsPage() {
                 <EpisodeList
                   episodes={episodes}
                   onSelect={(ep) => navigate(`/anime/${id}/watch/${ep._id}`)}
+                  fallbackImage={anime.fanartBackground || anime.bannerImage || anime.coverImage}
                 />
               ) : (
                 <div className="empty-state">No episodes available yet.</div>
@@ -196,6 +211,19 @@ export default function AnimeDetailsPage() {
           </aside>
         </div>
       </div>
+
+      {/* Floating Action Button (Mobile) */}
+      {isMobile && episodes.length > 0 && (
+        <div className={`sticky-watch-fab ${showStickyWatch ? "visible" : ""}`}>
+          <button
+            className="btn-watch-now"
+            onClick={() => navigate(`/anime/${anime._id}/watch/${episodes[0]._id}`)}
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Watch Now
+          </button>
+        </div>
+      )}
     </div>
   );
 }

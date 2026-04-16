@@ -6,7 +6,7 @@
 
 .anime-card-wrapper.is-hovered {
   z-index: 100;
-  transition-delay: 0s;
+  transition-delay: 0.15s; /* Smooth delay before expanding to prevent accidental triggers */
 }
 
 .anime-card {
@@ -23,8 +23,16 @@
 
 .anime-card-wrapper.is-hovered .anime-card {
   transform: translateY(-40px) scale(1.4);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 20px var(--color-accent-glow);
-  border-color: rgba(255, 202, 40, 0.4);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 202, 40, 0.35);
+  border-color: rgba(255, 202, 40, 0.5);
+  transition-delay: 0.1s;
+}
+
+/* Dim other cards in the row when one is hovered */
+.anime-row:has(.anime-card-wrapper.is-hovered) .anime-card-wrapper:not(.is-hovered) {
+  opacity: 0.4;
+  filter: grayscale(0.5) blur(1px);
+  transform: scale(0.95);
 }
 
 .anime-card__image-wrapper {
@@ -126,6 +134,23 @@
   font-weight: 800;
   padding: 4px 8px;
   border-radius: 4px;
+}
+
+/* NEW: Premium badges */
+.badge-match {
+  color: #46d369;
+  font-weight: 800;
+  font-size: 0.65rem;
+}
+
+.badge-top10 {
+  background: #e50914; /* Netflix Red */
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
 }
 
 .anime-card__info {

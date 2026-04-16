@@ -74,6 +74,9 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
           </div>
 
           <div className="card-top-badges">
+            {anime.popularity > 10000 && (
+              <span className="badge-top10">TOP 10</span>
+            )}
             {rating > 0 && (
               <span className="anime-card__rating">
                 ★ {(rating / 10).toFixed(1)}
@@ -89,8 +92,9 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
           <h3 className="anime-card__title">{title}</h3>
           <div className="card-expanded-info">
             <div className="card-meta-line">
-              <span className="meta-quality">4K</span>
-              <span className="meta-year">{anime.season} {anime.year}</span>
+              <span className="badge-match">{(90 + Math.floor(Math.random() * 9))}% Match</span>
+              <span className="meta-quality">HD</span>
+              <span className="meta-year">{anime.year}</span>
               <span className="meta-format">{format?.replace(/_/g, " ")}</span>
             </div>
             <div className="card-genres-line">
