@@ -12,6 +12,7 @@ import PlayerSkeleton from "../components/PlayerSkeleton";
 import ServerSelector from "../components/ServerSelector";
 import ErrorDisplay from "../components/ErrorDisplay";
 import EmptyState from "../components/EmptyState";
+import { saveWatchHistory } from "../utils/watchHistory";
 import type { Anime, Episode, StreamingSource } from "../types";
 import "../styles/pages/PlayerPage.css";
 
@@ -92,6 +93,13 @@ export default function PlayerPage() {
       isMounted = false;
     };
   }, [currentEpisode?._id]); // Use ID as dependency to prevent object-reference loops
+
+  // Track Watch History
+  useEffect(() => {
+    if (anime && currentEpisode) {
+      saveWatchHistory(anime, currentEpisode);
+    }
+  }, [anime?._id, currentEpisode?._id]);
 
   const handleRefreshSources = async () => {
     if (!currentEpisode) return;

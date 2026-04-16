@@ -11,9 +11,10 @@ import "../styles/components/AnimeCard.css";
  */
 interface AnimeCardProps {
   anime: Anime;
+  disableTrailer?: boolean;
 }
 
-export default function AnimeCard({ anime }: AnimeCardProps) {
+export default function AnimeCard({ anime, disableTrailer = false }: AnimeCardProps) {
   const {
     _id,
     title,
@@ -29,13 +30,13 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
 
   useEffect(() => {
     let timer: any;
-    if (isHovered && anime.trailer?.id) {
+    if (!disableTrailer && isHovered && anime.trailer?.id) {
       timer = setTimeout(() => setShowTrailer(true), 1200); // Wait for user to settle
     } else {
       setShowTrailer(false);
     }
     return () => clearTimeout(timer);
-  }, [isHovered, anime.trailer?.id]);
+  }, [isHovered, anime.trailer?.id, disableTrailer]);
 
   const displayEpisodes = latestEpisode ?? totalEpisodes;
 

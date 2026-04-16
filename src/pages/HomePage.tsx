@@ -8,6 +8,8 @@ import AnimeLogoImage from "../components/AnimeLogoImage";
 import EmptyState from "../components/EmptyState";
 import ErrorDisplay from "../components/ErrorDisplay";
 import LoadingSpinner from "../components/LoadingSpinner";
+import SEO from "../components/SEO";
+import { getWatchHistory, type HistoryItem } from "../utils/watchHistory";
 import type { Anime } from "../types";
 import "../styles/pages/HomePage.css";
 
@@ -35,6 +37,7 @@ export default function HomePage() {
   const [topRated, setTopRated] = useState<Anime[]>([]);
   const [trending, setTrending] = useState<Anime[]>([]);
   const [discoveryLoading, setDiscoveryLoading] = useState(true);
+  const [watchHistory, setWatchHistory] = useState<HistoryItem[]>([]);
   const [currentSpotlightIdx, setCurrentSpotlightIdx] = useState(0);
   const [showTrailer, setShowTrailer] = useState(false);
   const [trailerReady, setTrailerReady] = useState(false);
@@ -78,6 +81,13 @@ export default function HomePage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Only load watch history when starting discovery view
+    if (!isBrowsing) {
+      setWatchHistory(getWatchHistory());
+    }
+  }, [isBrowsing]);
 
   useEffect(() => {
     if (!isBrowsing) {
@@ -206,6 +216,7 @@ export default function HomePage() {
 
     return (
       <div className="discovery-view">
+        <SEO title="Home" />
         {/* Spotlight Carousel */}
         {carouselItems.length > 0 && (
           <div
@@ -325,20 +336,30 @@ export default function HomePage() {
         )}
 
         {/* Horizontal Scrolling Rows */}
+        {watchHistory.length > 0 && (
+          <AnimeRow
+            title="Continue Watching"
+            animes={watchHistory.map(h => h.anime)}
+            disableCardTrailers={true}
+          />
+        )}
         <AnimeRow
           title="Latest Releases"
           animes={latest}
+          disableCardTrailers={true}
           onSeeAll={() => updateFilters("sort", "newest")}
         />
         <AnimeRow
           title="Trending Now"
           animes={trending}
           showRankings={true}
+          disableCardTrailers={true}
           onSeeAll={() => updateFilters("sort", "popularity")}
         />
         <AnimeRow
           title="Top Rated Classics"
           animes={topRated}
+          disableCardTrailers={true}
           onSeeAll={() => updateFilters("sort", "rating")}
         />
       </div>

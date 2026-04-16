@@ -160,7 +160,7 @@
 
 .row-nav svg {
   transition: transform 0.2s ease;
-  filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
 }
 
 .row-nav:hover svg {

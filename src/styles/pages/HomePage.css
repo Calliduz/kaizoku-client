@@ -642,18 +642,20 @@
 }
 
 .home-page .spotlight-carousel {
-  width: 100%;
-  margin-left: 0;
-  margin-top: 0;
-  border-radius: 16px;
-  height: clamp(400px, 62vh, 560px);
-  min-height: 400px;
+  width: 100vw;
+  height: 82vh;
+  min-height: 520px;
+  margin-top: calc(-1 * var(--navbar-height));
+  margin-left: calc(-50vw + 50%);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .home-page .spotlight-hero {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center top;
+  border-radius: 0;
 }
 
 .home-page .spotlight-content {

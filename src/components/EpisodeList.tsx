@@ -30,7 +30,7 @@ export default function EpisodeList({
                 onClick={() => onSelect(ep)}
                 id={`episode-${ep.number}`}
               >
-                <div className="episode-item-number">{index + 1}</div>
+                <div className="episode-item-number">{ep.number}</div>
                 
                 <div className="episode-item-thumb">
                   <img src={fallbackImage} alt={`Episode ${ep.number}`} />
