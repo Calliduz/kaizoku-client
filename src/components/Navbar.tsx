@@ -1,11 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import "../styles/components/Navbar.css";
 
 export default function Navbar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  
+  // Detect if we should show the back button
+  const showBackButton = location.pathname.startsWith("/anime/") || location.pathname.includes("/watch/");
 
   // Scroll listener for sticky navbar effect
   useEffect(() => {
@@ -76,11 +80,25 @@ export default function Navbar() {
         ))}
       </div>
       <div className="navbar__inner container">
-        {/* Logo */}
-        <Link to="/" className="navbar__logo" id="nav-logo">
-          <img src="/logo.png" alt="Kaizoku Logo" className="navbar__logo-img" />
-          <span className="navbar__logo-text gradient-text">KAIZOKU</span>
-        </Link>
+        {/* Left Side: Back Button & Logo */}
+        <div className="navbar__left">
+          {showBackButton && (
+            <button 
+              className="navbar__back-btn" 
+              onClick={() => navigate(-1)}
+              title="Go Back"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+              <span>Back</span>
+            </button>
+          )}
+          <Link to="/" className="navbar__logo" id="nav-logo">
+            <img src="/logo.png" alt="Kaizoku Logo" className="navbar__logo-img" />
+            <span className="navbar__logo-text gradient-text">KAIZOKU</span>
+          </Link>
+        </div>
 
         {/* Search */}
         <div className="navbar__search-container">

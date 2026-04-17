@@ -133,11 +133,6 @@ export default function AnimeDetailsPage() {
         )}
 
         <div className="details-hero__gradient" />
-        
-        <button className="back-btn details-back-btn" onClick={() => navigate(-1)}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-          Back
-        </button>
 
         {hasTrailer && (
           <button

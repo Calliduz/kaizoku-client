@@ -23,11 +23,48 @@
 }
 
 .navbar__inner {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 18px;
   height: 100%;
+}
+
+.navbar__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.navbar__back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.navbar__back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-accent);
+  transform: translateX(-2px);
+  box-shadow: 0 0 15px rgba(108, 92, 231, 0.2);
+}
+
+.navbar__back-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .navbar__logo {
@@ -59,8 +96,9 @@
 
 .navbar__search-container {
   width: 100%;
-  max-width: 560px;
-  justify-self: center;
+  max-width: 500px;
+  flex-grow: 1;
+  margin: 0 1rem;
 }
 
 .navbar__search {
@@ -240,6 +278,16 @@
 
   .navbar__logo-text {
     display: none;
+  }
+
+  .navbar__back-btn span {
+    display: none;
+  }
+
+  .navbar__back-btn {
+    padding: 8px;
+    width: 36px;
+    height: 36px;
   }
 
   .navbar__search-container {

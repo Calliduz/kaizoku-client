@@ -89,27 +89,6 @@
   position: absolute;
 }
 
-/* Back button */
-.details-back-btn {
-  position: absolute;
-  top: calc(var(--navbar-height, 64px) + 12px);
-  left: 24px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  transition: all 0.2s ease;
-}
-
 .production-info.card-panel {
   background: rgba(255, 255, 255, 0.035);
   padding: 24px;
@@ -391,12 +370,6 @@
     margin-inline: 0;
   }
 
-  .details-back-btn {
-    top: calc(var(--navbar-height, 64px) + 8px) !important;
-    left: 12px !important;
-    padding: 6px 12px;
-    font-size: 0.75rem;
-  }
 }
 
 /* ── Sticky Mobile Watch Bar ──────────────── */
