@@ -87,7 +87,7 @@ export default function PlayerPage() {
         setSourceLoading(true);
         const res = await fetchEpisodeSources(currentEpisode._id, isRefresh);
         if (isMounted) {
-          const fetchedSources = res.data || [];
+          const fetchedSources = (res.data || []).filter((s: StreamingSource) => s && s.url);
           setSources(fetchedSources);
           setCurrentSource(fetchedSources[0] || null);
         }

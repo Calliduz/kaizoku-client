@@ -26,7 +26,7 @@ export default function AiringScheduleRow({ schedule }: AiringScheduleRowProps) 
           <div 
             key={`${item.media.id}-${idx}`} 
             className="airing-item"
-            onClick={() => navigate(`/anime/search?title=${encodeURIComponent(item.media.title.romaji)}`)}
+            onClick={() => navigate(`/?search=${encodeURIComponent(item.media.title.romaji)}`)}
           >
             <div className="airing-item__time">
               {new Date(item.airingAt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

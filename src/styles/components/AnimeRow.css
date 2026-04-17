@@ -173,7 +173,7 @@
     font-size: 1.45rem;
   }
 
-  .nav-arrow {
-    display: none; /* Hide arrows on touch devices */
+  .row-nav {
+    display: none; /* Hide arrows on touch devices where swipe is preferred */
   }
 }

@@ -18,7 +18,6 @@ export default function AnimeDetailsPage() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
   const [detailTrailerMuted, setDetailTrailerMuted] = useState(true);
   const [detailTrailerReady, setDetailTrailerReady] = useState(false);
-  const [showStickyWatch, setShowStickyWatch] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 1024);
@@ -62,18 +61,6 @@ export default function AnimeDetailsPage() {
       }
     };
     loadData();
-
-    const handleScroll = () => {
-      // Show sticky button after scrolling past the hero actions (approx 500px)
-      if (window.scrollY > 500) {
-        setShowStickyWatch(true);
-      } else {
-        setShowStickyWatch(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, [id]);
 
   // Polling logic for background scraping
@@ -243,21 +230,6 @@ export default function AnimeDetailsPage() {
         </div>
       </div>
 
-      {/* Floating Action Button (Mobile) */}
-      {isMobile && episodes.length > 0 && (
-        <div className={`sticky-watch-fab ${showStickyWatch ? "visible" : ""}`}>
-          <button
-            className="btn-watch-now"
-            onClick={() => {
-              const firstEp = [...episodes].sort((a, b) => a.number - b.number)[0];
-              navigate(`/anime/${anime._id}/watch/${firstEp._id}`);
-            }}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            Watch Now
-          </button>
-        </div>
-      )}
     </div>
   );
 }
