@@ -439,9 +439,10 @@
     font-size: 0.95rem;
     margin-bottom: 15px;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9), 0px 0px 8px rgba(0, 0, 0, 0.8);
     font-weight: 500;
   }
@@ -502,7 +503,7 @@
     margin-bottom: 5px;
   }
   .spotlight-description {
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     font-size: 0.9rem;
   }
   .btn-watch {
@@ -580,6 +581,7 @@
     -webkit-line-clamp: 3;
     font-size: 0.92rem;
     overflow: hidden;
+    text-overflow: ellipsis;
     margin-bottom: 16px;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
     font-weight: 500;
@@ -786,30 +788,7 @@
   transform: scale(1.05);
 }
 
-/* ───── Mute Toggle Style ───── */
-.hero-mute-toggle {
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.2s ease;
-  pointer-events: all;
-}
 
-.hero-mute-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(1.1);
-}
 
 .spotlight-metadata {
   display: flex;
@@ -925,17 +904,14 @@
 
   .home-page .spotlight-description {
     font-size: 0.95rem;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     font-weight: 600;
     color: #f8f8f8;
     display: -webkit-box;
-    -webkit-line-clamp: 10; /* Increased to avoid cutting off descriptions */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-shadow: 
-      0px 1px 3px rgba(0, 0, 0, 0.9),
-      0px 2px 6px rgba(0, 0, 0, 0.8),
-      0px 0px 12px rgba(0, 0, 0, 0.7);
+    text-overflow: ellipsis;
   }
 
   .catalog-back-btn {
