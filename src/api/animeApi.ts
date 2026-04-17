@@ -16,6 +16,10 @@ export async function fetchEpisodes(animeId: string): Promise<any> {
   return client.get(`/anime/${animeId}/episodes`);
 }
 
+export async function fetchEpisodeById(id: string): Promise<any> {
+  return client.get(`/episodes/${id}`);
+}
+
 export async function fetchEpisodeSources(
   episodeId: string,
   refresh = false,

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   fetchAnimeById,
   fetchEpisodes,
+  fetchEpisodeById,
   fetchEpisodeSources,
 } from "../api/animeApi";
 import VideoPlayer from "../components/VideoPlayer";
@@ -36,12 +37,8 @@ export default function PlayerPage() {
     "Optimizing stream buffer...",
     "Almost ready for departure...",
   ];
-
   const [loading, setLoading] = useState(true);
   const [sourceLoading, setSourceLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState(
-    "Fetching streaming sources...",
-  );
   const [error, setError] = useState<string | null>(null);
 
   const loadData = async () => {
@@ -118,10 +115,17 @@ export default function PlayerPage() {
     if (!currentEpisode) return;
     try {
       setSourceLoading(true);
+      // 1. Refresh Sources (Backend will also refresh metadata if forceRefresh=true)
       const res = await fetchEpisodeSources(currentEpisode._id, true);
       const fetchedSources = res.data || [];
       setSources(fetchedSources);
       setCurrentSource(fetchedSources[0] || null);
+
+      // 2. Sync Metadata (Fetch updated episode object from DB)
+      const epRes = await fetchEpisodeById(currentEpisode._id);
+      if (epRes.data) {
+        setCurrentEpisode(epRes.data);
+      }
     } catch (err) {
       console.error("Failed to refresh sources:", err);
     } finally {
@@ -212,7 +216,7 @@ export default function PlayerPage() {
                 title="Force re-scrape for new links"
               >
                 <span className="refresh-btn-premium__icon">🔄</span>
-                <span className="refresh-btn-premium__text">Refresh</span>
+                <span className="refresh-btn-premium__text">Force Refresh</span>
               </button>
             </div>
           </div>
@@ -290,29 +294,29 @@ export default function PlayerPage() {
                   src={anime.logo}
                   alt={anime.title}
                   className="player-page__logo"
-                  style={{
-                    maxWidth: "250px",
-                    maxHeight: "80px",
-                    objectFit: "contain",
-                    filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.8))",
-                    marginBottom: "10px",
-                  }}
                 />
               ) : (
                 <h1 className="player-page__title">{anime.title}</h1>
               )}
-              <p
-                className="player-page__episode-title"
-                style={{
-                  fontSize: "1.2rem",
-                  color: "var(--text-secondary)",
-                  margin: 0,
-                }}
-              >
-                {currentEpisode
-                  ? `Episode ${currentEpisode.number}: ${currentEpisode.title}`
-                  : "No episodes"}
-              </p>
+              
+              <div className="player-page__meta-content">
+                <p className="player-page__episode-badge">
+                  {currentEpisode
+                    ? `${currentEpisode.seasonNumber ? `Season ${currentEpisode.seasonNumber} : ` : ""}Episode ${currentEpisode.number}`
+                    : "No episodes"}
+                </p>
+                
+                {currentEpisode?.title && 
+                 !currentEpisode.title.toLowerCase().includes(`episode ${currentEpisode.number}`) && (
+                  <h2 className="player-page__ep-name">{currentEpisode.title}</h2>
+                )}
+
+                {currentEpisode?.description && (
+                  <p className="player-page__description animate-fade-in">
+                    {currentEpisode.description}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 

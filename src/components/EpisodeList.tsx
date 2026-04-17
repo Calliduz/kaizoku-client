@@ -35,7 +35,7 @@ export default function EpisodeList({
                 <div className="episode-item-number">{ep.number}</div>
                 
                 <div className="episode-item-thumb">
-                  <img src={fallbackImage} alt={`Episode ${ep.number}`} />
+                  <img src={ep.thumbnail || fallbackImage} alt={`Episode ${ep.number}`} />
                   <div className="episode-item-overlay">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M8 5v14l11-7z" />
@@ -44,17 +44,20 @@ export default function EpisodeList({
                   {isActive && <div className="now-playing-tag">PLAYING</div>}
                 </div>
 
-                <div className="episode-item-info">
-                  <div className="episode-item-header">
-                    <h4 className="episode-item-title">
-                      {ep.title || `Episode ${ep.number}`}
-                    </h4>
-                    <span className="episode-item-duration">24m</span>
+                {variant !== "compact" && (
+                  <div className="episode-item-info">
+                    <div className="episode-item-header">
+                      <h4 className="episode-item-title">
+                        {ep.seasonNumber ? `S${ep.seasonNumber} : ` : ""}
+                        {ep.title || `Episode ${ep.number}`}
+                      </h4>
+                      <span className="episode-item-duration">24m</span>
+                    </div>
+                    <p className={`episode-item-summary ${!ep.description ? "is-empty" : ""}`}>
+                      {ep.description || "No synopsis available for this episode."}
+                    </p>
                   </div>
-                  <p className="episode-item-summary">
-                    Watch episode {ep.number} of this amazing series. Join the adventure as the story unfolds in this high-quality stream.
-                  </p>
-                </div>
+                )}
               </button>
             );
           })

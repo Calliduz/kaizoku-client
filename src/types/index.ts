@@ -78,8 +78,10 @@ export interface Anime {
   characters?: Character[];
   recommendations?: Recommendation[];
   relations?: Relation[];
+  source?: string;
   sourceId?: string;
   scrapeSource?: string;
+  metaEnriched?: boolean;
   updatedAt: string;
   createdAt: string;
 }
@@ -90,7 +92,11 @@ export interface Episode {
   number: number;
   title: string;
   sourceEpisodeId: string;
+  description?: string;
+  seasonNumber?: number;
+  thumbnail?: string;
   url: string;
+  streamingSources?: StreamingSource[];
 }
 
 export interface Subtitle {

@@ -41,7 +41,7 @@ export default function HomePage() {
   const [currentSpotlightIdx, setCurrentSpotlightIdx] = useState(0);
   const [showTrailer, setShowTrailer] = useState(false);
   const [trailerReady, setTrailerReady] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted] = useState(true);
   const [fanartBackgrounds, setFanartBackgrounds] = useState<Record<string, string>>({});
   const spotlightWithBanner = spotlight.filter((anime) => !!anime.bannerImage);
   const carouselItems = spotlightWithBanner.length >= 3 ? spotlightWithBanner : spotlight;

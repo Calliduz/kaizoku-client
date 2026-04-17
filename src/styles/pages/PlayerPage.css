@@ -212,10 +212,23 @@
 
 .refresh-pill {
   border-radius: var(--radius-full);
-  opacity: 0.6;
-  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-accent), #a29bfe);
+  border: none;
+  color: white !important;
+  font-weight: 800;
   letter-spacing: 0.5px;
   font-size: 0.75rem;
+  padding: 10px 24px;
+  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.refresh-pill:hover {
+  opacity: 1;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(108, 92, 231, 0.6);
 }
 
 @media (max-width: 480px) {
@@ -328,10 +341,42 @@
   color: var(--color-text-primary);
 }
 
-.player-page__episode-title {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
+.player-page__episode-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
   color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+
+.player-page__ep-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.player-page__description {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  max-width: 850px;
+  opacity: 0.85;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.player-page__logo {
+  max-width: 250px;
+  max-height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
   margin-bottom: var(--space-md);
 }
 
@@ -353,9 +398,11 @@
 }
 
 .player-page__desc {
-  font-size: var(--font-size-md);
+  font-size: 0.95rem;
   color: var(--color-text-secondary);
-  line-height: 1.8;
+  line-height: 1.6;
+  max-width: 800px;
+  opacity: 0.8;
 }
 
 .player-page__episodes-container {

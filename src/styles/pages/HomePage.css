@@ -274,9 +274,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 5;
+  z-index: 20;
   transition: all 0.25s ease;
-  opacity: 0;
+  opacity: 0.4;
   outline: none !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }

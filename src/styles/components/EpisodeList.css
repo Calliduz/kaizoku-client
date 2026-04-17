@@ -34,28 +34,17 @@
 }
 
 .episode-list-cinematic.compact-view .episode-item-wrapper {
-  grid-template-columns: min-content 100px 1fr;
-  gap: 1rem;
-  padding: 0.5rem;
+  grid-template-columns: 40px 1fr;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
 }
 
-.episode-list-cinematic.compact-view .episode-item-summary {
-  display: none;
-}
-
-.episode-list-cinematic.compact-view .episode-item-duration {
-  display: none;
-}
-
-.episode-list-cinematic.compact-view .episode-item-title {
-  font-size: 0.95rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.episode-list-cinematic.compact-view .episode-item-thumb {
+  width: 100%;
 }
 
 .episode-list-cinematic.compact-view .episode-item-number {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .episode-item-wrapper {
@@ -166,13 +155,20 @@
 }
 
 .episode-item-summary {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   line-height: 1.5;
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-top: 4px;
+}
+
+.episode-item-summary.is-empty {
+  color: var(--color-text-muted);
+  font-style: italic;
+  opacity: 0.7;
 }
 
 /* Mobile Adjustments */
@@ -188,7 +184,8 @@
   }
 
   .episode-item-summary {
-    display: none; /* Hide summary on small screens for better space */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
   }
 
   .episode-item-title {
