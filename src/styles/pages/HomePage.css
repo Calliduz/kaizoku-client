@@ -155,6 +155,7 @@
   opacity: 0;
   transition: opacity 0.9s ease-in-out;
   z-index: 1;
+  pointer-events: none; /* Prevent inactive slides from blocking clicks */
 }
 
 /* Cinematic multi-directional gradient overlay */
@@ -184,7 +185,8 @@
 
 .spotlight-hero.active {
   opacity: 1;
-  z-index: 1;
+  z-index: 10; /* Bring active slide to front */
+  pointer-events: auto; /* Allow clicks on active slide only */
 }
 
 .spotlight-content {
@@ -920,11 +922,16 @@
   }
 }
 
-/* Final mobile-first carousel layering fix (kept last to override older blocks) */
 .home-page .spotlight-hero {
   position: absolute;
   inset: 0;
   isolation: isolate;
+  pointer-events: none;
+}
+
+.home-page .spotlight-hero.active {
+  z-index: 10;
+  pointer-events: auto;
 }
 
 .home-page .spotlight-hero::before {
