@@ -27,6 +27,15 @@ export default function PlayerPage() {
   const [currentSource, setCurrentSource] = useState<StreamingSource | null>(
     null,
   );
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+
+  const LOADING_MESSAGES = [
+    "Initializing playback engine...",
+    "Bypassing Cloudflare filters...",
+    "Hunting for high-quality mirrors...",
+    "Optimizing stream buffer...",
+    "Almost ready for departure...",
+  ];
 
   const [loading, setLoading] = useState(true);
   const [sourceLoading, setSourceLoading] = useState(false);
@@ -63,8 +72,12 @@ export default function PlayerPage() {
   // Set Current Episode when episodes or episodeId changes
   useEffect(() => {
     if (episodes.length > 0 && episodeId) {
-      const ep = episodes.find((e) => e._id === episodeId);
-      if (ep) setCurrentEpisode(ep);
+      if (episodeId === "first") {
+        setCurrentEpisode(episodes[0]);
+      } else {
+        const ep = episodes.find((e) => e._id === episodeId);
+        if (ep) setCurrentEpisode(ep);
+      }
     }
   }, [episodes, episodeId]);
   // Load Sources when episode changes
@@ -119,9 +132,15 @@ export default function PlayerPage() {
   // Loading Message Rotator
   useEffect(() => {
     if (!sourceLoading) {
-      setLoadingMessage("Fetching streaming sources...");
+      setLoadingMessageIndex(0);
       return;
     }
+
+    const interval = setInterval(() => {
+      setLoadingMessageIndex((prev) => (prev + 1) % LOADING_MESSAGES.length);
+    }, 1800);
+
+    return () => clearInterval(interval);
   }, [sourceLoading]);
 
   if (loading) {
@@ -203,13 +222,17 @@ export default function PlayerPage() {
         <div className="player-page__video-container">
           {sourceLoading ? (
             <div className="player-page__video-loading premium-loader">
+              <div 
+                className="loading-backdrop" 
+                style={{ backgroundImage: `url(${anime.bannerImage || anime.coverImage})` }}
+              />
               <div className="premium-loader__visual">
                 <LoadingSpinner />
                 <div className="premium-loader__pulse"></div>
               </div>
               <div className="premium-loader__content">
-                <p className="premium-loader__status animate-pulse">
-                  {loadingMessage}
+                <p className="premium-loader__status animate-fade-in-down" key={loadingMessageIndex}>
+                  {LOADING_MESSAGES[loadingMessageIndex]}
                 </p>
                 <div className="premium-loader__progress-bar">
                   <div className="premium-loader__progress-fill"></div>

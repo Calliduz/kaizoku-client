@@ -265,7 +265,7 @@ export default function HomePage() {
                   </p>
                   <div className="spotlight-actions-hero">
                     <button
-                      onClick={() => navigate(`/anime/${anime._id}`)}
+                      onClick={() => navigate(`/anime/${anime._id}/watch/first`)}
                       className="btn-watch-hero"
                     >
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
