@@ -109,6 +109,9 @@ body {
   color: var(--color-text-primary);
   background-color: var(--color-bg-primary);
   min-height: 100vh;
+  overflow-x: hidden !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
   /* Premium selection color */
   & ::selection {
     background-color: var(--color-accent);
