@@ -15,15 +15,8 @@ export default function AnimeDetailsPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
   const [detailTrailerMuted, setDetailTrailerMuted] = useState(true);
   const [detailTrailerReady, setDetailTrailerReady] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 1024);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const [anime, setAnime] = useState<Anime | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
