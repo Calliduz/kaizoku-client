@@ -11,6 +11,7 @@ interface Props {
   onSeeAll?: () => void;
   showRankings?: boolean;
   disableCardTrailers?: boolean;
+  isExternal?: boolean;
 }
 
 export default function AnimeRow({
@@ -20,6 +21,7 @@ export default function AnimeRow({
   onSeeAll,
   showRankings = false,
   disableCardTrailers = false,
+  isExternal = false,
 }: Props) {
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -80,7 +82,11 @@ export default function AnimeRow({
                   {showRankings && index < 10 && (
                     <div className="ranking-number">{index + 1}</div>
                   )}
-                  <AnimeCard anime={anime} disableTrailer={disableCardTrailers} />
+                  <AnimeCard 
+                    anime={anime} 
+                    disableTrailer={disableCardTrailers} 
+                    isExternal={isExternal}
+                  />
                 </div>
               ))}
         </div>

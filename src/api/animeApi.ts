@@ -41,3 +41,11 @@ export async function fetchSuggestions(query: string): Promise<any> {
 export async function fetchAnimeLogo(id: string): Promise<any> {
   return client.get(`/anime/${id}/logo`);
 }
+
+export async function fetchTop100(): Promise<any> {
+  return client.get("/anime/top-100");
+}
+
+export async function fetchAiringSchedule(): Promise<any> {
+  return client.get("/anime/airing-schedule");
+}

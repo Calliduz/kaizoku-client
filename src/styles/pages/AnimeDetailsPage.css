@@ -404,3 +404,40 @@
   justify-content: center;
   box-shadow: 0 0 20px rgba(255, 202, 40, 0.2);
 }
+
+/* ── Discovery Status ──────────────── */
+.discovery-status {
+  margin-top: 1rem;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 202, 40, 0.1);
+  border: 1px solid rgba(255, 202, 40, 0.2);
+  border-radius: 999px;
+  color: var(--color-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.pulse::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color-accent-glow);
+  animation: status-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}

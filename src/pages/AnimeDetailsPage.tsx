@@ -5,6 +5,7 @@ import EpisodeList from "../components/EpisodeList";
 import CharacterList from "../components/CharacterList";
 import RecommendationList from "../components/RecommendationList";
 import AnimeDetailsSkeleton from "../components/AnimeDetailsSkeleton";
+import EpisodeSkeleton from "../components/EpisodeSkeleton";
 import ErrorDisplay from "../components/ErrorDisplay";
 import AnimeLogoImage from "../components/AnimeLogoImage";
 import type { Anime, Episode } from "../types";
@@ -28,6 +29,7 @@ export default function AnimeDetailsPage() {
   const [anime, setAnime] = useState<Anime | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isScraping, setIsScraping] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -44,6 +46,7 @@ export default function AnimeDetailsPage() {
 
         setAnime(animeRes.data);
         setEpisodes(itemsRes.data || []);
+        setIsScraping(!!itemsRes.isScraping);
         
         // Scroll to top on load
         window.scrollTo(0, 0);
@@ -73,6 +76,30 @@ export default function AnimeDetailsPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [id]);
 
+  // Polling logic for background scraping
+  useEffect(() => {
+    let interval: any;
+    
+    if (isScraping && episodes.length === 0 && id) {
+      interval = setInterval(async () => {
+        try {
+          const res = await fetchEpisodes(id);
+          if (res.success && res.data && res.data.length > 0) {
+            setEpisodes(res.data);
+            setIsScraping(!!res.isScraping);
+            if (!res.isScraping) clearInterval(interval);
+          }
+        } catch (err) {
+          console.error("Polling error:", err);
+        }
+      }, 3000); // Poll every 3 seconds
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isScraping, episodes.length, id]);
+
   if (loading) {
     return <AnimeDetailsSkeleton />;
   }
@@ -97,7 +124,7 @@ export default function AnimeDetailsPage() {
         {hasTrailer && (
           <div className="details-hero__trailer">
             <iframe
-              src={`https://www.youtube.com/embed/${anime.trailer!.id}?autoplay=1&mute=${detailTrailerMuted ? 1 : 0}&controls=0&loop=1&playlist=${anime.trailer!.id}&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&modestbranding=1`}
+              src={`https://www.youtube.com/embed/${anime.trailer!.id}?autoplay=1&mute=${detailTrailerMuted ? 1 : 0}&controls=0&loop=1&playlist=${anime.trailer!.id}&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&modestbranding=1&enablejsapi=1`}
               allow="autoplay; encrypted-media"
               title="Anime Trailer Background"
               className="details-hero__trailer-iframe"
@@ -185,6 +212,11 @@ export default function AnimeDetailsPage() {
                   onSelect={(ep) => navigate(`/anime/${id}/watch/${ep._id}`)}
                   fallbackImage={anime.fanartBackground || anime.bannerImage || anime.coverImage}
                 />
+              ) : isScraping ? (
+                <div className="discovery-status">
+                  <div className="status-badge pulse">Searching Sources...</div>
+                  <EpisodeSkeleton />
+                </div>
               ) : (
                 <div className="empty-state">No episodes available yet.</div>
               )}

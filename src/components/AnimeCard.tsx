@@ -12,9 +12,14 @@ import "../styles/components/AnimeCard.css";
 interface AnimeCardProps {
   anime: Anime;
   disableTrailer?: boolean;
+  isExternal?: boolean;
 }
 
-export default function AnimeCard({ anime, disableTrailer = false }: AnimeCardProps) {
+export default function AnimeCard({ 
+  anime, 
+  disableTrailer = false,
+  isExternal = false
+}: AnimeCardProps) {
   const {
     _id,
     title,
@@ -45,7 +50,11 @@ export default function AnimeCard({ anime, disableTrailer = false }: AnimeCardPr
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link to={`/anime/${_id}`} className="anime-card" id={`anime-card-${_id}`}>
+      <Link 
+        to={isExternal ? `/?search=${encodeURIComponent(title)}` : `/anime/${_id}`} 
+        className="anime-card" 
+        id={`anime-card-${_id}`}
+      >
         <div className="anime-card__image-wrapper">
           <LazyLoadImage
             src={coverImage || "/placeholder.svg"}

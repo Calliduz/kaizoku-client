@@ -1,13 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { fetchAllAnime } from "../api/animeApi";
+import { fetchAllAnime, fetchTop100, fetchAiringSchedule } from "../api/animeApi";
 import AnimeCard from "../components/AnimeCard";
 import AnimeCardSkeleton from "../components/AnimeCardSkeleton";
 import AnimeRow from "../components/AnimeRow";
+import AiringScheduleRow from "../components/AiringScheduleRow";
 import AnimeLogoImage from "../components/AnimeLogoImage";
 import EmptyState from "../components/EmptyState";
 import ErrorDisplay from "../components/ErrorDisplay";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Pagination from "../components/Pagination";
 import SEO from "../components/SEO";
 import { getWatchHistory, type HistoryItem } from "../utils/watchHistory";
 import type { Anime } from "../types";
@@ -29,13 +31,15 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
 
   // Yorumi-like Discovery State
   const [spotlight, setSpotlight] = useState<Anime[]>([]);
   const [latest, setLatest] = useState<Anime[]>([]);
   const [topRated, setTopRated] = useState<Anime[]>([]);
   const [trending, setTrending] = useState<Anime[]>([]);
+  const [top100, setTop100] = useState<any[]>([]);
+  const [schedule, setSchedule] = useState<any[]>([]);
   const [discoveryLoading, setDiscoveryLoading] = useState(true);
   const [watchHistory, setWatchHistory] = useState<HistoryItem[]>([]);
   const [currentSpotlightIdx, setCurrentSpotlightIdx] = useState(0);
@@ -49,16 +53,20 @@ export default function HomePage() {
   const loadDiscovery = async () => {
     setDiscoveryLoading(true);
     try {
-      const [spotlightRes, latestRes, topRes, trendingRes] = await Promise.all([
+      const [spotlightRes, latestRes, topRes, trendingRes, top100Res, scheduleRes] = await Promise.all([
         fetchAllAnime({ sort: "popular", limit: 10, page: 1 }),
         fetchAllAnime({ sort: "newest", limit: 15, page: 1 }),
         fetchAllAnime({ sort: "rating", limit: 15, page: 1 }),
         fetchAllAnime({ sort: "popularity", limit: 15, page: 1 }),
+        fetchTop100(),
+        fetchAiringSchedule(),
       ]);
       setSpotlight(spotlightRes.data);
       setLatest(latestRes.data);
       setTopRated(topRes.data);
       setTrending(trendingRes.data);
+      setTop100(top100Res.data);
+      setSchedule(scheduleRes.data);
     } catch (e) {
       console.error(e);
       setError("Failed to load discovery data");
@@ -67,19 +75,28 @@ export default function HomePage() {
     }
   };
 
-  const loadQuery = async () => {
-    setLoading(true);
+  const loadQuery = async (targetPage = 1) => {
+    setLoading(targetPage === 1); // Only full loading overlay on first page/filter change
     setError(null);
     try {
-      const res = await fetchAllAnime({ search, genre, format, sort, page: 1 });
+      const res = await fetchAllAnime({ search, genre, format, sort, page: targetPage });
       setAnimeList(res.data);
-      setHasMore(res.pagination.page < res.pagination.pages);
-      setPage(1);
+      setTotalPages(res.pagination.pages);
+      setPage(targetPage);
+      
+      // Scroll to top on page change if not first load
+      if (targetPage > 1 || isBrowsing) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     } catch (err: any) {
       setError(err.response?.data?.error?.message || err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    loadQuery(newPage);
   };
 
   useEffect(() => {
@@ -163,25 +180,6 @@ export default function HomePage() {
     setSearchParams(newParams);
   };
 
-  const handleLoadMore = async () => {
-    if (!hasMore || loading) return;
-    const nextPage = page + 1;
-
-    try {
-      const res = await fetchAllAnime({
-        search,
-        genre,
-        format,
-        sort,
-        page: nextPage,
-      });
-      setAnimeList((prev) => [...prev, ...res.data]);
-      setHasMore(res.pagination.page < res.pagination.pages);
-      setPage(nextPage);
-    } catch (err) {
-      console.error("Failed to load more:", err);
-    }
-  };
 
   // ----- RENDERERS -----
 
@@ -349,6 +347,14 @@ export default function HomePage() {
           disableCardTrailers={true}
           onSeeAll={() => updateFilters("sort", "rating")}
         />
+        
+        <AnimeRow
+          title="AniList Top 100"
+          animes={top100.slice(0, 12)}
+          isExternal={true}
+          disableCardTrailers={true}
+        />
+        <AiringScheduleRow schedule={schedule} />
       </div>
     );
   };
@@ -446,17 +452,18 @@ export default function HomePage() {
                 <AnimeCardSkeleton count={5} />
               )}
             </div>
-            {hasMore && (
-              <div className="catalog__actions">
-                <button
-                  className="btn-load-more"
-                  onClick={handleLoadMore}
-                  disabled={loading}
-                >
-                  {loading && animeList.length > 0 ? "" : "Load More Anime"}
-                </button>
+            {loading && page > 1 && (
+              <div className="catalog-loading-overlay">
+                <LoadingSpinner />
               </div>
             )}
+            
+            <Pagination 
+              currentPage={page} 
+              totalPages={totalPages} 
+              onPageChange={handlePageChange}
+              isLoading={loading}
+            />
           </>
         )}
       </section>

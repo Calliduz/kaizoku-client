@@ -169,19 +169,19 @@
 }
 
 .premium-loader__content {
-  width: 100%;
+  width: 90%;
   max-width: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
   z-index: 1;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  padding: 24px;
+  background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 
 .premium-loader__status {
@@ -231,20 +231,6 @@
   box-shadow: 0 8px 25px rgba(108, 92, 231, 0.6);
 }
 
-@media (max-width: 480px) {
-  .premium-loader__status {
-    font-size: var(--font-size-sm);
-  }
-
-  .premium-loader__content {
-    max-width: 260px;
-  }
-
-  .refresh-pill {
-    font-size: 0.65rem;
-    padding: 6px 14px;
-  }
-}
 
 .refresh-pill:hover {
   opacity: 1;
@@ -280,14 +266,6 @@
   position: relative;
 }
 
-@media (max-width: 768px) {
-  .player-page__video-container {
-    margin-bottom: var(--space-lg);
-    border-radius: 0;
-    margin-left: -1rem !important; /* Force offset from .container 1rem padding */
-    width: calc(100% + 2rem) !important;
-  }
-}
 
 @media (max-width: 640px) {
   .player-page__metadata-grid {
@@ -500,5 +478,43 @@
   }
   .player-page__logo {
     margin: 0 auto;
+  }
+  
+  .player-page__video-container {
+    margin-bottom: var(--space-lg);
+    border-radius: 0;
+    margin-left: -1rem !important;
+    width: calc(100% + 2rem) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .player-page__video-container {
+    margin-bottom: var(--space-md);
+    margin-left: -50vw !important;
+    left: 50% !important;
+    width: 100vw !important;
+    border-radius: 0;
+    position: relative;
+  }
+
+  .premium-loader__status {
+    font-size: 0.8rem;
+  }
+
+  .premium-loader__content {
+    max-width: 260px;
+    padding: 12px 16px;
+    gap: var(--space-xs);
+  }
+
+  .premium-loader__visual {
+    margin-bottom: var(--space-md);
+    transform: scale(0.8);
+  }
+
+  .refresh-pill {
+    font-size: 0.6rem;
+    padding: 4px 10px;
   }
 }
