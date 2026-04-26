@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchAnimeById, fetchEpisodes } from "../api/animeApi";
 import EpisodeList from "../components/EpisodeList";
@@ -17,6 +17,19 @@ export default function AnimeDetailsPage() {
 
   const [detailTrailerMuted, setDetailTrailerMuted] = useState(true);
   const [detailTrailerReady, setDetailTrailerReady] = useState(false);
+  const trailerIframeRef = useRef<HTMLIFrameElement>(null);
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (trailerIframeRef.current?.contentWindow) {
+      const command = detailTrailerMuted ? "unMute" : "mute";
+      trailerIframeRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: command, args: [] }),
+        "*"
+      );
+      setDetailTrailerMuted(!detailTrailerMuted);
+    }
+  };
 
   const [anime, setAnime] = useState<Anime | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
@@ -104,7 +117,8 @@ export default function AnimeDetailsPage() {
         {hasTrailer && (
           <div className="details-hero__trailer">
             <iframe
-              src={`https://www.youtube.com/embed/${anime.trailer!.id}?autoplay=1&mute=${detailTrailerMuted ? 1 : 0}&controls=0&loop=1&playlist=${anime.trailer!.id}&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&modestbranding=1&enablejsapi=1`}
+              ref={trailerIframeRef}
+              src={`https://www.youtube.com/embed/${anime.trailer!.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${anime.trailer!.id}&rel=0&iv_load_policy=3&showinfo=0&disablekb=1&modestbranding=1&enablejsapi=1`}
               allow="autoplay; encrypted-media"
               title="Anime Trailer Background"
               className="details-hero__trailer-iframe"
@@ -117,7 +131,7 @@ export default function AnimeDetailsPage() {
         {hasTrailer && (
           <button
             className="hero-mute-toggle"
-            onClick={() => setDetailTrailerMuted(!detailTrailerMuted)}
+            onClick={toggleMute}
             title={detailTrailerMuted ? "Unmute Trailer" : "Mute Trailer"}
           >
             {detailTrailerMuted ? (

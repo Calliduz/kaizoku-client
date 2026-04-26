@@ -231,6 +231,7 @@ export default function PlayerPage() {
             <VideoPlayer
               source={currentSource}
               title={`${anime.title} - ${currentEpisode.title}`}
+              episodeId={currentEpisode._id}
             />
           ) : (
             <div className="player-page__video-error">

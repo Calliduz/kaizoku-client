@@ -7,9 +7,10 @@ interface VideoPlayerProps {
   source: StreamingSource;
   title?: string;
   onProgress?: (progress: number) => void;
+  episodeId?: string;
 }
 
-export default function VideoPlayer({ source, title = "", onProgress }: VideoPlayerProps) {
+export default function VideoPlayer({ source, title = "", onProgress, episodeId }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
 
@@ -135,9 +136,14 @@ export default function VideoPlayer({ source, title = "", onProgress }: VideoPla
   }, [source]);
 
   const handleTimeUpdate = () => {
-    if (onProgress && videoRef.current) {
-      const progress = (videoRef.current.currentTime / videoRef.current.duration) * 100;
-      onProgress(progress || 0);
+    if (videoRef.current) {
+      if (episodeId) {
+        localStorage.setItem(`progress-${episodeId}`, videoRef.current.currentTime.toString());
+      }
+      if (onProgress) {
+        const progress = (videoRef.current.currentTime / videoRef.current.duration) * 100;
+        onProgress(progress || 0);
+      }
     }
   };
 
@@ -162,6 +168,14 @@ export default function VideoPlayer({ source, title = "", onProgress }: VideoPla
         className="video-player__video"
         controls
         onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={() => {
+          if (episodeId && videoRef.current) {
+            const savedTime = localStorage.getItem(`progress-${episodeId}`);
+            if (savedTime) {
+              videoRef.current.currentTime = parseFloat(savedTime);
+            }
+          }
+        }}
         playsInline
       />
     </div>
