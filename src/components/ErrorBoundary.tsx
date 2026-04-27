@@ -32,27 +32,86 @@ class ErrorBoundary extends Component<Props, State> {
 
       return (
         <div className="container" style={{ 
-          margin: "100px auto", 
+          minHeight: "85vh", 
+          display: "flex", 
+          flexDirection: "column", 
+          alignItems: "center", 
+          justifyContent: "center",
           textAlign: "center",
-          padding: "40px",
-          background: "rgba(255, 255, 255, 0.05)",
-          borderRadius: "12px",
-          border: "1px solid rgba(255, 255, 255, 0.1)"
+          position: "relative",
+          overflow: "hidden"
         }}>
-          <h1 style={{ fontSize: "3rem", marginBottom: "1rem" }}>🚢 Oh No!</h1>
-          <p style={{ fontSize: "1.2rem", opacity: 0.7, marginBottom: "2rem" }}>
-            The ship hit an iceberg. Something went wrong while loading this page.
+          {/* Background Ambient Glow */}
+          <div style={{
+            position: "absolute",
+            width: "300px",
+            height: "300px",
+            background: "var(--color-danger)",
+            filter: "blur(150px)",
+            opacity: 0.1,
+            borderRadius: "50%",
+            zIndex: -1,
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)"
+          }} />
+
+          <div style={{ fontSize: "5rem", marginBottom: "20px", filter: "drop-shadow(0 10px 20px rgba(239, 68, 68, 0.3))" }}>
+            ⚓
+          </div>
+
+          <h1 style={{ 
+            fontSize: "3.5rem", 
+            fontWeight: 900, 
+            marginBottom: "1rem", 
+            color: "#fff",
+            letterSpacing: "-2px"
+          }}>
+            System Breach
+          </h1>
+
+          <p style={{ 
+            maxWidth: "500px", 
+            margin: "0 auto 2.5rem", 
+            opacity: 0.7, 
+            fontSize: "1.2rem",
+            lineHeight: 1.6,
+          }}>
+            An unexpected error has disrupted your voyage. We've logged the incident and are working to restore order.
           </p>
-          <button 
-            className="btn btn--primary"
-            onClick={() => window.location.assign("/")}
-          >
-            Back to Safe Waters
-          </button>
+
+          <div style={{ display: "flex", gap: "1.5rem" }}>
+            <button 
+              className="btn-watch-hero"
+              onClick={() => window.location.assign("/")}
+              style={{ padding: "14px 40px" }}
+            >
+              Return Home
+            </button>
+            <button 
+              className="btn-info-hero"
+              onClick={() => window.location.reload()}
+              style={{ padding: "14px 40px" }}
+            >
+              Retry Page
+            </button>
+          </div>
           
           {import.meta.env.MODE === "development" && (
-            <div style={{ marginTop: "2rem", textAlign: "left", opacity: 0.5, fontSize: "0.8rem", overflow: "auto", maxHeight: "200px" }}>
-              <code>{this.state.error?.toString()}</code>
+            <div style={{ 
+              marginTop: "4rem", 
+              textAlign: "left", 
+              background: "rgba(0,0,0,0.3)",
+              padding: "20px",
+              borderRadius: "12px",
+              border: "1px solid rgba(239, 68, 68, 0.2)",
+              maxWidth: "800px",
+              width: "100%"
+            }}>
+              <h4 style={{ color: "var(--color-danger)", marginBottom: "10px", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "1px" }}>Debug Info</h4>
+              <code style={{ fontSize: "0.8rem", opacity: 0.6, display: "block", overflowX: "auto", whiteSpace: "pre-wrap" }}>
+                {this.state.error?.stack || this.state.error?.toString()}
+              </code>
             </div>
           )}
         </div>
