@@ -103,7 +103,7 @@ export default function HomePage() {
       setCachedDiscovery(newDiscovery);
       localStorage.setItem("kaizoku_discovery_cache", JSON.stringify(newDiscovery));
     } catch (e: any) {
-      if (e.name === "CanceledError" || e.name === "AbortError") return;
+      if (e.name === "CanceledError" || e.name === "AbortError" || e.message === "canceled") return;
       console.error(e);
       setError("Failed to load discovery data");
     } finally {
@@ -124,7 +124,7 @@ export default function HomePage() {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (err: any) {
-      if (err.name === "CanceledError" || err.name === "AbortError") return;
+      if (err.name === "CanceledError" || err.name === "AbortError" || err.message === "canceled") return;
       setError(err.response?.data?.error?.message || err.message);
     } finally {
       setLoading(false);

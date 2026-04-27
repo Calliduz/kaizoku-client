@@ -68,7 +68,7 @@ export default function AnimeDetailsPage() {
           return () => clearTimeout(timer);
         }
       } catch (err: any) {
-        if (err.name === "CanceledError" || err.name === "AbortError") return;
+        if (err.name === "CanceledError" || err.name === "AbortError" || err.message === "canceled") return;
         setError(err.response?.data?.error?.message || err.message);
       } finally {
         setLoading(false);
@@ -95,7 +95,7 @@ export default function AnimeDetailsPage() {
             }
           }
         } catch (err: any) {
-          if (err.name === "CanceledError" || err.name === "AbortError") return;
+          if (err.name === "CanceledError" || err.name === "AbortError" || err.message === "canceled") return;
           console.error("Polling error:", err);
         }
       }, 3000);

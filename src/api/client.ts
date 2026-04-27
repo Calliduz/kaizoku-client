@@ -25,7 +25,9 @@ client.interceptors.response.use(
       error.message ||
       "An unexpected error occurred";
 
-    if (!isLogo404) {
+    const isCanceled = error.name === "CanceledError" || error.message === "canceled";
+
+    if (!isLogo404 && !isCanceled) {
       console.error("[API Error]", message);
     }
 
