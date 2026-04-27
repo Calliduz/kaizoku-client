@@ -50,24 +50,60 @@ export default function HomePage() {
   const spotlightWithBanner = spotlight.filter((anime) => !!anime.bannerImage);
   const carouselItems = spotlightWithBanner.length >= 3 ? spotlightWithBanner : spotlight;
 
-  const loadDiscovery = async () => {
-    setDiscoveryLoading(true);
+  // Global discovery cache to avoid flashes on back navigation
+  const [cachedDiscovery, setCachedDiscovery] = useState<{
+    spotlight: Anime[];
+    latest: Anime[];
+    topRated: Anime[];
+    trending: Anime[];
+    top100: any[];
+    schedule: any[];
+  } | null>(() => {
+    const saved = localStorage.getItem("kaizoku_discovery_cache");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const loadDiscovery = async (signal?: AbortSignal) => {
+    if (cachedDiscovery) {
+      setSpotlight(cachedDiscovery.spotlight);
+      setLatest(cachedDiscovery.latest);
+      setTopRated(cachedDiscovery.topRated);
+      setTrending(cachedDiscovery.trending);
+      setTop100(cachedDiscovery.top100);
+      setSchedule(cachedDiscovery.schedule);
+      setDiscoveryLoading(false);
+    }
+
     try {
       const [spotlightRes, latestRes, topRes, trendingRes, top100Res, scheduleRes] = await Promise.all([
-        fetchAllAnime({ sort: "popular", limit: 10, page: 1 }),
-        fetchAllAnime({ sort: "newest", limit: 15, page: 1 }),
-        fetchAllAnime({ sort: "rating", limit: 15, page: 1 }),
-        fetchAllAnime({ sort: "popularity", limit: 15, page: 1 }),
-        fetchTop100(),
-        fetchAiringSchedule(),
+        fetchAllAnime({ sort: "popular", limit: 10, page: 1 }, signal),
+        fetchAllAnime({ sort: "newest", limit: 15, page: 1 }, signal),
+        fetchAllAnime({ sort: "rating", limit: 15, page: 1 }, signal),
+        fetchAllAnime({ sort: "popularity", limit: 15, page: 1 }, signal),
+        fetchTop100(signal),
+        fetchAiringSchedule(signal),
       ]);
-      setSpotlight(spotlightRes.data);
-      setLatest(latestRes.data);
-      setTopRated(topRes.data);
-      setTrending(trendingRes.data);
-      setTop100(top100Res.data);
-      setSchedule(scheduleRes.data);
-    } catch (e) {
+      
+      const newDiscovery = {
+        spotlight: spotlightRes.data,
+        latest: latestRes.data,
+        topRated: topRes.data,
+        trending: trendingRes.data,
+        top100: top100Res.data,
+        schedule: scheduleRes.data,
+      };
+
+      setSpotlight(newDiscovery.spotlight);
+      setLatest(newDiscovery.latest);
+      setTopRated(newDiscovery.topRated);
+      setTrending(newDiscovery.trending);
+      setTop100(newDiscovery.top100);
+      setSchedule(newDiscovery.schedule);
+      
+      setCachedDiscovery(newDiscovery);
+      localStorage.setItem("kaizoku_discovery_cache", JSON.stringify(newDiscovery));
+    } catch (e: any) {
+      if (e.name === "CanceledError" || e.name === "AbortError") return;
       console.error(e);
       setError("Failed to load discovery data");
     } finally {
@@ -75,20 +111,20 @@ export default function HomePage() {
     }
   };
 
-  const loadQuery = async (targetPage = 1) => {
-    setLoading(targetPage === 1); // Only full loading overlay on first page/filter change
+  const loadQuery = async (targetPage = 1, signal?: AbortSignal) => {
+    setLoading(targetPage === 1);
     setError(null);
     try {
-      const res = await fetchAllAnime({ search, genre, format, sort, page: targetPage });
+      const res = await fetchAllAnime({ search, genre, format, sort, page: targetPage }, signal);
       setAnimeList(res.data);
       setTotalPages(res.pagination.pages);
       setPage(targetPage);
       
-      // Scroll to top on page change if not first load
       if (targetPage > 1 || isBrowsing) {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (err: any) {
+      if (err.name === "CanceledError" || err.name === "AbortError") return;
       setError(err.response?.data?.error?.message || err.message);
     } finally {
       setLoading(false);
@@ -100,21 +136,25 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    // Only load watch history when starting discovery view
     if (!isBrowsing) {
       setWatchHistory(getWatchHistory());
     }
   }, [isBrowsing]);
 
   useEffect(() => {
+    const controller = new AbortController();
     if (!isBrowsing) {
-      loadDiscovery();
+      loadDiscovery(controller.signal);
     } else {
       const delayDebounceFn = setTimeout(() => {
-        loadQuery();
+        loadQuery(1, controller.signal);
       }, 500);
-      return () => clearTimeout(delayDebounceFn);
+      return () => {
+        clearTimeout(delayDebounceFn);
+        controller.abort();
+      };
     }
+    return () => controller.abort();
   }, [search, genre, format, sort, isBrowsing]);
 
   useEffect(() => {

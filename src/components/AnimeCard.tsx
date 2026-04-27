@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import type { Anime } from "../types";
@@ -16,12 +16,12 @@ interface AnimeCardProps {
   progress?: number;
 }
 
-export default function AnimeCard({ 
+const AnimeCard = memo(({ 
   anime, 
   disableTrailer = false,
   isExternal = false,
   progress = 0
-}: AnimeCardProps) {
+}: AnimeCardProps) => {
   const {
     _id,
     title,
@@ -34,14 +34,23 @@ export default function AnimeCard({
   const [isHovered, setIsHovered] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
+  const trailerTimerRef = useRef<any>(null);
+
   useEffect(() => {
-    let timer: any;
     if (!disableTrailer && isHovered && anime.trailer?.id) {
-      timer = setTimeout(() => setShowTrailer(true), 1200); // Wait for user to settle
+      trailerTimerRef.current = setTimeout(() => setShowTrailer(true), 1200);
     } else {
       setShowTrailer(false);
+      if (trailerTimerRef.current) {
+        clearTimeout(trailerTimerRef.current);
+        trailerTimerRef.current = null;
+      }
     }
-    return () => clearTimeout(timer);
+    return () => {
+      if (trailerTimerRef.current) {
+        clearTimeout(trailerTimerRef.current);
+      }
+    };
   }, [isHovered, anime.trailer?.id, disableTrailer]);
 
   const displayEpisodes = latestEpisode ?? totalEpisodes;
@@ -126,4 +135,6 @@ export default function AnimeCard({
       </Link>
     </div>
   );
-}
+});
+
+export default AnimeCard;

@@ -41,6 +41,7 @@ export default function AnimeDetailsPage() {
   const [watchHistoryItem, setWatchHistoryItem] = useState<HistoryItem | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
     const loadData = async () => {
       try {
         setLoading(true);
@@ -48,56 +49,61 @@ export default function AnimeDetailsPage() {
         setDetailTrailerReady(false);
         if (!id) throw new Error("No anime ID provided");
         const [animeRes, itemsRes] = await Promise.all([
-          fetchAnimeById(id),
-          fetchEpisodes(id),
+          fetchAnimeById(id, controller.signal),
+          fetchEpisodes(id, controller.signal),
         ]);
 
         setAnime(animeRes.data);
         setEpisodes(itemsRes.data || []);
         setIsScraping(!!itemsRes.isScraping);
         
-        // Scroll to top on load
         window.scrollTo(0, 0);
 
-        // Get watch history for this anime
         const history = getWatchHistory();
         const item = history.find(h => h.anime._id === id);
         setWatchHistoryItem(item || null);
 
-        // Delay revealing trailer
         if (animeRes.data?.trailer?.id) {
-          setTimeout(() => setDetailTrailerReady(true), 2000);
+          const timer = setTimeout(() => setDetailTrailerReady(true), 2000);
+          return () => clearTimeout(timer);
         }
       } catch (err: any) {
+        if (err.name === "CanceledError" || err.name === "AbortError") return;
         setError(err.response?.data?.error?.message || err.message);
       } finally {
         setLoading(false);
       }
     };
     loadData();
+    return () => controller.abort();
   }, [id]);
 
-  // Polling logic for background scraping
   useEffect(() => {
     let interval: any;
+    const controller = new AbortController();
     
     if (isScraping && episodes.length === 0 && id) {
       interval = setInterval(async () => {
         try {
-          const res = await fetchEpisodes(id);
+          const res = await fetchEpisodes(id, controller.signal);
           if (res.success && res.data && res.data.length > 0) {
             setEpisodes(res.data);
             setIsScraping(!!res.isScraping);
-            if (!res.isScraping) clearInterval(interval);
+            if (!res.isScraping) {
+              clearInterval(interval);
+              interval = null;
+            }
           }
-        } catch (err) {
+        } catch (err: any) {
+          if (err.name === "CanceledError" || err.name === "AbortError") return;
           console.error("Polling error:", err);
         }
-      }, 3000); // Poll every 3 seconds
+      }, 3000);
     }
 
     return () => {
       if (interval) clearInterval(interval);
+      controller.abort();
     };
   }, [isScraping, episodes.length, id]);
 
