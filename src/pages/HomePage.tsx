@@ -58,9 +58,22 @@ export default function HomePage() {
     trending: Anime[];
     top100: any[];
     schedule: any[];
+    timestamp: number;
   } | null>(() => {
     const saved = localStorage.getItem("kaizoku_discovery_cache");
-    return saved ? JSON.parse(saved) : null;
+    if (!saved) return null;
+    
+    try {
+      const parsed = JSON.parse(saved);
+      const isExpired = Date.now() - (parsed.timestamp || 0) > 24 * 60 * 60 * 1000;
+      if (isExpired) {
+        localStorage.removeItem("kaizoku_discovery_cache");
+        return null;
+      }
+      return parsed;
+    } catch (e) {
+      return null;
+    }
   });
 
   const loadDiscovery = async (signal?: AbortSignal) => {
@@ -91,6 +104,7 @@ export default function HomePage() {
         trending: trendingRes.data,
         top100: top100Res.data,
         schedule: scheduleRes.data,
+        timestamp: Date.now(),
       };
 
       setSpotlight(newDiscovery.spotlight);

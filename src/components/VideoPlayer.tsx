@@ -25,7 +25,7 @@ export default function VideoPlayer({
   const [showSkipIntro, setShowSkipIntro] = useState(false);
   const [showNextOverlay, setShowNextOverlay] = useState(false);
   const [nextCountdown, setNextCountdown] = useState(8);
-  const countdownTimerRef = useRef<any>(null);
+  const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (!source?.url) return;
@@ -188,7 +188,7 @@ export default function VideoPlayer({
       countdownTimerRef.current = setInterval(() => {
         setNextCountdown((prev: number) => {
           if (prev <= 1) {
-            clearInterval(countdownTimerRef.current);
+            clearInterval(countdownTimerRef.current as any);
             countdownTimerRef.current = null;
             if (onEnded) onEnded();
             return 0;
@@ -197,7 +197,7 @@ export default function VideoPlayer({
         });
       }, 1000);
     } else if (!showNextOverlay && countdownTimerRef.current) {
-      clearInterval(countdownTimerRef.current);
+      clearInterval(countdownTimerRef.current as any);
       countdownTimerRef.current = null;
       setNextCountdown(8);
     }
