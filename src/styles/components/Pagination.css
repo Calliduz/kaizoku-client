@@ -104,4 +104,12 @@
     width: 36px;
     height: 36px;
   }
+
+  .pagination__number:not(.is-active) {
+    display: none;
+  }
+
+  .pagination__dots {
+    display: none;
+  }
 }

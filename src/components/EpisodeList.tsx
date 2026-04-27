@@ -47,10 +47,10 @@ export default function EpisodeList({
                 {variant !== "compact" && (
                   <div className="episode-item-info">
                     <div className="episode-item-header">
-                      <h4 className="episode-item-title">
+                      <h3 className="episode-item-title">
                         {ep.seasonNumber ? `S${ep.seasonNumber} : ` : ""}
                         {ep.title || `Episode ${ep.number}`}
-                      </h4>
+                      </h3>
                       <span className="episode-item-duration">24m</span>
                     </div>
                     <p className={`episode-item-summary ${!ep.description ? "is-empty" : ""}`}>

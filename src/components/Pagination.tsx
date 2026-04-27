@@ -47,6 +47,7 @@ const Pagination: React.FC<PaginationProps> = ({
         className="pagination__btn pagination__btn--prev"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1 || isLoading}
+        aria-label="Previous Page"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polyline points="15 18 9 12 15 6"></polyline>
@@ -57,7 +58,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className="pagination__numbers">
         {pages[0] > 1 && (
           <>
-            <button className="pagination__number" onClick={() => onPageChange(1)}>1</button>
+            <button className="pagination__number" onClick={() => onPageChange(1)} aria-label="Page 1">1</button>
             {pages[0] > 2 && <span className="pagination__dots">...</span>}
           </>
         )}
@@ -68,6 +69,8 @@ const Pagination: React.FC<PaginationProps> = ({
             className={`pagination__number ${currentPage === page ? "is-active" : ""}`}
             onClick={() => onPageChange(page)}
             disabled={isLoading}
+            aria-label={`Page ${page}`}
+            aria-current={currentPage === page ? "page" : undefined}
           >
             {page}
           </button>
@@ -76,7 +79,7 @@ const Pagination: React.FC<PaginationProps> = ({
         {pages[pages.length - 1] < totalPages && (
           <>
             {pages[pages.length - 1] < totalPages - 1 && <span className="pagination__dots">...</span>}
-            <button className="pagination__number" onClick={() => onPageChange(totalPages)}>
+            <button className="pagination__number" onClick={() => onPageChange(totalPages)} aria-label={`Page ${totalPages}`}>
               {totalPages}
             </button>
           </>
@@ -87,6 +90,7 @@ const Pagination: React.FC<PaginationProps> = ({
         className="pagination__btn pagination__btn--next"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages || isLoading}
+        aria-label="Next Page"
       >
         <span>Next</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

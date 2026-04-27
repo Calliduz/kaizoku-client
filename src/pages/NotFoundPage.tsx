@@ -15,7 +15,11 @@ export default function NotFoundPage() {
     }}>
       <SEO title="404 - Not Found | Kaizoku" />
       
-      <div style={{ fontSize: "120px", marginBottom: "20px" }}>🏝️</div>
+      <img 
+        src="/kaizoku-404.svg" 
+        alt="404" 
+        style={{ width: "200px", height: "auto", marginBottom: "20px" }} 
+      />
       <h1 style={{ fontSize: "4rem", fontWeight: 900, marginBottom: "1rem", letterSpacing: "-2px" }}>
         404
       </h1>

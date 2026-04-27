@@ -34,12 +34,16 @@ export default function Navbar() {
     }
   }, [urlQuery]);
 
+  const [isDebouncing, setIsDebouncing] = useState(false);
+
   // Debounce the URL update
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
       return;
     }
+
+    setIsDebouncing(true);
 
     const timer = setTimeout(() => {
       const newParams = new URLSearchParams(searchParams);
@@ -52,6 +56,7 @@ export default function Navbar() {
       }
 
       setSearchParams(newParams);
+      setIsDebouncing(false);
 
       // Only navigate to home if the user explicitly typed in the search bar
       if (hasUserTyped.current && window.location.pathname !== "/") {
@@ -95,7 +100,7 @@ export default function Navbar() {
             </button>
           )}
           <Link to="/" className="navbar__logo" id="nav-logo">
-            <img src="/logo.png" alt="Kaizoku Logo" className="navbar__logo-img" />
+            <img src="/kaizoku-icon.svg" alt="Kaizoku Logo" className="navbar__logo-img" />
             <span className="navbar__logo-text gradient-text">KAIZOKU</span>
           </Link>
         </div>
@@ -103,7 +108,7 @@ export default function Navbar() {
         {/* Search */}
         <div className="navbar__search-container">
           <form
-            className="navbar__search"
+            className={`navbar__search ${isDebouncing ? "is-loading" : ""}`}
             onSubmit={handleSearchSubmit}
             id="nav-search-form"
           >
@@ -131,10 +136,18 @@ export default function Navbar() {
 
         {/* Nav Links */}
         <div className="navbar__links">
-          <Link to="/" className="navbar__link" id="nav-home">
+          <Link 
+            to="/" 
+            className={`navbar__link ${location.pathname === "/" && !urlQuery ? "active" : ""}`} 
+            id="nav-home"
+          >
             Home
           </Link>
-          <Link to="/catalog" className="navbar__link" id="nav-catalog">
+          <Link 
+            to="/catalog" 
+            className={`navbar__link ${location.pathname === "/catalog" || (location.pathname === "/" && urlQuery) ? "active" : ""}`} 
+            id="nav-catalog"
+          >
             Catalog
           </Link>
         </div>

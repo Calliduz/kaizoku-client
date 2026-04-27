@@ -388,7 +388,7 @@ export default function HomePage() {
           >
             ← Back
           </button>
-          <h2
+          <h1
             className="catalog__title"
             style={{
               fontSize: "2.5rem",
@@ -397,7 +397,7 @@ export default function HomePage() {
             }}
           >
             {getCatalogTitle()}
-          </h2>
+          </h1>
           <div className="catalog__filters">
             <div className="filter-group">
               <span className="filter-label">Genre</span>
