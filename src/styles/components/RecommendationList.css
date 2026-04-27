@@ -42,7 +42,7 @@
 
 .rec-item:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 163, 255, 0.3);
   transform: translateY(-4px);
 }
 
@@ -78,7 +78,7 @@
   border-radius: 4px;
   letter-spacing: 0.5px;
   backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 202, 40, 0.2);
+  border: 1px solid rgba(0, 163, 255, 0.2);
 }
 
 .rec-item__info {

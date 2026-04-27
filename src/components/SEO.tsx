@@ -12,7 +12,7 @@ export default function SEO({
   title = "Kaizoku — Stream Premium Anime",
   description = "Midnight Voyage of discoveries. Stream your favorite anime in high resolution with premium cinematic experience on Kaizoku.",
   keywords = "anime, streaming, free anime, hd anime, cinematic anime, kaizoku",
-  image = "/kaizoku-icon.svg",
+  image = "/kaizoku-embed.png",
   url = window.location.href,
 }: SEOProps) {
   useEffect(() => {

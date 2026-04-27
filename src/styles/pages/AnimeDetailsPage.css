@@ -217,7 +217,7 @@
 
 .meta-chip.episodes {
   color: var(--color-accent);
-  border-color: rgba(255, 202, 40, 0.4);
+  border-color: rgba(0, 163, 255, 0.4);
 }
 
 .meta-chip.status-tag {
@@ -410,8 +410,8 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(255, 202, 40, 0.1);
-  border: 1px solid rgba(255, 202, 40, 0.2);
+  background: rgba(0, 163, 255, 0.1);
+  border: 1px solid rgba(0, 163, 255, 0.2);
   border-radius: 999px;
   color: var(--color-accent);
   font-size: 0.85rem;

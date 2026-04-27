@@ -73,25 +73,54 @@
   gap: 12px;
   font-weight: 900;
   letter-spacing: -0.3px;
+  text-decoration: none;
+  position: relative;
 }
 
 .navbar__logo-img {
-  width: 32px;
-  height: 32px;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(255, 202, 40, 0.4));
-  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 15px rgba(0, 163, 255, 0.6));
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .navbar__logo:hover .navbar__logo-img {
-  transform: rotate(15deg) scale(1.1);
+  transform: rotate(15deg) scale(1.15) translateY(-2px);
+  filter: drop-shadow(0 0 20px rgba(0, 163, 255, 0.7));
 }
 
 .navbar__logo-text {
-  font-size: 1.75rem;
+  font-size: 2.1rem;
   font-weight: 950;
   line-height: 1;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  background: linear-gradient(
+    135deg,
+    #fff 0%,
+    var(--color-accent) 45%,
+    #00d1ff 55%,
+    var(--color-accent) 65%,
+    #fff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar__logo:hover .navbar__logo-text {
+  animation: shine 1.5s linear infinite;
+  letter-spacing: 2px;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }
 
 .navbar__search-container {
@@ -179,7 +208,7 @@
 
 .navbar__link.active {
   color: var(--color-accent);
-  text-shadow: 0 0 10px rgba(255, 202, 40, 0.4);
+  text-shadow: 0 0 10px rgba(0, 163, 255, 0.4);
 }
 
 /* ── Golden Firefly Particles ──────────────── */
@@ -193,10 +222,10 @@
 
 .particle {
   position: absolute;
-  background: radial-gradient(circle, #fff5d6 0%, var(--color-accent) 50%, transparent 100%);
+  background: radial-gradient(circle, #e0f7ff 0%, var(--color-accent) 50%, transparent 100%);
   border-radius: 50%;
   filter: blur(1px);
-  box-shadow: 0 0 8px var(--color-accent), 0 0 16px var(--color-accent-glow);
+  box-shadow: 0 0 8px var(--color-accent), 0 0 16px rgba(0, 163, 255, 0.2);
   bottom: -10px;
   opacity: 0;
   animation: firefly-rise var(--duration) ease-in-out infinite;
