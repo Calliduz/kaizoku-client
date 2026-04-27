@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   fetchAnimeById,
@@ -147,6 +147,8 @@ export default function PlayerPage() {
     return () => clearInterval(interval);
   }, [sourceLoading]);
 
+  const lastHistoryUpdateRef = useRef<number>(0);
+
   if (loading) {
     return (
       <>
@@ -232,6 +234,13 @@ export default function PlayerPage() {
               source={currentSource}
               title={`${anime.title} - ${currentEpisode.title}`}
               episodeId={currentEpisode._id}
+              onProgress={(percent) => {
+                const now = Date.now();
+                if (now - lastHistoryUpdateRef.current > 5000) {
+                  saveWatchHistory(anime, currentEpisode, percent);
+                  lastHistoryUpdateRef.current = now;
+                }
+              }}
             />
           ) : (
             <div className="player-page__video-error">

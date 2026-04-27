@@ -134,23 +134,7 @@ export default function Navbar() {
           </form>
         </div>
 
-        {/* Nav Links */}
-        <div className="navbar__links">
-          <Link 
-            to="/" 
-            className={`navbar__link ${location.pathname === "/" && !urlQuery ? "active" : ""}`} 
-            id="nav-home"
-          >
-            Home
-          </Link>
-          <Link 
-            to="/catalog" 
-            className={`navbar__link ${location.pathname === "/catalog" || (location.pathname === "/" && urlQuery) ? "active" : ""}`} 
-            id="nav-catalog"
-          >
-            Catalog
-          </Link>
-        </div>
+        {/* Nav Links REMOVED per user request */}
       </div>
     </nav>
   );

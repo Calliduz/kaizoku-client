@@ -801,36 +801,37 @@
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
 }
-  position: relative;
-  z-index: 10;
-}
 
 .meta-badge {
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 850;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
 }
 
 .meta-badge.rating {
-  background: var(--color-accent);
-  color: #000;
-  box-shadow: 0 0 10px var(--color-accent-glow);
+  background: var(--color-bg-card);
+  color: var(--color-accent);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .meta-badge.format {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
-  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .meta-badge.episodes {
-  color: var(--color-accent);
-  border: 1px solid var(--color-accent-glow);
-  font-weight: 700;
+  background: var(--color-accent);
+  color: #000;
+  border: none;
 }
 
 .meta-genres {
@@ -839,16 +840,20 @@
 }
 
 .genre-tag {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1rem;
-  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
 
-.genre-tag:not(:last-child)::after {
-  content: "•";
-  margin-left: 8px;
-  color: var(--color-accent);
-  opacity: 0.5;
+.genre-tag:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-accent-glow);
+  color: #fff;
 }
 
 @media (max-width: 768px) {

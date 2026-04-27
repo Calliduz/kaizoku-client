@@ -2,6 +2,7 @@ import { useRef } from "react";
 import AnimeCard from "./AnimeCard";
 import AnimeCardSkeleton from "./AnimeCardSkeleton";
 import type { Anime } from "../types";
+import type { HistoryItem } from "../utils/watchHistory";
 import "../styles/components/AnimeRow.css";
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
   showRankings?: boolean;
   disableCardTrailers?: boolean;
   isExternal?: boolean;
+  historyItems?: HistoryItem[];
 }
 
 export default function AnimeRow({
@@ -22,6 +24,7 @@ export default function AnimeRow({
   showRankings = false,
   disableCardTrailers = false,
   isExternal = false,
+  historyItems = []
 }: Props) {
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -77,18 +80,22 @@ export default function AnimeRow({
                   <AnimeCardSkeleton />
                 </div>
               ))
-            : animes.map((anime, index) => (
-                <div className="anime-row-item" key={anime._id}>
-                  {showRankings && index < 10 && (
-                    <div className="ranking-number">{index + 1}</div>
-                  )}
-                  <AnimeCard 
-                    anime={anime} 
-                    disableTrailer={disableCardTrailers} 
-                    isExternal={isExternal}
-                  />
-                </div>
-              ))}
+            : animes.map((anime, index) => {
+                const history = historyItems.find(h => h.anime._id === anime._id);
+                return (
+                  <div className="anime-row-item" key={anime._id}>
+                    {showRankings && index < 10 && (
+                      <div className="ranking-number">{index + 1}</div>
+                    )}
+                    <AnimeCard 
+                      anime={anime} 
+                      disableTrailer={disableCardTrailers} 
+                      isExternal={isExternal}
+                      progress={history?.progressPercentage}
+                    />
+                  </div>
+                );
+              })}
         </div>
 
         <button

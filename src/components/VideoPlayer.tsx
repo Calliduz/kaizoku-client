@@ -137,11 +137,16 @@ export default function VideoPlayer({ source, title = "", onProgress, episodeId 
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
+      const { currentTime, duration } = videoRef.current;
       if (episodeId) {
-        localStorage.setItem(`progress-${episodeId}`, videoRef.current.currentTime.toString());
+        localStorage.setItem(`progress-${episodeId}`, currentTime.toString());
+        if (duration) {
+          const percent = (currentTime / duration) * 100;
+          localStorage.setItem(`percent-${episodeId}`, percent.toString());
+        }
       }
       if (onProgress) {
-        const progress = (videoRef.current.currentTime / videoRef.current.duration) * 100;
+        const progress = (currentTime / duration) * 100;
         onProgress(progress || 0);
       }
     }

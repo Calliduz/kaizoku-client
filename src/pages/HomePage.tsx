@@ -325,6 +325,7 @@ export default function HomePage() {
           <AnimeRow
             title="Continue Watching"
             animes={watchHistory.map(h => h.anime)}
+            historyItems={watchHistory}
             disableCardTrailers={true}
           />
         )}

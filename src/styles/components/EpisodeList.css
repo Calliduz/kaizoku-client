@@ -102,6 +102,22 @@
   transition: transform 0.3s ease;
 }
 
+.episode-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 5;
+}
+
+.episode-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent-glow);
+}
+
 .episode-item-wrapper:hover .episode-item-thumb img {
   transform: scale(1.1);
 }

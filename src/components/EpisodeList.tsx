@@ -1,3 +1,4 @@
+import { getEpisodePercentage } from "../utils/watchHistory";
 import type { Episode } from "../types";
 import "../styles/components/EpisodeList.css";
 
@@ -25,6 +26,7 @@ export default function EpisodeList({
         {episodes.length > 0 ? (
           episodes.map((ep) => {
             const isActive = ep._id === currentEpisodeId;
+            const progress = getEpisodePercentage(ep._id);
             return (
               <button
                 key={ep._id}
@@ -41,6 +43,11 @@ export default function EpisodeList({
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
+                  {progress > 0 && (
+                    <div className="episode-progress-bar">
+                      <div className="episode-progress-fill" style={{ width: `${progress}%` }} />
+                    </div>
+                  )}
                   {isActive && <div className="now-playing-tag">PLAYING</div>}
                 </div>
 

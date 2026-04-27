@@ -13,12 +13,14 @@ interface AnimeCardProps {
   anime: Anime;
   disableTrailer?: boolean;
   isExternal?: boolean;
+  progress?: number;
 }
 
 export default function AnimeCard({ 
   anime, 
   disableTrailer = false,
-  isExternal = false
+  isExternal = false,
+  progress = 0
 }: AnimeCardProps) {
   const {
     _id,
@@ -63,6 +65,16 @@ export default function AnimeCard({
             className="anime-card__image"
             wrapperClassName="anime-card__lazy-wrapper"
           />
+
+          {/* Progress Bar */}
+          {progress > 0 && (
+            <div className="anime-card__progress-container">
+              <div 
+                className="anime-card__progress-fill" 
+                style={{ width: `${progress}%` }} 
+              />
+            </div>
+          )}
 
           {/* Trailer Preview */}
           {showTrailer && anime.trailer?.id && (

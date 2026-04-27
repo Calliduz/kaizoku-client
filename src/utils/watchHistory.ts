@@ -47,6 +47,24 @@ export const getWatchHistory = (): HistoryItem[] => {
   }
 };
 
+export const getEpisodeProgress = (episodeId: string): number => {
+  try {
+    const savedTime = localStorage.getItem(`progress-${episodeId}`);
+    return savedTime ? parseFloat(savedTime) : 0;
+  } catch (e) {
+    return 0;
+  }
+};
+
+export const getEpisodePercentage = (episodeId: string): number => {
+  try {
+    const savedPercent = localStorage.getItem(`percent-${episodeId}`);
+    return savedPercent ? parseFloat(savedPercent) : 0;
+  } catch (e) {
+    return 0;
+  }
+};
+
 export const clearWatchHistory = () => {
   localStorage.removeItem(HISTORY_KEY);
 };

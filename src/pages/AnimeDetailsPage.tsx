@@ -8,6 +8,8 @@ import AnimeDetailsSkeleton from "../components/AnimeDetailsSkeleton";
 import EpisodeSkeleton from "../components/EpisodeSkeleton";
 import ErrorDisplay from "../components/ErrorDisplay";
 import AnimeLogoImage from "../components/AnimeLogoImage";
+import { getWatchHistory } from "../utils/watchHistory";
+import type { HistoryItem } from "../utils/watchHistory";
 import type { Anime, Episode } from "../types";
 import "../styles/pages/AnimeDetailsPage.css";
 
@@ -36,6 +38,7 @@ export default function AnimeDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [isScraping, setIsScraping] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [watchHistoryItem, setWatchHistoryItem] = useState<HistoryItem | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -55,6 +58,11 @@ export default function AnimeDetailsPage() {
         
         // Scroll to top on load
         window.scrollTo(0, 0);
+
+        // Get watch history for this anime
+        const history = getWatchHistory();
+        const item = history.find(h => h.anime._id === id);
+        setWatchHistoryItem(item || null);
 
         // Delay revealing trailer
         if (animeRes.data?.trailer?.id) {
@@ -166,18 +174,30 @@ export default function AnimeDetailsPage() {
             </div>
 
             <div className="details-actions">
-              <button
-                className="btn-watch-now"
-                onClick={() => {
-                  if (episodes.length > 0) {
-                    const firstEp = [...episodes].sort((a, b) => a.number - b.number)[0];
-                    navigate(`/anime/${anime._id}/watch/${firstEp._id}`);
-                  }
-                }}
-              >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                Watch Now
-              </button>
+              {watchHistoryItem ? (
+                <button
+                  className="btn-watch-now"
+                  onClick={() => {
+                    navigate(`/anime/${anime._id}/watch/${watchHistoryItem.episode._id}`);
+                  }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  Continue Watching Ep. {watchHistoryItem.episode.number}
+                </button>
+              ) : (
+                <button
+                  className="btn-watch-now"
+                  onClick={() => {
+                    if (episodes.length > 0) {
+                      const firstEp = [...episodes].sort((a, b) => a.number - b.number)[0];
+                      navigate(`/anime/${anime._id}/watch/${firstEp._id}`);
+                    }
+                  }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  Watch Now
+                </button>
+              )}
               <button className="btn-add-list">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Add to List
