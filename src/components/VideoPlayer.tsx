@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import type { StreamingSource } from "../types";
 import "../styles/components/VideoPlayer.css";
@@ -7,12 +7,25 @@ interface VideoPlayerProps {
   source: StreamingSource;
   title?: string;
   onProgress?: (progress: number) => void;
+  onEnded?: () => void;
   episodeId?: string;
+  nextEpisodeId?: string;
 }
 
-export default function VideoPlayer({ source, title = "", onProgress, episodeId }: VideoPlayerProps) {
+export default function VideoPlayer({ 
+  source, 
+  title = "", 
+  onProgress, 
+  onEnded,
+  episodeId, 
+  nextEpisodeId 
+}: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
+  const [showSkipIntro, setShowSkipIntro] = useState(false);
+  const [showNextOverlay, setShowNextOverlay] = useState(false);
+  const [nextCountdown, setNextCountdown] = useState(8);
+  const countdownTimerRef = useRef<any>(null);
 
   useEffect(() => {
     if (!source?.url) return;
@@ -132,12 +145,30 @@ export default function VideoPlayer({ source, title = "", onProgress, episodeId 
         hlsRef.current.destroy();
         hlsRef.current = null;
       }
+      if (countdownTimerRef.current) clearInterval(countdownTimerRef.current);
     };
   }, [source]);
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
       const { currentTime, duration } = videoRef.current;
+      
+      // Skip Intro logic: Show between 1:30 and 3:00 (standard anime intro range)
+      if (currentTime > 90 && currentTime < 180) {
+        if (!showSkipIntro) setShowSkipIntro(true);
+      } else {
+        if (showSkipIntro) setShowSkipIntro(false);
+      }
+
+      // Next Episode Overlay logic: Show in last 40 seconds
+      if (duration && nextEpisodeId) {
+        if (duration - currentTime < 40 && !showNextOverlay) {
+          setShowNextOverlay(true);
+        } else if (duration - currentTime >= 40 && showNextOverlay) {
+          setShowNextOverlay(false);
+        }
+      }
+
       if (episodeId) {
         localStorage.setItem(`progress-${episodeId}`, currentTime.toString());
         if (duration) {
@@ -149,6 +180,33 @@ export default function VideoPlayer({ source, title = "", onProgress, episodeId 
         const progress = (currentTime / duration) * 100;
         onProgress(progress || 0);
       }
+    }
+  };
+
+  useEffect(() => {
+    if (showNextOverlay && !countdownTimerRef.current) {
+      countdownTimerRef.current = setInterval(() => {
+        setNextCountdown((prev: number) => {
+          if (prev <= 1) {
+            clearInterval(countdownTimerRef.current);
+            countdownTimerRef.current = null;
+            if (onEnded) onEnded();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (!showNextOverlay && countdownTimerRef.current) {
+      clearInterval(countdownTimerRef.current);
+      countdownTimerRef.current = null;
+      setNextCountdown(8);
+    }
+  }, [showNextOverlay, onEnded]);
+
+  const skipIntro = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 180; // Standard 3:00 intro end
+      setShowSkipIntro(false);
     }
   };
 
@@ -173,6 +231,7 @@ export default function VideoPlayer({ source, title = "", onProgress, episodeId 
         className="video-player__video"
         controls
         onTimeUpdate={handleTimeUpdate}
+        onEnded={onEnded}
         onLoadedMetadata={() => {
           if (episodeId && videoRef.current) {
             const savedTime = localStorage.getItem(`progress-${episodeId}`);
@@ -183,6 +242,28 @@ export default function VideoPlayer({ source, title = "", onProgress, episodeId 
         }}
         playsInline
       />
+
+      {/* Skip Intro Button */}
+      {showSkipIntro && (
+        <button className="player-skip-intro animate-fade-in-right" onClick={skipIntro}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 4l10 8-10 8V4z"/><path d="M19 5v14"/></svg>
+          Skip Intro
+        </button>
+      )}
+
+      {/* Next Episode Mini Overlay */}
+      {showNextOverlay && nextEpisodeId && (
+        <div className="player-next-overlay animate-fade-in-up">
+          <div className="next-overlay__content">
+            <span className="next-overlay__label">Next Episode in</span>
+            <span className="next-overlay__timer">{nextCountdown}s</span>
+          </div>
+          <button className="next-overlay__btn" onClick={() => onEnded && onEnded()}>
+            Play Now
+          </button>
+          <button className="next-overlay__close" onClick={() => setShowNextOverlay(false)}>✕</button>
+        </div>
+      )}
     </div>
   );
 }

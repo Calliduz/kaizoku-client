@@ -21,9 +21,130 @@
   background: transparent;
 }
 
+/* Skip Intro Button */
+.player-skip-intro {
+  position: absolute;
+  bottom: 80px;
+  right: 30px;
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.player-skip-intro:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--color-accent);
+  transform: scale(1.05);
+}
+
+/* Next Episode Overlay */
+.player-next-overlay {
+  position: absolute;
+  bottom: 100px;
+  right: 30px;
+  background: rgba(5, 7, 10, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--color-accent);
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 280px;
+  z-index: 20;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.next-overlay__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.next-overlay__label {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.next-overlay__timer {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.next-overlay__btn {
+  background: var(--color-accent);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.next-overlay__btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.next-overlay__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* Custom Animations */
+.animate-fade-in-right {
+  animation: fadeInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 @media (max-width: 768px) {
   .video-player {
     border-radius: 0;
     aspect-ratio: 16 / 9;
+  }
+  
+  .player-skip-intro {
+    bottom: 60px;
+    right: 15px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+
+  .player-next-overlay {
+    bottom: 70px;
+    right: 15px;
+    width: 220px;
+    padding: 16px;
+  }
+
+  .next-overlay__timer {
+    font-size: 1.5rem;
   }
 }

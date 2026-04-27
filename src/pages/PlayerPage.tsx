@@ -234,6 +234,17 @@ export default function PlayerPage() {
               source={currentSource}
               title={`${anime.title} - ${currentEpisode.title}`}
               episodeId={currentEpisode._id}
+              nextEpisodeId={(() => {
+                const currentIndex = episodes.findIndex(e => e._id === currentEpisode._id);
+                return episodes[currentIndex + 1]?._id;
+              })()}
+              onEnded={() => {
+                const currentIndex = episodes.findIndex(e => e._id === currentEpisode._id);
+                const nextEp = episodes[currentIndex + 1];
+                if (nextEp) {
+                  navigate(`/anime/${id}/watch/${nextEp._id}`);
+                }
+              }}
               onProgress={(percent) => {
                 const now = Date.now();
                 if (now - lastHistoryUpdateRef.current > 5000) {
