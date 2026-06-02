@@ -5,6 +5,8 @@ import "../styles/components/VideoPlayer.css";
 
 interface VideoPlayerProps {
   source: StreamingSource;
+  sources?: StreamingSource[];
+  onQualityChange?: (source: StreamingSource) => void;
   title?: string;
   onProgress?: (progress: number) => void;
   onEnded?: () => void;
@@ -14,6 +16,8 @@ interface VideoPlayerProps {
 
 export default function VideoPlayer({ 
   source, 
+  sources = [],
+  onQualityChange,
   title = "", 
   onProgress, 
   onEnded,
@@ -26,6 +30,26 @@ export default function VideoPlayer({
   const [showNextOverlay, setShowNextOverlay] = useState(false);
   const [nextCountdown, setNextCountdown] = useState(8);
   const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const [showQualityMenu, setShowQualityMenu] = useState(false);
+  const qualityMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close quality menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (qualityMenuRef.current && !qualityMenuRef.current.contains(event.target as Node)) {
+        setShowQualityMenu(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const availableQualities = sources.filter(
+    (s) => s.server === source.server && s.audio === source.audio
+  );
 
   useEffect(() => {
     if (!source?.url) return;
@@ -210,9 +234,11 @@ export default function VideoPlayer({
     }
   };
 
-  if (source?.type === "iframe" || source?.type === "embed") {
-    return (
-      <div className="video-player">
+  const isIframe = source?.type === "iframe" || source?.type === "embed";
+
+  return (
+    <div className="video-player">
+      {isIframe ? (
         <iframe
           src={source.url}
           title={title}
@@ -221,31 +247,27 @@ export default function VideoPlayer({
           allow="autoplay; encrypted-media"
           referrerPolicy="no-referrer"
         />
-      </div>
-    );
-  }
-
-  return (
-    <div className="video-player">
-      <video
-        ref={videoRef}
-        className="video-player__video"
-        controls
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={onEnded}
-        onLoadedMetadata={() => {
-          if (episodeId && videoRef.current) {
-            const savedTime = localStorage.getItem(`progress-${episodeId}`);
-            if (savedTime) {
-              videoRef.current.currentTime = parseFloat(savedTime);
+      ) : (
+        <video
+          ref={videoRef}
+          className="video-player__video"
+          controls
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={onEnded}
+          onLoadedMetadata={() => {
+            if (episodeId && videoRef.current) {
+              const savedTime = localStorage.getItem(`progress-${episodeId}`);
+              if (savedTime) {
+                videoRef.current.currentTime = parseFloat(savedTime);
+              }
             }
-          }
-        }}
-        playsInline
-      />
+          }}
+          playsInline
+        />
+      )}
 
       {/* Skip Intro Button */}
-      {showSkipIntro && (
+      {!isIframe && showSkipIntro && (
         <button className="player-skip-intro animate-fade-in-right" onClick={skipIntro}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 4l10 8-10 8V4z"/><path d="M19 5v14"/></svg>
           Skip Intro
@@ -253,7 +275,7 @@ export default function VideoPlayer({
       )}
 
       {/* Next Episode Mini Overlay */}
-      {showNextOverlay && nextEpisodeId && (
+      {!isIframe && showNextOverlay && nextEpisodeId && (
         <div className="player-next-overlay animate-fade-in-up">
           <div className="next-overlay__content">
             <span className="next-overlay__label">Next Episode in</span>
@@ -263,6 +285,39 @@ export default function VideoPlayer({
             Play Now
           </button>
           <button className="next-overlay__close" onClick={() => setShowNextOverlay(false)}>✕</button>
+        </div>
+      )}
+
+      {/* Quality Switcher overlay */}
+      {availableQualities.length > 1 && (
+        <div className="player-quality-selector" ref={qualityMenuRef}>
+          <button 
+            className="quality-selector__trigger" 
+            onClick={() => setShowQualityMenu(!showQualityMenu)}
+            title="Switch Quality"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>{source.quality}</span>
+          </button>
+          
+          {showQualityMenu && (
+            <div className="quality-selector__menu">
+              <div className="quality-selector__menu-header">Select Quality</div>
+              {availableQualities.map((q) => (
+                <button
+                  key={q.quality}
+                  className={`quality-selector__item ${q.quality === source.quality ? 'active' : ''}`}
+                  onClick={() => {
+                    if (onQualityChange) onQualityChange(q);
+                    setShowQualityMenu(false);
+                  }}
+                >
+                  <span className="quality-selector__item-name">{q.quality}</span>
+                  {q.quality === source.quality && <span className="quality-selector__item-check">✓</span>}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

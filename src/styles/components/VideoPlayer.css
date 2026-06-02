@@ -148,3 +148,115 @@
     font-size: 1.5rem;
   }
 }
+
+/* Quality Switcher Overlay */
+.player-quality-selector {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 30;
+}
+
+.quality-selector__trigger {
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-text-secondary);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.quality-selector__trigger:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.quality-selector__trigger svg {
+  transition: transform 0.3s ease;
+}
+
+.quality-selector__trigger:hover svg {
+  transform: rotate(45deg);
+}
+
+.quality-selector__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: rgba(5, 7, 10, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  animation: scaleIn 0.15s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.quality-selector__menu-header {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.quality-selector__item {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  padding: 10px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quality-selector__item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-primary);
+}
+
+.quality-selector__item.active {
+  background: rgba(108, 92, 231, 0.15);
+  color: var(--color-accent);
+}
+
+.quality-selector__item-check {
+  font-weight: 800;
+}
+
+@media (max-width: 768px) {
+  .player-quality-selector {
+    top: 15px;
+    right: 15px;
+  }
+  .quality-selector__trigger {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+}
+

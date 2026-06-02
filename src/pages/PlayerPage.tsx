@@ -232,6 +232,8 @@ export default function PlayerPage() {
           ) : currentSource && currentEpisode && anime ? (
             <VideoPlayer
               source={currentSource}
+              sources={sources}
+              onQualityChange={setCurrentSource}
               title={`${anime.title} - ${currentEpisode.title}`}
               episodeId={currentEpisode._id}
               nextEpisodeId={(() => {
