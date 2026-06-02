@@ -219,6 +219,7 @@ export default function VideoPlayer({
           className="video-player__iframe"
           allowFullScreen
           allow="autoplay; encrypted-media"
+          referrerPolicy="no-referrer"
         />
       </div>
     );
